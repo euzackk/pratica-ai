@@ -8,7 +8,19 @@ import random
 import os
 from datetime import datetime
 
-# --- 1. CONFIGURAÇÃO DE SEGURANÇA ---
+# --- 1. SETUP DA PÁGINA (Deve ser o primeiro comando) ---
+# Recupera o estado do menu (se deve estar aberto ou fechado)
+if "sidebar_state" not in st.session_state:
+    st.session_state.sidebar_state = "auto"
+
+st.set_page_config(
+    page_title="Pratica.ai",
+    page_icon="🐱",
+    layout="wide",
+    initial_sidebar_state=st.session_state.sidebar_state
+)
+
+# --- 2. CONFIGURAÇÃO DE SEGURANÇA ---
 try:
     API_KEY = st.secrets["GOOGLE_API_KEY"]
 except:
@@ -17,21 +29,7 @@ except:
 if API_KEY:
     genai.configure(api_key=API_KEY)
 
-# --- 2. CONFIGURAÇÃO DE ESTADO DO MENU (NOVO) ---
-# Se não existir um estado definido para o menu, inicia como "auto"
-if "sidebar_state" not in st.session_state:
-    st.session_state.sidebar_state = "auto"
-
-# --- 3. SETUP DA PÁGINA ---
-st.set_page_config(
-    page_title="Pratica.ai",
-    page_icon="🐱",
-    layout="wide",
-    # Aqui usamos a variável de estado para decidir se abre ou fecha
-    initial_sidebar_state=st.session_state.sidebar_state 
-)
-
-# --- 4. BANCO DE DADOS ---
+# --- 3. BANCO DE DADOS ---
 def init_db():
     conn = sqlite3.connect('dados_pratica.db')
     c = conn.cursor()
@@ -75,7 +73,7 @@ def deletar_estudo_bd(id_estudo):
 
 init_db()
 
-# --- 5. CATÁLOGO DE VENDAS ---
+# --- 4. CATÁLOGO DE VENDAS ---
 CATALOGO_PREMIUM = {
     "direito": {
         "visual": {"badge": "🔥 OFERTA", "titulo": "KIT OAB 2026", "icone": "⚖️", "bg_style": "background: linear-gradient(135deg, #240b36 0%, #c31432 100%);", "btn_text": "VER PREÇO"},
@@ -123,7 +121,7 @@ def ia_escolher_categoria(contexto_usuario):
     if any(x in ctx for x in ["policia", "taf"]): return "policial"
     return "geral"
 
-# --- 6. CSS (LIMPO - SEM TEMA ESCURO FORÇADO) ---
+# --- 5. CSS (MODO NATIVO LIMPO) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap');
@@ -181,13 +179,13 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- 7. ESTADO ---
+# --- 6. ESTADO ---
 if "historico" not in st.session_state: st.session_state.historico = carregar_historico_bd()
 if "pagina_atual" not in st.session_state: st.session_state.pagina_atual = "upload"
 if "chat_ativo_id" not in st.session_state: st.session_state.chat_ativo_id = None
 if "mensagens_ia" not in st.session_state: st.session_state.mensagens_ia = [{"role": "model", "content": "Olá! Sou seu Tutor IA."}]
 
-# --- 8. FUNÇÕES DO SISTEMA ---
+# --- 7. FUNÇÕES DO SISTEMA ---
 def ler_pdf(arquivo):
     try:
         leitor = pypdf.PdfReader(arquivo)
@@ -231,15 +229,15 @@ def criar_novo_estudo(nome_arquivo, questoes):
 # --- FUNÇÃO DE NAVEGAÇÃO QUE FECHA O MENU ---
 def navegar_para(pagina):
     st.session_state.pagina_atual = pagina
-    st.session_state.sidebar_state = "collapsed" # <-- O SEGREDO ESTÁ AQUI
+    st.session_state.sidebar_state = "collapsed"
     st.rerun()
 
-# --- 9. BARRA LATERAL ---
+# --- 8. BARRA LATERAL ---
 with st.sidebar:
     st.header("PRATICA.AI 🐱")
     st.markdown("---")
     
-    # Botões agora usam a função 'navegar_para'
+    # Botões de navegação
     if st.button("📄 NOVO UPLOAD", use_container_width=True): navegar_para("upload")
     if st.button("📚 BIBLIOTECA", use_container_width=True): navegar_para("biblioteca")
     if st.button("🤖 TUTOR IA", use_container_width=True): navegar_para("chat_ia")
@@ -271,7 +269,7 @@ with st.sidebar:
     </a>
     """, unsafe_allow_html=True)
 
-# --- 10. ÁREA PRINCIPAL ---
+# --- 9. ÁREA PRINCIPAL ---
 
 # >>> UPLOAD <<<
 if st.session_state.pagina_atual == "upload":
