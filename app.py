@@ -75,7 +75,6 @@ CATALOGO_PREMIUM = {
             "titulo": "KIT VADE MECUM & OAB",
             "subtitulo": "Os melhores materiais com preços imbatíveis.",
             "icone": "⚖️",
-            # Gradiente Roxo/Dourado Luxo
             "bg_style": "background: rgb(75,20,140); background: linear-gradient(135deg, rgba(75,20,140,1) 0%, rgba(199,148,29,1) 100%);",
             "btn_color": "#FFD700", "btn_text": "#000"
         }
@@ -97,7 +96,6 @@ CATALOGO_PREMIUM = {
             "titulo": "NOTEBOOKS & ACESSÓRIOS",
             "subtitulo": "Potencialize seus estudos com hardware de ponta.",
             "icone": "💻",
-            # Gradiente Azul/Ciano Neon
             "bg_style": "background: rgb(0,108,255); background: linear-gradient(135deg, rgba(0,108,255,1) 0%, rgba(0,255,200,1) 100%);",
             "btn_color": "#FFF", "btn_text": "#000"
         }
@@ -113,7 +111,6 @@ CATALOGO_PREMIUM = {
             "titulo": "CARREIRAS POLICIAIS",
             "subtitulo": "Material tático e focado para o seu concurso.",
             "icone": "🚓",
-            # Gradiente Laranja/Vermelho Alerta
             "bg_style": "background: rgb(255,69,0); background: linear-gradient(135deg, rgba(255,69,0,1) 0%, rgba(255,145,0,1) 100%);",
             "btn_color": "#FFF", "btn_text": "#FF4500"
         }
@@ -138,7 +135,6 @@ CATALOGO_PREMIUM = {
             "titulo": "ESSENCIAIS DO ESTUDANTE",
             "subtitulo": "Kindle, Fones e tudo para seu foco.",
             "icone": "🎒",
-            # Gradiente Rosa/Roxo Moderno
             "bg_style": "background: rgb(255,0,168); background: linear-gradient(135deg, rgba(255,0,168,1) 0%, rgba(138,43,226,1) 100%);",
             "btn_color": "#FFF", "btn_text": "#8A2BE2"
         }
@@ -146,37 +142,26 @@ CATALOGO_PREMIUM = {
 }
 
 def ia_escolher_categoria(contexto_usuario):
-    """Usa IA ou contexto simples para definir a categoria do banner"""
     if not contexto_usuario or len(contexto_usuario) < 5:
-        # Sem contexto, sorteia entre geral e tecnologia
         return random.choice(["geral", "tecnologia"])
-
-    # Tenta usar IA se tiver chave
     if API_KEY:
         try:
             model = genai.GenerativeModel('gemini-flash-latest')
-            # Prompt super rápido para classificar
             prompt = f"""Classifique o texto: "{contexto_usuario[:500]}"
             Categorias: direito, tecnologia, policial, geral.
             Responda APENAS a palavra da categoria em minúsculo."""
-            
             resp = model.generate_content(prompt).text.strip().lower()
-            
             if "direito" in resp: return "direito"
             if "tecnolo" in resp: return "tecnologia"
             if "policia" in resp: return "policial"
-        except:
-            pass # Se a IA falhar, cai no fallback abaixo
-
-    # Fallback simples por palavra-chave se a IA falhar ou não tiver chave
+        except: pass
     ctx_lower = contexto_usuario.lower()
     if any(x in ctx_lower for x in ["lei", "juridico", "oab", "penal"]): return "direito"
     if any(x in ctx_lower for x in ["python", "java", "código", "computador"]): return "tecnologia"
     if any(x in ctx_lower for x in ["policia", "militar", "taf"]): return "policial"
-    
     return "geral"
 
-# --- 5. CSS REVOLUCIONÁRIO (VISUAL DE VENDAS IMPACTANTE) ---
+# --- 5. CSS (VISUAL DE VENDAS + GATOS) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
@@ -185,82 +170,43 @@ st.markdown("""
     .stApp { background-color: #050505; }
     section[data-testid="stSidebar"] { background-color: #0F0F0F; border-right: 1px solid #222; }
     
-    /* --- SUPER BANNER DE VENDAS --- */
+    /* SUPER BANNER */
     .super-banner {
-        display: block;
-        text-decoration: none;
-        border-radius: 16px;
-        padding: 20px;
-        margin: 20px 0;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border: 2px solid rgba(255,255,255,0.1);
+        display: block; text-decoration: none; border-radius: 16px; padding: 20px; margin: 20px 0;
+        position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        transition: transform 0.3s ease, box-shadow 0.3s ease; border: 2px solid rgba(255,255,255,0.1);
     }
-    
-    .super-banner:hover {
-        transform: scale(1.03);
-        box-shadow: 0 15px 40px rgba(0,0,0,0.7);
-        border-color: rgba(255,255,255,0.3);
-    }
-    
+    .super-banner:hover { transform: scale(1.03); box-shadow: 0 15px 40px rgba(0,0,0,0.7); }
     .sb-badge {
-        position: absolute; top: 12px; right: 12px;
-        background: rgba(0,0,0,0.6); color: #FFF;
-        font-size: 0.7rem; font-weight: 900; padding: 4px 10px;
-        border-radius: 20px; text-transform: uppercase; letter-spacing: 1px;
-        backdrop-filter: blur(5px);
+        position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); color: #FFF;
+        font-size: 0.7rem; font-weight: 900; padding: 4px 10px; border-radius: 20px; backdrop-filter: blur(5px);
     }
-    
-    .sb-icon {
-        font-size: 3.5rem; margin-bottom: 10px; display: block; text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    }
-    
-    .sb-title {
-        color: #FFF; font-weight: 900; font-size: 1.4rem; line-height: 1.1;
-        margin-bottom: 8px; display: block; text-transform: uppercase;
-        text-shadow: 0 2px 5px rgba(0,0,0,0.5);
-    }
-    
-    .sb-subtitle {
-        color: rgba(255,255,255,0.9); font-size: 0.9rem; display: block; margin-bottom: 20px; font-weight: 500;
-    }
-    
+    .sb-icon { font-size: 3.5rem; margin-bottom: 10px; display: block; }
+    .sb-title { color: #FFF; font-weight: 900; font-size: 1.4rem; line-height: 1.1; margin-bottom: 8px; display: block; }
+    .sb-subtitle { color: rgba(255,255,255,0.9); font-size: 0.9rem; display: block; margin-bottom: 20px; font-weight: 500; }
     .sb-button {
-        background: #FFF; color: #000; text-align: center; font-weight: 800;
-        padding: 12px 20px; border-radius: 50px; display: block;
-        font-size: 1rem; transition: 0.2s; text-transform: uppercase;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        background: #FFF; color: #000; text-align: center; font-weight: 800; padding: 12px 20px;
+        border-radius: 50px; display: block; font-size: 1rem; text-transform: uppercase;
     }
-    
-    .sb-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
 
-    /* --- ESTILO PIX/APOIO --- */
-    .pix-container {
-        background: #111; border: 1px dashed #444; border-radius: 15px; padding: 30px; text-align: center;
-    }
+    /* PIX & GATOS */
+    .pix-container { background: #111; border: 1px dashed #444; border-radius: 15px; padding: 30px; text-align: center; }
     .pix-key {
         font-family: monospace; background: #222; padding: 15px; border-radius: 8px;
         color: #00FF7F; font-size: 1.1rem; margin: 20px 0; word-break: break-all; select-all;
     }
     
-    /* GERAL */
-    .stButton button {
-        text-align: left; padding: 12px; background: transparent; color: #999; 
-        width: 100%; border: 1px solid transparent; border-radius: 8px !important; font-weight: 600;
-    }
-    .stButton button:hover { color: #FFF; background: #1A1A1A; border: 1px solid #333; }
+    /* ESTILIZAÇÃO DAS IMAGENS DOS GATOS (BORDAS ARREDONDADAS) */
+    img { border-radius: 12px; }
     
-    .questao-container {
-        background-color: #111; border: 1px solid #333; border-left: 4px solid #333;
-        padding: 30px; margin-bottom: 40px; border-radius: 0px;
-    }
+    /* GERAL */
+    .stButton button { text-align: left; padding: 12px; background: transparent; color: #999; width: 100%; border-radius: 8px !important; }
+    .stButton button:hover { color: #FFF; background: #1A1A1A; border: 1px solid #333; }
+    .questao-container { background-color: #111; border: 1px solid #333; border-left: 4px solid #333; padding: 30px; margin-bottom: 40px; }
     .questao-texto { font-size: 1.2rem; line-height: 1.6; color: #FFF; margin-bottom: 25px; }
     .feedback-box { margin-top: 20px; padding: 20px; }
     .feedback-correct { background-color: #051B11; border-left: 4px solid #198754; color: #75B798; }
     .feedback-wrong { background-color: #2C0B0E; border-left: 4px solid #DC3545; color: #EA868F; }
-    
     input[type="text"] { background-color: #111 !important; color: white !important; border: 1px solid #333 !important; }
 </style>
 """, unsafe_allow_html=True)
@@ -312,21 +258,17 @@ with st.sidebar:
     st.markdown("<h2 style='color: white; font-family: Inter; font-weight: 900; letter-spacing: -1px;'>Pratica.ai <span style='color:#444'>.</span></h2>", unsafe_allow_html=True)
     st.markdown("---")
     
-    # Navegação Principal
     if st.button("📄 NOVO UPLOAD", use_container_width=True):
         st.session_state.pagina_atual = "upload"; st.session_state.chat_ativo_id = None; st.rerun()
-        
     if st.button("🤖 TUTOR IA", use_container_width=True):
         st.session_state.pagina_atual = "chat_ia"; st.session_state.chat_ativo_id = None; st.rerun()
-
     if st.button("🐱 APOIE NOSSO PROJETO", use_container_width=True):
         st.session_state.pagina_atual = "apoio"; st.session_state.chat_ativo_id = None; st.rerun()
     
-    # --- ÁREA DO SUPER BANNER DE VENDAS (CONTEXTUAL) ---
+    # --- ÁREA DO SUPER BANNER (OFERTAS) ---
     st.markdown("---")
     st.markdown("<p style='font-size: 0.75rem; color: #888; font-weight: 800; letter-spacing: 1px; margin-bottom: 10px;'>PATROCINADO</p>", unsafe_allow_html=True)
     
-    # 1. Detectar Contexto
     contexto_usuario = ""
     if st.session_state.pagina_atual == "visualizacao" and st.session_state.chat_ativo_id:
         estudo_ativo = next((e for e in st.session_state.historico if e["id"] == st.session_state.chat_ativo_id), None)
@@ -334,13 +276,11 @@ with st.sidebar:
     elif st.session_state.pagina_atual == "chat_ia" and len(st.session_state.mensagens_ia) > 1:
              contexto_usuario = st.session_state.mensagens_ia[-2]['content']
 
-    # 2. Escolher Categoria e Link
     cat_nome = ia_escolher_categoria(contexto_usuario)
     cat_data = CATALOGO_PREMIUM[cat_nome]
     link_final = random.choice(cat_data["links"])
     visual = cat_data["visual"]
 
-    # 3. Renderizar o SUPER BANNER
     st.markdown(f"""
     <a href="{link_final}" target="_blank" class="super-banner" style="{visual['bg_style']}">
         <div class="sb-badge">{visual['badge']}</div>
@@ -352,8 +292,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
     st.markdown("---")
 
-    # Biblioteca
-    st.markdown("<p style='font-size: 0.7rem; color: #666; text-transform: uppercase; font-weight: bold;'>Sua Biblioteca</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 0.7rem; color: #666; text-transform: uppercase; font-weight: bold;'>Biblioteca</p>", unsafe_allow_html=True)
     for estudo in st.session_state.historico:
         if st.session_state.editando_id == estudo["id"]:
             def salvar_nome(): st.session_state.editando_id = None
@@ -372,12 +311,11 @@ with st.sidebar:
 
 # --- 9. ÁREA PRINCIPAL ---
 
-# >>> PÁGINA 1: UPLOAD <<<
 if st.session_state.pagina_atual == "upload":
     st.markdown("""
     <div style="text-align: left; margin-top: 80px;">
         <h1 style="font-size: 4rem; color: #FFF; font-weight: 900; letter-spacing: -2px;">PRATICA<span style="color: #444;">.AI</span></h1>
-        <p style="color: #888; font-size: 1.2rem; font-weight: 500;">A melhor forma de estudar, potencializada por IA.</p>
+        <p style="color: #888; font-size: 1.2rem;">A melhor forma de estudar, potencializada por IA.</p>
     </div>
     """, unsafe_allow_html=True)
     col_up, _ = st.columns([1, 1])
@@ -395,26 +333,37 @@ if st.session_state.pagina_atual == "upload":
                     if questoes: criar_novo_estudo(arquivo.name, questoes); st.rerun()
                     else: st.error("Erro ao processar.")
 
-# >>> PÁGINA 2: APOIO (PIX & GATOS) <<<
+# >>> PÁGINA DE APOIO ATUALIZADA (Layout Pirâmide) <<<
 elif st.session_state.pagina_atual == "apoio":
-    st.title("🐱 Apoie o Projeto (e o Gatinho)")
+    st.title("🐱 Apoie o Projeto")
     
     st.markdown("""
-    <h3 style="color: #CCC;">O site é 100% grátis!</h3>
-    Mas se ele te ajudou nos estudos e você quiser pagar um sachê para o nosso <b>Gerente de TI (o gato das fotos)</b>, ficaremos muito felizes!
+    <h3 style="color: #CCC;">Ajude a manter o servidor ligado!</h3>
+    O site é grátis, mas se quiser pagar um sachê para o <b>Gerente de TI (o gato)</b>, ficaremos felizes!
     """, unsafe_allow_html=True)
     
-    # GALERIA DE FOTOS DO GATO
-    cols_gato = st.columns(3)
-    fotos_gato = ["gato1.jpeg", "gato2.jpeg", "gato3.jpeg"] # Lembre de colocar os arquivos na pasta!
-    caption_gato = ["O Gerente julgando seu estudo.", "Tirando um cochilo pós-deploy.", "Esperando o Pix do sachê."]
+    # LAYOUT PIRÂMIDE
+    # 1. Foto do Topo (Centralizada) - gato1
+    c_top_left, c_top_center, c_top_right = st.columns([1, 2, 1]) # Coluna do meio é maior
+    with c_top_center:
+        if os.path.exists("gato1.jpeg"):
+            st.image("gato1.jpeg", caption="O Gerente julgando seu estudo.", use_container_width=True)
+        else:
+            st.warning("Foto gato1.jpeg não encontrada.")
+
+    # 2. Fotos da Base (Lado a Lado) - gato2 e gato3
+    st.markdown("<br>", unsafe_allow_html=True)
+    c_bot1, c_bot2 = st.columns(2)
     
-    for i, foto in enumerate(fotos_gato):
-        with cols_gato[i]:
-            if os.path.exists(foto):
-                st.image(foto, caption=caption_gato[i], use_column_width=True)
-            else:
-                st.warning(f"📸 Foto {foto} não encontrada na pasta.")
+    with c_bot1:
+        if os.path.exists("gato2.jpeg"):
+            st.image("gato2.jpeg", caption="Tirando um cochilo pós-deploy.", use_container_width=True)
+        else: st.warning("gato2.jpeg faltando.")
+            
+    with c_bot2:
+        if os.path.exists("gato3.jpeg"):
+            st.image("gato3.jpeg", caption="Esperando o Pix do sachê.", use_container_width=True)
+        else: st.warning("gato3.jpeg faltando.")
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("### 💠 Chave Pix Copia e Cola")
@@ -426,8 +375,6 @@ elif st.session_state.pagina_atual == "apoio":
     </div>
     """, unsafe_allow_html=True)
 
-
-# >>> PÁGINA 3: TUTOR IA <<<
 elif st.session_state.pagina_atual == "chat_ia":
     st.title("🤖 Tutor IA")
     modo_tutor = st.radio("OPÇÕES:", ["💬 Conversar", "📝 Criar Simulado"], horizontal=True)
@@ -452,7 +399,6 @@ elif st.session_state.pagina_atual == "chat_ia":
                 questoes = chamar_ia_json(assunto, "criar")
                 if questoes: criar_novo_estudo(f"Simulado: {assunto}", questoes); st.rerun()
 
-# >>> PÁGINA 4: VISUALIZAÇÃO DO SIMULADO <<<
 elif st.session_state.pagina_atual == "visualizacao" and st.session_state.chat_ativo_id:
     estudo_ativo = next((e for e in st.session_state.historico if e["id"] == st.session_state.chat_ativo_id), None)
     if estudo_ativo:
