@@ -17,15 +17,21 @@ except:
 if API_KEY:
     genai.configure(api_key=API_KEY)
 
-# --- 2. SETUP DA PÁGINA ---
+# --- 2. CONFIGURAÇÃO DE ESTADO DO MENU (NOVO) ---
+# Se não existir um estado definido para o menu, inicia como "auto"
+if "sidebar_state" not in st.session_state:
+    st.session_state.sidebar_state = "auto"
+
+# --- 3. SETUP DA PÁGINA ---
 st.set_page_config(
     page_title="Pratica.ai",
     page_icon="🐱",
     layout="wide",
-    initial_sidebar_state="auto" 
+    # Aqui usamos a variável de estado para decidir se abre ou fecha
+    initial_sidebar_state=st.session_state.sidebar_state 
 )
 
-# --- 3. BANCO DE DADOS ---
+# --- 4. BANCO DE DADOS ---
 def init_db():
     conn = sqlite3.connect('dados_pratica.db')
     c = conn.cursor()
@@ -69,7 +75,7 @@ def deletar_estudo_bd(id_estudo):
 
 init_db()
 
-# --- 4. CATÁLOGO DE VENDAS ---
+# --- 5. CATÁLOGO DE VENDAS ---
 CATALOGO_PREMIUM = {
     "direito": {
         "visual": {"badge": "🔥 OFERTA", "titulo": "KIT OAB 2026", "icone": "⚖️", "bg_style": "background: linear-gradient(135deg, #240b36 0%, #c31432 100%);", "btn_text": "VER PREÇO"},
@@ -117,18 +123,17 @@ def ia_escolher_categoria(contexto_usuario):
     if any(x in ctx for x in ["policia", "taf"]): return "policial"
     return "geral"
 
-# --- 5. CSS (LIMPEZA TOTAL - MODO NATIVO) ---
-# Removemos todas as cores forçadas. O app vai usar o tema do seu sistema (Claro/Escuro).
+# --- 6. CSS (LIMPO - SEM TEMA ESCURO FORÇADO) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap');
     
-    /* 1. REMOÇÃO DO RODAPÉ (Made with Streamlit) */
+    /* 1. REMOÇÃO DO RODAPÉ */
     footer { visibility: hidden; display: none !important; }
     .stDeployButton { display: none !important; }
     #MainMenu { visibility: hidden; display: none !important; }
 
-    /* --- SUPER BANNER (Mantido pois tem cor própria) --- */
+    /* --- SUPER BANNER --- */
     @keyframes pulse-border {
         0% { box-shadow: 0 0 0 0 rgba(240, 193, 75, 0.4); }
         70% { box-shadow: 0 0 0 10px rgba(240, 193, 75, 0); }
@@ -145,11 +150,11 @@ st.markdown("""
     .sb-prod-name { background: rgba(0,0,0,0.4); color: #FFF !important; font-size: 0.8rem; padding: 5px; margin-bottom: 15px; border-left: 3px solid #FFD700;}
     .sb-button { background: #FFF; color: #000 !important; text-align: center; font-weight: 900; padding: 12px; display: block; font-size: 0.8rem; border-radius: 4px; }
 
-    /* --- CARD BIBLIOTECA (Adaptável) --- */
+    /* --- CARD BIBLIOTECA --- */
     .lib-card {
         border: 1px solid #444; padding: 20px;
         cursor: pointer; border-left: 5px solid #F0C14B; margin-bottom: 10px;
-        background-color: #262730; /* Fundo escuro padrão para cards */
+        background-color: #262730; 
         color: white;
         border-radius: 5px;
     }
@@ -161,7 +166,7 @@ st.markdown("""
     .pix-key { font-family: monospace; background: #EEE; padding: 15px; color: #333 !important; font-size: 0.9rem; word-break: break-all; border: 1px solid #CCC; margin-top: 5px; font-weight: bold;}
     
     .questao-container { 
-        background-color: #262730; /* Fundo escuro para destacar no modo claro */
+        background-color: #262730; 
         color: white !important;
         border: 1px solid #444; 
         border-left: 5px solid #666; 
@@ -176,13 +181,13 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- 6. ESTADO ---
+# --- 7. ESTADO ---
 if "historico" not in st.session_state: st.session_state.historico = carregar_historico_bd()
 if "pagina_atual" not in st.session_state: st.session_state.pagina_atual = "upload"
 if "chat_ativo_id" not in st.session_state: st.session_state.chat_ativo_id = None
 if "mensagens_ia" not in st.session_state: st.session_state.mensagens_ia = [{"role": "model", "content": "Olá! Sou seu Tutor IA."}]
 
-# --- 7. FUNÇÕES ---
+# --- 8. FUNÇÕES DO SISTEMA ---
 def ler_pdf(arquivo):
     try:
         leitor = pypdf.PdfReader(arquivo)
@@ -223,15 +228,22 @@ def criar_novo_estudo(nome_arquivo, questoes):
     st.session_state.pagina_atual = "biblioteca" 
     st.rerun()
 
-# --- 8. BARRA LATERAL ---
+# --- FUNÇÃO DE NAVEGAÇÃO QUE FECHA O MENU ---
+def navegar_para(pagina):
+    st.session_state.pagina_atual = pagina
+    st.session_state.sidebar_state = "collapsed" # <-- O SEGREDO ESTÁ AQUI
+    st.rerun()
+
+# --- 9. BARRA LATERAL ---
 with st.sidebar:
     st.header("PRATICA.AI 🐱")
     st.markdown("---")
     
-    if st.button("📄 NOVO UPLOAD", use_container_width=True): st.session_state.pagina_atual = "upload"; st.rerun()
-    if st.button("📚 BIBLIOTECA", use_container_width=True): st.session_state.pagina_atual = "biblioteca"; st.rerun()
-    if st.button("🤖 TUTOR IA", use_container_width=True): st.session_state.pagina_atual = "chat_ia"; st.rerun()
-    if st.button("🐱 APOIE", use_container_width=True): st.session_state.pagina_atual = "apoio"; st.rerun()
+    # Botões agora usam a função 'navegar_para'
+    if st.button("📄 NOVO UPLOAD", use_container_width=True): navegar_para("upload")
+    if st.button("📚 BIBLIOTECA", use_container_width=True): navegar_para("biblioteca")
+    if st.button("🤖 TUTOR IA", use_container_width=True): navegar_para("chat_ia")
+    if st.button("🐱 APOIE", use_container_width=True): navegar_para("apoio")
     
     st.markdown("---")
     
@@ -259,7 +271,7 @@ with st.sidebar:
     </a>
     """, unsafe_allow_html=True)
 
-# --- 9. ÁREA PRINCIPAL ---
+# --- 10. ÁREA PRINCIPAL ---
 
 # >>> UPLOAD <<<
 if st.session_state.pagina_atual == "upload":
