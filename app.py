@@ -8,8 +8,7 @@ import random
 import os
 from datetime import datetime
 
-# --- 1. SETUP DA PÁGINA (Deve ser o primeiro comando) ---
-# Recupera o estado do menu (se deve estar aberto ou fechado)
+# --- 1. CONFIGURAÇÃO INICIAL (Obrigatório ser o primeiro comando) ---
 if "sidebar_state" not in st.session_state:
     st.session_state.sidebar_state = "auto"
 
@@ -73,7 +72,13 @@ def deletar_estudo_bd(id_estudo):
 
 init_db()
 
-# --- 4. CATÁLOGO DE VENDAS ---
+# --- 4. FUNÇÃO DE NAVEGAÇÃO (CALLBACK) ---
+# Esta função roda quando o botão é clicado, ANTES da página recarregar.
+def navegar(pagina):
+    st.session_state.pagina_atual = pagina
+    st.session_state.sidebar_state = "collapsed"  # Força o fechamento do menu
+
+# --- 5. CATÁLOGO DE VENDAS ---
 CATALOGO_PREMIUM = {
     "direito": {
         "visual": {"badge": "🔥 OFERTA", "titulo": "KIT OAB 2026", "icone": "⚖️", "bg_style": "background: linear-gradient(135deg, #240b36 0%, #c31432 100%);", "btn_text": "VER PREÇO"},
@@ -121,7 +126,7 @@ def ia_escolher_categoria(contexto_usuario):
     if any(x in ctx for x in ["policia", "taf"]): return "policial"
     return "geral"
 
-# --- 5. CSS (MODO NATIVO LIMPO) ---
+# --- 6. CSS LIMPO E RESPONSIVO ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap');
@@ -179,13 +184,13 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- 6. ESTADO ---
+# --- 7. ESTADO ---
 if "historico" not in st.session_state: st.session_state.historico = carregar_historico_bd()
 if "pagina_atual" not in st.session_state: st.session_state.pagina_atual = "upload"
 if "chat_ativo_id" not in st.session_state: st.session_state.chat_ativo_id = None
 if "mensagens_ia" not in st.session_state: st.session_state.mensagens_ia = [{"role": "model", "content": "Olá! Sou seu Tutor IA."}]
 
-# --- 7. FUNÇÕES DO SISTEMA ---
+# --- 8. FUNÇÕES DO SISTEMA ---
 def ler_pdf(arquivo):
     try:
         leitor = pypdf.PdfReader(arquivo)
@@ -226,22 +231,16 @@ def criar_novo_estudo(nome_arquivo, questoes):
     st.session_state.pagina_atual = "biblioteca" 
     st.rerun()
 
-# --- FUNÇÃO DE NAVEGAÇÃO QUE FECHA O MENU ---
-def navegar_para(pagina):
-    st.session_state.pagina_atual = pagina
-    st.session_state.sidebar_state = "collapsed"
-    st.rerun()
-
-# --- 8. BARRA LATERAL ---
+# --- 9. BARRA LATERAL (COM NAVEGAÇÃO 'ON CLICK') ---
 with st.sidebar:
     st.header("PRATICA.AI 🐱")
     st.markdown("---")
     
-    # Botões de navegação
-    if st.button("📄 NOVO UPLOAD", use_container_width=True): navegar_para("upload")
-    if st.button("📚 BIBLIOTECA", use_container_width=True): navegar_para("biblioteca")
-    if st.button("🤖 TUTOR IA", use_container_width=True): navegar_para("chat_ia")
-    if st.button("🐱 APOIE", use_container_width=True): navegar_para("apoio")
+    # Botões usando Callbacks (A chave do sucesso no Mobile)
+    st.button("📄 NOVO UPLOAD", on_click=navegar, args=("upload",), use_container_width=True)
+    st.button("📚 BIBLIOTECA", on_click=navegar, args=("biblioteca",), use_container_width=True)
+    st.button("🤖 TUTOR IA", on_click=navegar, args=("chat_ia",), use_container_width=True)
+    st.button("🐱 APOIE", on_click=navegar, args=("apoio",), use_container_width=True)
     
     st.markdown("---")
     
@@ -269,7 +268,7 @@ with st.sidebar:
     </a>
     """, unsafe_allow_html=True)
 
-# --- 9. ÁREA PRINCIPAL ---
+# --- 10. ÁREA PRINCIPAL ---
 
 # >>> UPLOAD <<<
 if st.session_state.pagina_atual == "upload":
