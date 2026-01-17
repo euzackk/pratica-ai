@@ -11,7 +11,6 @@ from datetime import datetime
 try:
     API_KEY = st.secrets["GOOGLE_API_KEY"]
 except:
-    # Coloque sua chave aqui apenas para testes locais
     API_KEY = "AIzaSyAq0c34TLlblT-a6ysdDr07edPBfnqR4kA" 
 
 if API_KEY:
@@ -62,112 +61,161 @@ def salvar_estudo_bd(estudo):
 
 init_db()
 
-# --- 4. SISTEMA DE AFILIADOS COM IA (SEUS LINKS) ---
-
-# Banco de Links Organizado com base na sua lista
-LINKS_AFILIADOS = {
-    "direito": [
-        "https://amzn.to/4qJymYt", "https://amzn.to/4qAOVWf", "https://amzn.to/45jNwuK", 
-        "https://amzn.to/4sKGLft", "https://amzn.to/4qslPZa"
-    ],
-    "tecnologia": [
-        "https://amzn.to/4pJLkUC", "https://amzn.to/3LyNpVu", "https://amzn.to/49BErP3", 
-        "https://amzn.to/4pFde4d", "https://amzn.to/4pCyW8J", "https://amzn.to/49Fvep3", 
-        "https://amzn.to/49Ey5yr", "https://amzn.to/3LHtK5z", "https://amzn.to/4qxDgaS", 
-        "https://amzn.to/49Egzue", "https://amzn.to/4aYslC1", "https://amzn.to/4qwxGW4", 
-        "https://amzn.to/49HXuXY", "https://amzn.to/4bn0coz", "https://amzn.to/4b3nWOj", 
-        "https://amzn.to/3LPR69e", "https://amzn.to/3NP6hQz", "https://amzn.to/3Zgb4Np", 
-        "https://amzn.to/4quE3cz", "https://amzn.to/3NQ8fQE", "https://amzn.to/3YK4Fdd", 
-        "https://amzn.to/45LnEbc", "https://amzn.to/4qs17sv", "https://amzn.to/3Nywpix", 
-        "https://amzn.to/4pF9wr7", "https://amzn.to/4r44fe1"
-    ],
-    "policial": [
-        "https://amzn.to/4qPWLeq", "https://amzn.to/4jK4vMs", "https://amzn.to/4qXVCBy", 
-        "https://amzn.to/4jOjNjx", "https://amzn.to/4qln2kV", "https://amzn.to/45cQFMP", 
-        "https://amzn.to/3Nhq3En"
-    ],
-    "geral": [
-        "https://amzn.to/3NpLfYP", "https://amzn.to/49Z1vsr", "https://amzn.to/4sL9elk", 
-        "https://amzn.to/4sKkRZD", "https://amzn.to/49Z1AML", "https://amzn.to/45X3YRE", 
-        "https://amzn.to/4qSYWxD", "https://amzn.to/45Ym7yx", "https://amzn.to/4qYh0GT", 
-        "https://amzn.to/4qXRrWb", "https://amzn.to/4qYh5KH", "https://amzn.to/49qnnwD", 
-        "https://amzn.to/3Nvg91N", "https://amzn.to/4sHWTOM", "https://amzn.to/4sLF5SM", 
-        "https://amzn.to/4sRPi0j", "https://amzn.to/4qX4BCS", "https://amzn.to/4r1JUWI", 
-        "https://amzn.to/4riIes3", "https://amzn.to/4sPKZCK", "https://amzn.to/45fnwRd", 
-        "https://amzn.to/4sIELnN", "https://amzn.to/4qqxg3r", "https://amzn.to/4quiOaK", 
-        "https://amzn.to/3LvT7r9", "https://amzn.to/4qnkYZB", "https://amzn.to/4jKBAYV", 
-        "https://amzn.to/4jM9FI6", "https://amzn.to/4jHMRci", "https://amzn.to/45eVftW", 
-        "https://amzn.to/4quExiT", "https://amzn.to/45iqd4t", "https://amzn.to/4quiQPU", 
-        "https://amzn.to/3Lnk93Y", "https://amzn.to/4bCsL16"
-    ]
-}
-
-# Informações visuais para o banner
-INFO_CATEGORIA = {
-    "direito": {"titulo": "⚖️ Seleção Jurídica", "desc": "Vade Mecums e livros essenciais para seus estudos."},
-    "tecnologia": {"titulo": "💻 Tech & Produtividade", "desc": "Equipamentos de alta performance recomendados."},
-    "policial": {"titulo": "🛡️ Carreiras Policiais", "desc": "Material tático e apostilas focadas."},
-    "geral": {"titulo": "🎒 Ofertas para Estudantes", "desc": "Kindle, acessórios e itens essenciais."}
+# --- 4. CATALOGO DE PRODUTOS "PREMIUM" ---
+# Aqui configuramos o visual de cada categoria
+CATALOGO_VISUAL = {
+    "direito": {
+        "icone": "⚖️",
+        "titulo": "Vade Mecum 2026",
+        "subtitulo": "Obrigatório para OAB",
+        "badge": "MAIS VENDIDO",
+        "cor_badge": "#FFD700", # Dourado
+        "links": ["https://amzn.to/4qJymYt", "https://amzn.to/4qAOVWf", "https://amzn.to/45jNwuK", "https://amzn.to/4sKGLft"]
+    },
+    "tecnologia": {
+        "icone": "💻",
+        "titulo": "Setup de Estudos",
+        "subtitulo": "Notebooks & Acessórios",
+        "badge": "OFERTA RELÂMPAGO",
+        "cor_badge": "#00FF7F", # Verde Neon
+        "links": ["https://amzn.to/4pJLkUC", "https://amzn.to/3LyNpVu", "https://amzn.to/49BErP3", "https://amzn.to/4pFde4d"]
+    },
+    "policial": {
+        "icone": "🛡️",
+        "titulo": "Kit Policial",
+        "subtitulo": "Apostilas & Tático",
+        "badge": "APROVAÇÃO",
+        "cor_badge": "#FF4500", # Laranja Forte
+        "links": ["https://amzn.to/4qPWLeq", "https://amzn.to/4jK4vMs", "https://amzn.to/4qXVCBy", "https://amzn.to/4jOjNjx"]
+    },
+    "geral": {
+        "icone": "🎒",
+        "titulo": "Essenciais",
+        "subtitulo": "Kindle, Fones e +",
+        "badge": "PROMOÇÃO",
+        "cor_badge": "#1E90FF", # Azul
+        "links": ["https://amzn.to/3NpLfYP", "https://amzn.to/49Z1vsr", "https://amzn.to/4sL9elk", "https://amzn.to/4sKkRZD"]
+    }
 }
 
 def ia_escolher_anuncio(contexto_usuario):
-    """
-    Usa a IA (Gemini) como Gerente de Marketing.
-    Ela analisa o que o usuário está fazendo e decide qual produto ofertar.
-    """
+    """Define a categoria baseada no contexto"""
     if not contexto_usuario or len(contexto_usuario) < 5:
-        # Se não tiver contexto, sorteia geral ou tecnologia
-        cat = random.choice(["geral", "tecnologia"])
-        return cat, random.choice(LINKS_AFILIADOS[cat])
+        return CATALOGO_VISUAL["geral"]
 
     model = genai.GenerativeModel('gemini-flash-latest')
-    
-    # Prompt de Marketing Contextual
     prompt = f"""
-    Atue como um sistema de recomendação de anúncios inteligente.
-    
-    Contexto do Usuário (o que ele está estudando/lendo): 
-    "{contexto_usuario[:800]}"
-    
-    Temos 4 categorias de produtos para vender:
-    1. direito (Vade Mecum, livros de lei)
-    2. tecnologia (Notebooks, teclados, mouse)
-    3. policial (Apostilas para policia, itens táticos)
-    4. geral (Kindle, roupas, academia, fones)
-    
-    Com base no contexto, qual categoria tem a MAIOR chance de conversão?
-    Responda APENAS a palavra da categoria em minúsculo. Se nada bater, responda 'geral'.
+    Contexto: "{contexto_usuario[:500]}"
+    Categorias: direito, tecnologia, policial, geral.
+    Responda APENAS a categoria.
     """
-    
     try:
-        response = model.generate_content(prompt)
-        categoria_ia = response.text.strip().lower()
-        
-        # Limpeza caso a IA responda algo fora do padrão
-        if "direito" in categoria_ia: categoria_ia = "direito"
-        elif "tecnologia" in categoria_ia: categoria_ia = "tecnologia"
-        elif "policial" in categoria_ia: categoria_ia = "policial"
-        elif "geral" in categoria_ia: categoria_ia = "geral"
-        else: categoria_ia = "geral"
-            
-    except:
-        categoria_ia = "geral"
+        resp = model.generate_content(prompt).text.lower()
+        if "direito" in resp: return CATALOGO_VISUAL["direito"]
+        if "tec" in resp: return CATALOGO_VISUAL["tecnologia"]
+        if "poli" in resp: return CATALOGO_VISUAL["policial"]
+        return CATALOGO_VISUAL["geral"]
+    except: return CATALOGO_VISUAL["geral"]
 
-    # Retorna a categoria e um link aleatório daquela lista
-    return categoria_ia, random.choice(LINKS_AFILIADOS[categoria_ia])
-
-# --- 5. CSS ---
+# --- 5. CSS REVOLUCIONÁRIO (VISUAL DE VENDAS) ---
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
     
-    html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: #E0E0E0; background-color: #000000; }
-    .stApp { background-color: #000000; }
-    section[data-testid="stSidebar"] { background-color: #0A0A0A; border-right: 1px solid #333; }
+    html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: #E0E0E0; background-color: #050505; }
+    .stApp { background-color: #050505; }
+    section[data-testid="stSidebar"] { background-color: #0F0F0F; border-right: 1px solid #222; }
     
+    /* --- CARD DE PRODUTO AMAZON STYLE --- */
+    .product-card {
+        background: #141414;
+        border: 1px solid #333;
+        border-radius: 12px;
+        padding: 0;
+        margin: 20px 0;
+        text-decoration: none;
+        display: block;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        border-color: #555;
+    }
+    
+    .card-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #FFD700;
+        color: #000;
+        font-size: 0.6rem;
+        font-weight: 900;
+        padding: 4px 8px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        z-index: 2;
+    }
+    
+    .card-image-area {
+        height: 100px;
+        background: radial-gradient(circle, #2a2a2a 0%, #141414 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3.5rem;
+    }
+    
+    .card-content {
+        padding: 15px;
+    }
+    
+    .card-title {
+        color: #FFF;
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 4px;
+        display: block;
+    }
+    
+    .card-subtitle {
+        color: #888;
+        font-size: 0.8rem;
+        display: block;
+        margin-bottom: 10px;
+    }
+    
+    .card-rating {
+        color: #FFB800;
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+        margin-bottom: 12px;
+        display: block;
+    }
+    
+    .card-btn {
+        background: #F0C14B; /* Cor do botão Amazon */
+        color: #111;
+        text-align: center;
+        font-weight: 700;
+        padding: 10px;
+        border-radius: 6px;
+        display: block;
+        font-size: 0.9rem;
+        transition: 0.2s;
+    }
+    
+    .card-btn:hover {
+        background: #eebb30;
+    }
+
+    /* Outros Estilos do App */
     .stButton button {
         text-align: left; padding: 10px; border: 1px solid transparent;
-        background: transparent; color: #888; width: 100%; border-radius: 0px !important;
+        background: transparent; color: #888; width: 100%; border-radius: 6px !important;
     }
     .stButton button:hover { color: #FFF; background: #1A1A1A; border: 1px solid #333; }
     
@@ -175,35 +223,12 @@ st.markdown("""
         background-color: #111; border: 1px solid #333; border-left: 4px solid #333;
         padding: 30px; margin-bottom: 40px; border-radius: 0px;
     }
-    .questao-header { font-family: 'JetBrains Mono'; color: #666; font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 15px; }
     .questao-texto { font-size: 1.2rem; line-height: 1.6; color: #FFF; margin-bottom: 25px; }
-    
-    .feedback-box { margin-top: 20px; padding: 20px; font-size: 0.95rem; animation: fadeIn 0.5s; }
-    .feedback-correct { background-color: #051B11; border: 1px solid #0F5132; border-left: 4px solid #198754; color: #75B798; }
-    .feedback-wrong { background-color: #2C0B0E; border: 1px solid #842029; border-left: 4px solid #DC3545; color: #EA868F; }
-    
-    /* ANÚNCIOS INTELIGENTES */
-    .ad-card {
-        display: block; padding: 15px; margin: 15px 0;
-        background: linear-gradient(145deg, #161616, #0A0A0A); 
-        border: 1px solid #333; color: #CCC;
-        text-decoration: none; font-size: 0.9rem; transition: 0.3s;
-        text-align: left; border-radius: 0px;
-        position: relative; overflow: hidden;
-    }
-    .ad-card:hover { border-color: #58a6ff; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-    .ad-tag { 
-        font-size: 0.6rem; color: #000; background: #EEE; 
-        padding: 2px 6px; font-weight: bold;
-        display: inline-block; margin-bottom: 8px; font-family: 'JetBrains Mono';
-    }
-    .ad-title { color: #FFF; font-weight: bold; font-size: 1rem; margin-bottom: 4px; display: block; }
-    .ad-desc { font-size: 0.8rem; color: #888; }
-    .pix-box { font-family: 'JetBrains Mono'; background: #222; padding: 10px; font-size: 0.8rem; color: #FFF; border: 1px dashed #555; word-break: break-all; }
+    .feedback-box { margin-top: 20px; padding: 20px; font-size: 0.95rem; }
+    .feedback-correct { background-color: #051B11; border-left: 4px solid #198754; color: #75B798; }
+    .feedback-wrong { background-color: #2C0B0E; border-left: 4px solid #DC3545; color: #EA868F; }
     
     input[type="text"], input[type="password"] { background-color: #111 !important; color: white !important; border: 1px solid #333 !important; }
-    .stRadio label { color: #CCC !important; }
-    .small-btn button { padding: 5px !important; text-align: center; font-size: 1.2rem !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -212,7 +237,7 @@ if "historico" not in st.session_state: st.session_state.historico = carregar_hi
 if "pagina_atual" not in st.session_state: st.session_state.pagina_atual = "upload"
 if "chat_ativo_id" not in st.session_state: st.session_state.chat_ativo_id = None
 if "editando_id" not in st.session_state: st.session_state.editando_id = None
-if "mensagens_ia" not in st.session_state: st.session_state.mensagens_ia = [{"role": "model", "content": "Olá! Sou seu Tutor IA. Pode me pedir questões ou tirar dúvidas."}]
+if "mensagens_ia" not in st.session_state: st.session_state.mensagens_ia = [{"role": "model", "content": "Olá! Sou seu Tutor IA."}]
 
 # --- 7. FUNÇÕES DE IA ---
 def ler_pdf(arquivo):
@@ -249,9 +274,9 @@ def criar_novo_estudo(nome_arquivo, questoes):
     st.session_state.chat_ativo_id = novo_id
     st.session_state.pagina_atual = "visualizacao"
 
-# --- 8. BARRA LATERAL (COM IA DE VENDAS) ---
+# --- 8. BARRA LATERAL (COM CARD PREMIUM) ---
 with st.sidebar:
-    st.markdown("<h2 style='color: white; font-family: JetBrains Mono;'>Pratica.ai_</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='color: white; font-family: Inter; font-weight: 900; letter-spacing: -1px;'>Pratica.ai <span style='color:#F0C14B'>.</span></h2>", unsafe_allow_html=True)
     st.markdown("---")
     
     if st.button("＋ NOVO UPLOAD", use_container_width=True):
@@ -264,7 +289,7 @@ with st.sidebar:
         st.session_state.chat_ativo_id = None
         st.rerun()
     
-    st.markdown("<br><p style='font-size: 0.8rem; color: #666; text-transform: uppercase;'>Biblioteca</p>", unsafe_allow_html=True)
+    st.markdown("<br><p style='font-size: 0.7rem; color: #666; text-transform: uppercase; font-weight: bold;'>Sua Biblioteca</p>", unsafe_allow_html=True)
     
     for estudo in st.session_state.historico:
         if st.session_state.editando_id == estudo["id"]:
@@ -278,70 +303,69 @@ with st.sidebar:
         else:
             col_nav, col_edit = st.columns([5, 1])
             with col_nav:
-                icone = "■" if st.session_state.chat_ativo_id == estudo["id"] else "□"
+                icone = "📂" if st.session_state.chat_ativo_id == estudo["id"] else "📁"
                 if st.button(f"{icone} {estudo['titulo']}", key=f"btn_{estudo['id']}", use_container_width=True):
                     st.session_state.chat_ativo_id = estudo["id"]
                     st.session_state.pagina_atual = "visualizacao"
                     st.rerun()
             with col_edit:
-                st.markdown('<div class="small-btn">', unsafe_allow_html=True)
                 if st.button("✎", key=f"edit_{estudo['id']}"):
                     st.session_state.editando_id = estudo["id"]
                     st.rerun()
-                st.markdown('</div>', unsafe_allow_html=True)
 
-    # --- LÓGICA DE RECOMENDAÇÃO AUTOMÁTICA (AI POWERED) ---
-    # 1. Determina o contexto
-    contexto_usuario = ""
+    # --- CARD DE ANÚNCIO PREMIUM (IA POWERED) ---
+    st.markdown("<br>", unsafe_allow_html=True)
     
+    # 1. Detectar Contexto
+    contexto_usuario = ""
     if st.session_state.pagina_atual == "visualizacao" and st.session_state.chat_ativo_id:
         estudo_ativo = next((e for e in st.session_state.historico if e["id"] == st.session_state.chat_ativo_id), None)
-        if estudo_ativo:
-            contexto_usuario = estudo_ativo['titulo']
-            
+        if estudo_ativo: contexto_usuario = estudo_ativo['titulo']
     elif st.session_state.pagina_atual == "chat_ia":
         if len(st.session_state.mensagens_ia) > 1:
-             for msg in reversed(st.session_state.mensagens_ia):
-                 if msg['role'] == 'user':
-                     contexto_usuario = msg['content']
-                     break
+             contexto_usuario = st.session_state.mensagens_ia[-2]['content'] # Pega ultima msg user
 
-    # 2. IA escolhe o anúncio
-    cat_escolhida, link_escolhido = ia_escolher_anuncio(contexto_usuario)
-    info_visual = INFO_CATEGORIA[cat_escolhida]
+    # 2. IA Escolhe a Categoria
+    produto_info = ia_escolher_anuncio(contexto_usuario)
+    link_final = random.choice(produto_info["links"]) # Pega um link aleatório da lista daquela categoria
 
-    # 3. Exibe o anúncio
-    st.markdown("---")
+    # 3. Renderiza o Card Bonito
     st.markdown(f"""
-    <a href="{link_escolhido}" target="_blank" class="ad-card">
-        <span class="ad-tag">RECOMENDADO PELA IA</span>
-        <span class="ad-title">{info_visual['titulo']}</span>
-        <span class="ad-desc">{info_visual['desc']}</span>
+    <a href="{link_final}" target="_blank" class="product-card">
+        <div class="card-badge" style="background: {produto_info['cor_badge']}">{produto_info['badge']}</div>
+        <div class="card-image-area">
+            {produto_info['icone']}
+        </div>
+        <div class="card-content">
+            <span class="card-title">{produto_info['titulo']}</span>
+            <span class="card-subtitle">{produto_info['subtitulo']}</span>
+            <span class="card-rating">⭐⭐⭐⭐⭐ (4.9)</span>
+            <span class="card-btn">VER PREÇO E OFERTA</span>
+        </div>
     </a>
     """, unsafe_allow_html=True)
 
-    # 4. Doação Pix
-    with st.expander("💖 Apoie o Projeto"):
-        st.write("Sua doação mantém o servidor!")
-        st.caption("Chave Pix Aleatória:")
-        st.markdown(f"<div class='pix-box'>5b84b80d-c11a-4129-b897-74fb6371dfce</div>", unsafe_allow_html=True)
+    # 4. Doação Pix Discreta
+    with st.expander("☕ Pagar um café pro Dev"):
+        st.caption("Chave Pix:")
+        st.code("5b84b80d-c11a-4129-b897-74fb6371dfce", language="text")
 
 # --- 9. ÁREA PRINCIPAL ---
 if st.session_state.pagina_atual == "upload":
     st.markdown("""
     <div style="text-align: left; margin-top: 80px;">
-        <h1 style="font-size: 4rem; color: #FFF; line-height: 1;">PRATICA<br><span style="color: #444;">.AI</span></h1>
-        <p style="color: #888; font-family: 'JetBrains Mono'; margin-top: 20px;">SISTEMA DE ESTUDOS INTELIGENTE</p>
+        <h1 style="font-size: 4rem; color: #FFF; line-height: 1; font-weight: 900; letter-spacing: -2px;">PRATICA<span style="color: #F0C14B;">.AI</span></h1>
+        <p style="color: #888; margin-top: 20px; font-size: 1.2rem;">ESTUDE MENOS, APRENDA MAIS.</p>
     </div>
     """, unsafe_allow_html=True)
     col_up, _ = st.columns([1, 1])
     with col_up:
         st.markdown("<br>", unsafe_allow_html=True)
-        modo = st.radio("MODO:", ["Criar Questões do PDF", "Extrair Prova do PDF"])
+        modo = st.radio("O QUE VAMOS FAZER HOJE?", ["Criar Questões do PDF", "Extrair Prova do PDF"])
         st.markdown("<br>", unsafe_allow_html=True)
-        arquivo = st.file_uploader("ARRASTE SEU PDF AQUI", type="pdf")
-        if arquivo and st.button("PROCESSAR (GRÁTIS) ->", type="primary"):
-            with st.spinner("ANALISANDO DADOS..."):
+        arquivo = st.file_uploader("ARRASTE SEU ARQUIVO AQUI", type="pdf")
+        if arquivo and st.button("PROCESSAR ARQUIVO ->", type="primary"):
+            with st.spinner("LENDO ARQUIVO..."):
                 texto, erro = ler_pdf(arquivo)
                 if erro: st.error(erro)
                 else:
@@ -351,29 +375,30 @@ if st.session_state.pagina_atual == "upload":
                     else: st.error("Erro ao processar.")
 
 elif st.session_state.pagina_atual == "chat_ia":
-    st.title("🤖 Tutor IA (Gratuito)")
+    st.title("🤖 Tutor IA")
+    st.caption("Acesso Gratuito e Ilimitado")
     
-    # REMOVIDO BLOQUEIO (FREE PARA TODOS)
-    modo_tutor = st.radio("MODO:", ["💬 Chat", "📝 Gerar Simulado"], horizontal=True)
+    modo_tutor = st.radio("OPÇÕES:", ["💬 Conversar", "📝 Criar Simulado"], horizontal=True)
     st.markdown("<hr style='border-color: #333;'>", unsafe_allow_html=True)
     
-    if modo_tutor == "💬 Chat":
+    if modo_tutor == "💬 Conversar":
         for msg in st.session_state.mensagens_ia:
             role = "user" if msg["role"] == "user" else "assistant"
             with st.chat_message(role): st.markdown(msg["content"])
-        if prompt := st.chat_input("Pergunte algo..."):
+        if prompt := st.chat_input("Dúvida ou assunto..."):
             st.session_state.mensagens_ia.append({"role": "user", "content": prompt})
             with st.chat_message("user"): st.markdown(prompt)
             with st.chat_message("assistant"):
                 with st.spinner("..."):
                     model = genai.GenerativeModel('gemini-flash-latest')
-                    response = model.generate_content(f"Seja didático. Usuário: {prompt}")
+                    response = model.generate_content(f"Seja didático e direto. Usuário: {prompt}")
                     st.markdown(response.text)
                     st.session_state.mensagens_ia.append({"role": "model", "content": response.text})
+                    st.rerun()
     else:
-        st.info("Digite um assunto para criar uma prova instantânea.")
-        if assunto := st.chat_input("Ex: Direito Penal, Python..."):
-            with st.spinner(f"Criando: {assunto}..."):
+        st.info("Digite um tema para gerar um simulado completo na hora.")
+        if assunto := st.chat_input("Ex: Direito Constitucional, Python, SUS..."):
+            with st.spinner(f"Criando prova sobre: {assunto}..."):
                 questoes = chamar_ia_json(assunto, "criar")
                 if questoes: criar_novo_estudo(f"Simulado: {assunto}", questoes); st.rerun()
 
@@ -390,7 +415,7 @@ elif st.session_state.pagina_atual == "visualizacao" and st.session_state.chat_a
         for index, q in enumerate(estudo_ativo['questoes']):
             st.markdown(f"""
             <div class="questao-container">
-                <div class="questao-header">QUESTÃO {index + 1:02d}</div>
+                <div style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">QUESTÃO {index + 1:02d}</div>
                 <div class="questao-texto">{q['pergunta']}</div>
             </div>""", unsafe_allow_html=True)
             res_salva = estudo_ativo["respostas_usuario"].get(str(q['id']))
@@ -402,6 +427,6 @@ elif st.session_state.pagina_atual == "visualizacao" and st.session_state.chat_a
             if res_salva:
                 letra_user = res_salva.split(")")[0].strip().upper()
                 letra_correta = q['correta'].strip().upper()
-                if letra_user == letra_correta: st.markdown(f"""<div class="feedback-box feedback-correct"><b>✓ CORRETO</b><br>{q['comentario']}</div>""", unsafe_allow_html=True)
-                else: st.markdown(f"""<div class="feedback-box feedback-wrong"><b>✕ ERRADO (A correta é {letra_correta})</b><br>{q['comentario']}</div>""", unsafe_allow_html=True)
+                if letra_user == letra_correta: st.markdown(f"""<div class="feedback-box feedback-correct"><b>✓ ACERTOU</b><br>{q['comentario']}</div>""", unsafe_allow_html=True)
+                else: st.markdown(f"""<div class="feedback-box feedback-wrong"><b>✕ ERROU (Correta: {letra_correta})</b><br>{q['comentario']}</div>""", unsafe_allow_html=True)
             st.markdown("<br><br>", unsafe_allow_html=True)
