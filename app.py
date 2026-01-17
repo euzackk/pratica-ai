@@ -22,7 +22,8 @@ st.set_page_config(
     page_title="Pratica.ai",
     page_icon="🐱",
     layout="wide",
-    initial_sidebar_state="collapsed" # Começa fechado no celular para ver o conteúdo
+    # "auto" deixa o Streamlit decidir (fechado no celular, aberto no PC)
+    initial_sidebar_state="auto" 
 )
 
 # --- 3. BANCO DE DADOS ---
@@ -117,43 +118,46 @@ def ia_escolher_categoria(contexto_usuario):
     if any(x in ctx for x in ["policia", "taf"]): return "policial"
     return "geral"
 
-# --- 5. CSS (CORREÇÃO DE MENU MOBILE) ---
+# --- 5. CSS (CORREÇÃO DE MENU MOBILE + REMOÇÃO DE RODAPÉ) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap');
     
-    /* 1. CONFIGURAÇÃO DA BARRA SUPERIOR (IMPORTANTE) */
+    /* 1. CABEÇALHO E MENU (O Fix do Mobile) */
     
-    /* Deixa o header transparente, mas OCUPA espaço para o botão existir */
+    /* Esconde a barra decorativa colorida no topo */
+    [data-testid="stDecoration"] {
+        display: none;
+    }
+    
+    /* Esconde o menu da direita (3 pontinhos, GitHub, Settings) */
+    [data-testid="stToolbar"] {
+        visibility: hidden;
+    }
+    
+    /* Força o Header a ser transparente para ver o fundo preto */
     header[data-testid="stHeader"] {
         background-color: transparent !important;
-        z-index: 99 !important;
     }
     
-    /* Esconde a barra de decoração colorida */
-    [data-testid="stDecoration"] { display: none; }
-
-    /* Esconde o menu da direita (3 pontinhos/Github) */
-    [data-testid="stToolbar"] { display: none !important; }
-    #MainMenu { display: none !important; }
-    
-    /* FORÇA O BOTÃO DE MENU A APARECER E SER BRANCO */
-    [data-testid="collapsedControl"] {
+    /* GARANTE que o botão de abrir sidebar esteja VISÍVEL e BRANCO */
+    [data-testid="stSidebarCollapsedControl"] {
         display: block !important;
         color: #FFFFFF !important;
-        top: 1rem !important;
-        left: 1rem !important;
-    }
-    /* Ícone do menu */
-    [data-testid="collapsedControl"] svg {
-        fill: #FFFFFF !important;
-        width: 30px !important;
-        height: 30px !important;
     }
     
-    /* 2. REMOÇÃO DO RODAPÉ */
-    footer { display: none !important; }
-    .stDeployButton { display: none !important; }
+    /* 2. REMOÇÃO DO RODAPÉ (Made with Streamlit) */
+    footer {
+        visibility: hidden;
+        display: none !important;
+    }
+    .stDeployButton {
+        display: none !important;
+    }
+    #MainMenu {
+        visibility: hidden;
+        display: none !important;
+    }
 
     /* 3. DARK MODE ABSOLUTO */
     :root {
@@ -164,6 +168,7 @@ st.markdown("""
         --font: 'Inter', sans-serif;
     }
     .stApp, [data-testid="stAppViewContainer"] { background-color: #000000 !important; color: #ffffff !important; }
+    [data-testid="stSidebar"] { background-color: #050505 !important; border-right: 1px solid #222; }
     
     /* Inputs */
     .stTextInput input, .stSelectbox, div[data-baseweb="select"] > div {
@@ -172,7 +177,7 @@ st.markdown("""
     
     p, label, h1, h2, h3, h4, span, li { color: #e0e0e0 !important; }
 
-    /* 4. ESTILO APP (SQUARED & TOUCH FRIENDLY) */
+    /* 4. ESTILO APP (SQUARED) */
     .stButton button {
         border-radius: 0px !important;
         border: 1px solid #333;
@@ -214,7 +219,7 @@ st.markdown("""
     @media only screen and (max-width: 600px) {
         h1 { font-size: 2rem !important; line-height: 1.1 !important; }
         
-        /* Upload Area */
+        /* Ajuste do Uploader */
         [data-testid="stFileUploader"] { padding: 5px; border: 1px dashed #444; }
         [data-testid="stFileUploader"] section { padding: 20px; background-color: #050505; }
         
@@ -290,7 +295,7 @@ with st.sidebar:
     if st.button("📄 NOVO UPLOAD", use_container_width=True): st.session_state.pagina_atual = "upload"; st.rerun()
     if st.button("📚 BIBLIOTECA", use_container_width=True): st.session_state.pagina_atual = "biblioteca"; st.rerun()
     if st.button("🤖 TUTOR IA", use_container_width=True): st.session_state.pagina_atual = "chat_ia"; st.rerun()
-    if st.button("🐱 APOIE (PIX)", use_container_width=True): st.session_state.pagina_atual = "apoio"; st.rerun()
+    if st.button("🐱 APOIE", use_container_width=True): st.session_state.pagina_atual = "apoio"; st.rerun()
     
     st.markdown("---")
     
@@ -442,13 +447,8 @@ elif st.session_state.pagina_atual == "apoio":
     st.title("🐱 APOIE NOSSO PROJETO!!")
     st.markdown("<h3 style='color: #888 !important;'>Ajude a manter o servidor ligado!</h3>", unsafe_allow_html=True)
     
-    # Ajuste de imagens para ocupar largura total no mobile
-    c1, c2, c3 = st.columns([1, 2, 1])
-    with c2:
-        if os.path.exists("static/gato1.jpeg"): st.image("static/gato1.jpeg", caption="Exausta após corrigir bugs no servidor.", use_container_width=True)
-        elif os.path.exists("gato1.jpeg"): st.image("gato1.jpeg", caption="Exausta após corrigir bugs no servidor.", use_container_width=True)
+    pad_esq, c_base1, c_base2, pad_dir = st.columns([1, 2, 2, 1])
     
-    c_base1, c_base2 = st.columns(2)
     with c_base1:
         if os.path.exists("static/gato2.jpeg"): st.image("static/gato2.jpeg", caption="A Gerente de TI analisando se você estudou hoje.", use_container_width=True)
         elif os.path.exists("gato2.jpeg"): st.image("gato2.jpeg", caption="A Gerente de TI analisando se você estudou hoje.", use_container_width=True)
