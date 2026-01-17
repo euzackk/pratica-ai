@@ -22,7 +22,6 @@ st.set_page_config(
     page_title="Pratica.ai",
     page_icon="🐱",
     layout="wide",
-    # "auto" deixa o Streamlit decidir (fechado no celular, aberto no PC)
     initial_sidebar_state="auto" 
 )
 
@@ -123,41 +122,36 @@ st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap');
     
-    /* 1. CABEÇALHO E MENU (O Fix do Mobile) */
+    /* 1. CABEÇALHO E MENU (Correção Crítica Mobile) */
     
-    /* Esconde a barra decorativa colorida no topo */
-    [data-testid="stDecoration"] {
-        display: none;
-    }
+    /* Esconde decoração padrão */
+    [data-testid="stDecoration"] { display: none; }
+    [data-testid="stToolbar"] { visibility: hidden; }
     
-    /* Esconde o menu da direita (3 pontinhos, GitHub, Settings) */
-    [data-testid="stToolbar"] {
-        visibility: hidden;
-    }
-    
-    /* Força o Header a ser transparente para ver o fundo preto */
+    /* HEADER: Fundo Transparente mas ÍCONES BRANCOS */
     header[data-testid="stHeader"] {
         background-color: transparent !important;
+        color: white !important;
+        z-index: 999999;
     }
     
-    /* GARANTE que o botão de abrir sidebar esteja VISÍVEL e BRANCO */
+    /* Força os ícones SVG (Menu Hamburguer) a ficarem brancos */
+    header[data-testid="stHeader"] svg {
+        fill: white !important;
+        color: white !important;
+    }
+    
+    /* Botão de colapsar sidebar */
     [data-testid="stSidebarCollapsedControl"] {
         display: block !important;
         color: #FFFFFF !important;
+        background-color: transparent !important;
     }
-    
-    /* 2. REMOÇÃO DO RODAPÉ (Made with Streamlit) */
-    footer {
-        visibility: hidden;
-        display: none !important;
-    }
-    .stDeployButton {
-        display: none !important;
-    }
-    #MainMenu {
-        visibility: hidden;
-        display: none !important;
-    }
+
+    /* 2. REMOÇÃO DO RODAPÉ */
+    footer { visibility: hidden; display: none !important; }
+    .stDeployButton { display: none !important; }
+    #MainMenu { visibility: hidden; display: none !important; }
 
     /* 3. DARK MODE ABSOLUTO */
     :root {
@@ -191,6 +185,22 @@ st.markdown("""
     }
     .stButton button:active { background: #333; }
 
+    /* --- UPLOADER (CORREÇÃO VISUAL) --- */
+    /* Deixa o fundo do uploader um pouco mais claro para não parecer um buraco preto */
+    [data-testid="stFileUploader"] {
+        padding: 10px;
+        border: 1px dashed #444;
+        background-color: #0f0f0f; 
+        border-radius: 5px;
+    }
+    [data-testid="stFileUploader"] section {
+        background-color: #0f0f0f !important;
+    }
+    /* Texto "Drag and drop" */
+    [data-testid="stFileUploader"] span {
+        color: #888 !important;
+    }
+
     /* --- SUPER BANNER --- */
     @keyframes pulse-border {
         0% { box-shadow: 0 0 0 0 rgba(240, 193, 75, 0.4); }
@@ -219,15 +229,8 @@ st.markdown("""
     @media only screen and (max-width: 600px) {
         h1 { font-size: 2rem !important; line-height: 1.1 !important; }
         
-        /* Ajuste do Uploader */
-        [data-testid="stFileUploader"] { padding: 5px; border: 1px dashed #444; }
-        [data-testid="stFileUploader"] section { padding: 20px; background-color: #050505; }
-        
-        /* Botões Full Width */
-        .stButton button { width: 100% !important; margin-bottom: 8px; }
-        
         /* Ajuste margem topo para não ficar embaixo do botão de menu */
-        .block-container { padding-top: 3rem !important; }
+        .block-container { padding-top: 4rem !important; }
     }
 
     /* PIX & QUESTÕES */
