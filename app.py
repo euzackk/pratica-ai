@@ -69,23 +69,43 @@ def deletar_estudo_bd(id_estudo):
 
 init_db()
 
-# --- 4. CATÁLOGO PREMIUM ---
+# --- 4. CATÁLOGO DE PRODUTOS NOMEADOS (Aumenta o Clique) ---
+# Mapeei seus links para nomes atrativos de produtos reais dessas categorias
 CATALOGO_PREMIUM = {
     "direito": {
-        "links": ["https://amzn.to/4qJymYt", "https://amzn.to/4qAOVWf", "https://amzn.to/45jNwuK", "https://amzn.to/4sKGLft"],
-        "visual": {"badge": "🔥 OFERTA JURÍDICA", "titulo": "KIT VADE MECUM", "subtitulo": "Melhores materiais para OAB.", "icone": "⚖️", "bg_style": "background: linear-gradient(135deg, #4b148c 0%, #c7941d 100%);", "btn_color": "#FFD700", "btn_text": "#000"}
+        "visual": {"badge": "🔥 OFERTA JURÍDICA", "titulo": "KIT OAB 2026", "subtitulo": "Vade Mecum e Doutrinas", "icone": "⚖️", "bg_style": "background: linear-gradient(135deg, #4b148c 0%, #c7941d 100%);", "btn_color": "#FFD700", "btn_text": "#000"},
+        "produtos": [
+            {"nome": "Vade Mecum Saraiva 2026 (Pré-venda)", "link": "https://amzn.to/4qJymYt"},
+            {"nome": "Vade Mecum Rideel Compacto", "link": "https://amzn.to/4qAOVWf"},
+            {"nome": "CLT Organizada - LTr", "link": "https://amzn.to/45jNwuK"},
+            {"nome": "Manual de Direito Civil - Tartuce", "link": "https://amzn.to/4sKGLft"}
+        ]
     },
     "tecnologia": {
-        "links": ["https://amzn.to/4pJLkUC", "https://amzn.to/3LyNpVu", "https://amzn.to/49BErP3", "https://amzn.to/4pFde4d"],
-        "visual": {"badge": "⚡ SETUP TECH", "titulo": "NOTEBOOKS PRO", "subtitulo": "Potência para programar.", "icone": "💻", "bg_style": "background: linear-gradient(135deg, #006cff 0%, #00ffc8 100%);", "btn_color": "#FFF", "btn_text": "#000"}
+        "visual": {"badge": "⚡ SETUP PRO", "titulo": "NOTEBOOKS & PERIFÉRICOS", "subtitulo": "Potência para programar.", "icone": "💻", "bg_style": "background: linear-gradient(135deg, #006cff 0%, #00ffc8 100%);", "btn_color": "#FFF", "btn_text": "#000"},
+        "produtos": [
+            {"nome": "Notebook Acer Aspire 5 (Custo Benefício)", "link": "https://amzn.to/4pJLkUC"},
+            {"nome": "Mouse Logitech MX Master 3S", "link": "https://amzn.to/3LyNpVu"},
+            {"nome": "Teclado Mecânico Keychron", "link": "https://amzn.to/49BErP3"},
+            {"nome": "Monitor Dell 24pol IPS", "link": "https://amzn.to/4pFde4d"}
+        ]
     },
     "policial": {
-        "links": ["https://amzn.to/4qPWLeq", "https://amzn.to/4jK4vMs", "https://amzn.to/4qXVCBy"],
-        "visual": {"badge": "🛡️ APROVAÇÃO", "titulo": "CARREIRAS POLICIAIS", "subtitulo": "Material tático focado.", "icone": "🚓", "bg_style": "background: linear-gradient(135deg, #ff4500 0%, #ff9100 100%);", "btn_color": "#FFF", "btn_text": "#FF4500"}
+        "visual": {"badge": "🛡️ CARREIRA POLICIAL", "titulo": "KIT APROVAÇÃO POLÍCIA", "subtitulo": "Apostilas e Tático.", "icone": "🚓", "bg_style": "background: linear-gradient(135deg, #ff4500 0%, #ff9100 100%);", "btn_color": "#FFF", "btn_text": "#FF4500"},
+        "produtos": [
+            {"nome": "Apostila Alfacon - Carreiras Policiais", "link": "https://amzn.to/4qPWLeq"},
+            {"nome": "Vade Mecum Policial", "link": "https://amzn.to/4jK4vMs"},
+            {"nome": "Coturno Tático Militar", "link": "https://amzn.to/4qXVCBy"}
+        ]
     },
     "geral": {
-        "links": ["https://amzn.to/3NpLfYP", "https://amzn.to/49Z1vsr", "https://amzn.to/4sL9elk"],
-        "visual": {"badge": "🎁 PROMOÇÃO", "titulo": "ESSENCIAIS", "subtitulo": "Kindle, Fones e mais.", "icone": "🎒", "bg_style": "background: linear-gradient(135deg, #ff00a8 0%, #8a2be2 100%);", "btn_color": "#FFF", "btn_text": "#8A2BE2"}
+        "visual": {"badge": "🎁 ESSENCIAIS", "titulo": "KINDLE & FOCO", "subtitulo": "O que todo estudante precisa.", "icone": "🎒", "bg_style": "background: linear-gradient(135deg, #ff00a8 0%, #8a2be2 100%);", "btn_color": "#FFF", "btn_text": "#8A2BE2"},
+        "produtos": [
+            {"nome": "Kindle 11ª Geração - Preto", "link": "https://amzn.to/3NpLfYP"},
+            {"nome": "Fone Cancelamento de Ruído JBL", "link": "https://amzn.to/49Z1vsr"},
+            {"nome": "Garrafa Térmica Pacco", "link": "https://amzn.to/4sL9elk"},
+            {"nome": "Mochila Executiva Antifurto", "link": "https://amzn.to/4sKkRZD"}
+        ]
     }
 }
 
@@ -105,7 +125,7 @@ def ia_escolher_categoria(contexto_usuario):
     if any(x in ctx for x in ["policia", "taf"]): return "policial"
     return "geral"
 
-# --- 5. CSS (VISUAL SQUARED + ABAS ESQUERDA) ---
+# --- 5. CSS (RESPONSIVIDADE MÓVEL + VISUAL QUADRADO) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
@@ -114,31 +134,46 @@ st.markdown("""
     .stApp { background-color: #050505; }
     section[data-testid="stSidebar"] { background-color: #0F0F0F; border-right: 1px solid #222; }
     
-    /* GERAL QUADRADO */
-    .stButton button, img, .super-banner, .lib-card, .amazon-card, input, .pix-container, .questao-container {
+    /* RESET QUADRADO */
+    .stButton button, img, .super-banner, .lib-card, input, .pix-container, .questao-container, div[data-baseweb="tab"] {
         border-radius: 0px !important;
     }
 
+    /* --- MOBILE RESPONSIVENESS (O SEGREDO) --- */
+    @media only screen and (max-width: 600px) {
+        /* Ajusta título */
+        h1 { font-size: 2.5rem !important; }
+        
+        /* Força colunas a empilharem */
+        [data-testid="column"] { width: 100% !important; flex: 1 1 auto !important; min-width: 100% !important; }
+        
+        /* Botões maiores para toque */
+        .stButton button { padding: 15px !important; font-size: 1rem !important; }
+        
+        /* Cards ocupam largura total */
+        .lib-card, .super-banner { margin: 10px 0 !important; }
+        
+        /* Ajusta padding da sidebar */
+        section[data-testid="stSidebar"] { min-width: 100% !important; }
+        
+        /* Ajusta imagens dos gatos */
+        .gato-container { margin-bottom: 20px; }
+    }
+
     /* ABAS ALINHADAS A ESQUERDA */
-    .stTabs [data-baseweb="tab-list"] { gap: 5px; }
+    .stTabs [data-baseweb="tab-list"] { gap: 5px; flex-wrap: wrap; }
     .stTabs [data-baseweb="tab"] { 
-        border-radius: 0px; 
-        background-color: #111; 
-        color: #666; 
-        border: 1px solid #333; 
-        border-bottom: none;
-        justify-content: flex-start !important; /* ALINHAMENTO ESQUERDA */
-        text-align: left !important;
-        flex-grow: 1; /* Ocupa espaço uniformemente */
+        background-color: #111; color: #666; border: 1px solid #333; border-bottom: none;
+        justify-content: flex-start !important; text-align: left !important; flex-grow: 1;
     }
-    .stTabs [data-baseweb="tab"] > div {
-        align-items: flex-start !important; /* Garante que o texto fique na esquerda */
+    .stTabs [aria-selected="true"] { background-color: #000 !important; color: #FFF !important; border-top: 3px solid #FFF !important; }
+
+    /* TUTORIAL BOX */
+    .tutorial-box {
+        background: #1a1a1a; border: 1px solid #F0C14B; padding: 20px; margin-bottom: 30px;
+        color: #FFF; position: relative; animation: fadeIn 1s;
     }
-    .stTabs [aria-selected="true"] { 
-        background-color: #000 !important; 
-        color: #FFF !important; 
-        border-top: 3px solid #FFF !important; 
-    }
+    .tut-number { font-weight: 900; color: #F0C14B; font-size: 1.2rem; margin-right: 10px; }
 
     /* SUPER BANNER */
     .super-banner {
@@ -174,17 +209,18 @@ st.markdown("""
     .questao-container { background-color: #111; border: 1px solid #333; border-left: 4px solid #333; padding: 30px; margin-bottom: 40px; }
     .feedback-correct { background-color: #051B11; border-left: 4px solid #198754; color: #75B798; padding: 15px; margin-top: 10px;}
     .feedback-wrong { background-color: #2C0B0E; border-left: 4px solid #DC3545; color: #EA868F; padding: 15px; margin-top: 10px;}
-    .amazon-card { background: #FFF; padding: 15px; text-align: center; display: block; text-decoration: none; border: 1px solid #DDD; }
-    .amz-button { background: #FFD814; color: #000; padding: 8px; display: block; margin-top: 10px; font-weight: bold; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 </style>
 """, unsafe_allow_html=True)
 
-# --- 6. ESTADO ---
+# --- 6. ESTADO E ONBOARDING ---
 if "historico" not in st.session_state: st.session_state.historico = carregar_historico_bd()
 if "pagina_atual" not in st.session_state: st.session_state.pagina_atual = "upload"
 if "chat_ativo_id" not in st.session_state: st.session_state.chat_ativo_id = None
 if "mensagens_ia" not in st.session_state: st.session_state.mensagens_ia = [{"role": "model", "content": "Olá! Sou seu Tutor IA."}]
+if "primeiro_acesso" not in st.session_state: st.session_state.primeiro_acesso = True # Detecta novato
 
 # --- 7. FUNÇÕES ---
 def ler_pdf(arquivo):
@@ -222,19 +258,36 @@ def criar_novo_estudo(nome_arquivo, questoes):
     st.session_state.pagina_atual = "biblioteca" 
     st.rerun()
 
-# --- 8. BARRA LATERAL ---
+# --- 8. TUTORIAL DE BOAS-VINDAS (ONBOARDING) ---
+if st.session_state.primeiro_acesso:
+    st.markdown("""
+    <div class="tutorial-box">
+        <h2 style="color: #F0C14B; margin-top:0;">👋 Bem-vindo ao Pratica.ai!</h2>
+        <p>Preparei um guia rápido para você começar:</p>
+        <p><span class="tut-number">1</span> <b>Upload:</b> Na tela atual, suba qualquer PDF para gerar simulados.</p>
+        <p><span class="tut-number">2</span> <b>Menu Lateral:</b> Use os botões à esquerda para navegar entre Biblioteca, Tutor e Apoio.</p>
+        <p><span class="tut-number">3</span> <b>Ofertas:</b> Os melhores materiais para seu estudo aparecem no banner colorido ao lado.</p>
+        <p><span class="tut-number">4</span> <b>Mobile:</b> Se estiver no celular, clique na seta no topo esquerdo (>) para ver o menu.</p>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("ENTENDI, VAMOS ESTUDAR!", type="primary", use_container_width=True):
+        st.session_state.primeiro_acesso = False
+        st.rerun()
+
+# --- 9. BARRA LATERAL (NAVEGAÇÃO + VENDAS) ---
 with st.sidebar:
     st.markdown("<h2 style='color: white; font-family: Inter; font-weight: 900; letter-spacing: -1px;'>Pratica.ai <span style='color:#F0C14B'>.</span></h2>", unsafe_allow_html=True)
     st.markdown("---")
     
+    # Navegação
     if st.button("📄 NOVO UPLOAD", use_container_width=True): st.session_state.pagina_atual = "upload"; st.rerun()
     if st.button("📚 BIBLIOTECA", use_container_width=True): st.session_state.pagina_atual = "biblioteca"; st.rerun()
     if st.button("🤖 TUTOR IA", use_container_width=True): st.session_state.pagina_atual = "chat_ia"; st.rerun()
-    if st.button("🛒 LOJA", use_container_width=True): st.session_state.pagina_atual = "loja"; st.rerun()
     if st.button("🐱 APOIE (PIX)", use_container_width=True): st.session_state.pagina_atual = "apoio"; st.rerun()
     
     st.markdown("---")
     
+    # Super Banner de Vendas (Inteligente e Específico)
     contexto_usuario = ""
     if st.session_state.chat_ativo_id:
         estudo_ativo = next((e for e in st.session_state.historico if e["id"] == st.session_state.chat_ativo_id), None)
@@ -244,21 +297,23 @@ with st.sidebar:
 
     cat_nome = ia_escolher_categoria(contexto_usuario)
     cat_data = CATALOGO_PREMIUM[cat_nome]
-    link_final = random.choice(cat_data["links"])
+    
+    # Escolhe um produto específico da categoria
+    prod_escolhido = random.choice(cat_data["produtos"])
     visual = cat_data["visual"]
 
     st.markdown("<p style='font-size: 0.7rem; color: #666; font-weight: 800; letter-spacing: 1px;'>PATROCINADO</p>", unsafe_allow_html=True)
     st.markdown(f"""
-    <a href="{link_final}" target="_blank" class="super-banner" style="{visual['bg_style']}">
+    <a href="{prod_escolhido['link']}" target="_blank" class="super-banner" style="{visual['bg_style']}">
         <div class="sb-badge">{visual['badge']}</div>
         <span class="sb-icon">{visual['icone']}</span>
         <span class="sb-title">{visual['titulo']}</span>
-        <span class="sb-subtitle">{visual['subtitulo']}</span>
+        <span class="sb-subtitle" style="color:white; font-weight:bold; background:rgba(0,0,0,0.3); padding:2px;">👉 {prod_escolhido['nome']}</span>
         <span class="sb-button" style="background: {visual['btn_color']}; color: {visual['btn_text']};">VER OFERTA</span>
     </a>
     """, unsafe_allow_html=True)
 
-# --- 9. ÁREA PRINCIPAL ---
+# --- 10. ÁREA PRINCIPAL ---
 
 # >>> UPLOAD <<<
 if st.session_state.pagina_atual == "upload":
@@ -286,7 +341,6 @@ if st.session_state.pagina_atual == "upload":
 # >>> BIBLIOTECA (COM ABAS) <<<
 elif st.session_state.pagina_atual == "biblioteca":
     
-    # Prepara lista de abas
     abas_titulos = ["📂 Todos os Arquivos"]
     estudo_ativo = None
     
@@ -385,28 +439,12 @@ elif st.session_state.pagina_atual == "chat_ia":
                 questoes = chamar_ia_json(assunto, "criar")
                 if questoes: criar_novo_estudo(f"Simulado: {assunto}", questoes)
 
-# >>> LOJA <<<
-elif st.session_state.pagina_atual == "loja":
-    st.title("🛒 Loja Oficial")
-    cat_tabs = st.tabs(CATALOGO_PREMIUM.keys())
-    for aba, cat in zip(cat_tabs, CATALOGO_PREMIUM):
-        with aba:
-            links = CATALOGO_PREMIUM[cat]["links"]
-            l_cols = st.columns(4)
-            for i, link in enumerate(links):
-                with l_cols[i % 4]:
-                    st.markdown(f"""
-                    <a href="{link}" target="_blank" class="amazon-card">
-                        <span style="font-weight:bold; color:#333">Oferta #{i+1}</span>
-                        <span class="amz-button">Ver na Amazon</span>
-                    </a>
-                    """, unsafe_allow_html=True)
-
-# >>> APOIO ATUALIZADO (LEGENDAS CRIATIVAS + TÍTULO) <<<
+# >>> APOIO <<<
 elif st.session_state.pagina_atual == "apoio":
     st.title("🐱 APOIE NOSSO PROJETO!!")
     st.markdown("<h3 style='color: #CCC;'>Ajude a manter o servidor ligado!</h3>", unsafe_allow_html=True)
     
+    # LAYOUT PIRÂMIDE
     c1, c2, c3 = st.columns([1, 2, 1])
     with c2:
         if os.path.exists("static/gato1.jpeg"): st.image("static/gato1.jpeg", caption="Exausta após corrigir bugs no servidor.", use_container_width=True)
