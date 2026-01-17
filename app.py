@@ -12,7 +12,6 @@ from datetime import datetime
 try:
     API_KEY = st.secrets["GOOGLE_API_KEY"]
 except:
-    # Chave de fallback para testes locais
     API_KEY = "AIzaSyAq0c34TLlblT-a6ysdDr07edPBfnqR4kA" 
 
 if API_KEY:
@@ -60,108 +59,53 @@ def salvar_estudo_bd(estudo):
                   json.dumps(estudo["questoes"]), json.dumps(estudo["respostas_usuario"])))
     conn.commit()
     conn.close()
+    
+def deletar_estudo_bd(id_estudo):
+    conn = sqlite3.connect('dados_pratica.db')
+    c = conn.cursor()
+    c.execute("DELETE FROM estudos WHERE id=?", (id_estudo,))
+    conn.commit()
+    conn.close()
 
 init_db()
 
-# --- 4. CATÁLOGO PREMIUM (LINKS + VISUAL IMPACTANTE) ---
+# --- 4. CATÁLOGO PREMIUM ---
 CATALOGO_PREMIUM = {
     "direito": {
-        "links": [
-            "https://amzn.to/4qJymYt", "https://amzn.to/4qAOVWf", "https://amzn.to/45jNwuK", 
-            "https://amzn.to/4sKGLft", "https://amzn.to/4qslPZa"
-        ],
-        "visual": {
-            "badge": "🔥 OFERTA JURÍDICA",
-            "titulo": "KIT VADE MECUM & OAB",
-            "subtitulo": "Os melhores materiais com preços imbatíveis.",
-            "icone": "⚖️",
-            "bg_style": "background: rgb(75,20,140); background: linear-gradient(135deg, rgba(75,20,140,1) 0%, rgba(199,148,29,1) 100%);",
-            "btn_color": "#FFD700", "btn_text": "#000"
-        }
+        "links": ["https://amzn.to/4qJymYt", "https://amzn.to/4qAOVWf", "https://amzn.to/45jNwuK", "https://amzn.to/4sKGLft"],
+        "visual": {"badge": "🔥 OFERTA JURÍDICA", "titulo": "KIT VADE MECUM", "subtitulo": "Melhores materiais para OAB.", "icone": "⚖️", "bg_style": "background: linear-gradient(135deg, #4b148c 0%, #c7941d 100%);", "btn_color": "#FFD700", "btn_text": "#000"}
     },
     "tecnologia": {
-        "links": [
-            "https://amzn.to/4pJLkUC", "https://amzn.to/3LyNpVu", "https://amzn.to/49BErP3", 
-            "https://amzn.to/4pFde4d", "https://amzn.to/4pCyW8J", "https://amzn.to/49Fvep3", 
-            "https://amzn.to/49Ey5yr", "https://amzn.to/3LHtK5z", "https://amzn.to/4qxDgaS", 
-            "https://amzn.to/49Egzue", "https://amzn.to/4aYslC1", "https://amzn.to/4qwxGW4", 
-            "https://amzn.to/49HXuXY", "https://amzn.to/4bn0coz", "https://amzn.to/4b3nWOj", 
-            "https://amzn.to/3LPR69e", "https://amzn.to/3NP6hQz", "https://amzn.to/3Zgb4Np", 
-            "https://amzn.to/4quE3cz", "https://amzn.to/3NQ8fQE", "https://amzn.to/3YK4Fdd", 
-            "https://amzn.to/45LnEbc", "https://amzn.to/4qs17sv", "https://amzn.to/3Nywpix", 
-            "https://amzn.to/4pF9wr7", "https://amzn.to/4r44fe1"
-        ],
-        "visual": {
-            "badge": "⚡ SETUP TECH",
-            "titulo": "NOTEBOOKS & ACESSÓRIOS",
-            "subtitulo": "Potencialize seus estudos com hardware de ponta.",
-            "icone": "💻",
-            "bg_style": "background: rgb(0,108,255); background: linear-gradient(135deg, rgba(0,108,255,1) 0%, rgba(0,255,200,1) 100%);",
-            "btn_color": "#FFF", "btn_text": "#000"
-        }
+        "links": ["https://amzn.to/4pJLkUC", "https://amzn.to/3LyNpVu", "https://amzn.to/49BErP3", "https://amzn.to/4pFde4d"],
+        "visual": {"badge": "⚡ SETUP TECH", "titulo": "NOTEBOOKS PRO", "subtitulo": "Potência para programar.", "icone": "💻", "bg_style": "background: linear-gradient(135deg, #006cff 0%, #00ffc8 100%);", "btn_color": "#FFF", "btn_text": "#000"}
     },
     "policial": {
-        "links": [
-            "https://amzn.to/4qPWLeq", "https://amzn.to/4jK4vMs", "https://amzn.to/4qXVCBy", 
-            "https://amzn.to/4jOjNjx", "https://amzn.to/4qln2kV", "https://amzn.to/45cQFMP", 
-            "https://amzn.to/3Nhq3En"
-        ],
-        "visual": {
-            "badge": "🛡️ MISSÃO APROVAÇÃO",
-            "titulo": "CARREIRAS POLICIAIS",
-            "subtitulo": "Material tático e focado para o seu concurso.",
-            "icone": "🚓",
-            "bg_style": "background: rgb(255,69,0); background: linear-gradient(135deg, rgba(255,69,0,1) 0%, rgba(255,145,0,1) 100%);",
-            "btn_color": "#FFF", "btn_text": "#FF4500"
-        }
+        "links": ["https://amzn.to/4qPWLeq", "https://amzn.to/4jK4vMs", "https://amzn.to/4qXVCBy"],
+        "visual": {"badge": "🛡️ APROVAÇÃO", "titulo": "CARREIRAS POLICIAIS", "subtitulo": "Material tático focado.", "icone": "🚓", "bg_style": "background: linear-gradient(135deg, #ff4500 0%, #ff9100 100%);", "btn_color": "#FFF", "btn_text": "#FF4500"}
     },
     "geral": {
-        "links": [
-            "https://amzn.to/3NpLfYP", "https://amzn.to/49Z1vsr", "https://amzn.to/4sL9elk", 
-            "https://amzn.to/4sKkRZD", "https://amzn.to/49Z1AML", "https://amzn.to/45X3YRE", 
-            "https://amzn.to/4qSYWxD", "https://amzn.to/45Ym7yx", "https://amzn.to/4qYh0GT", 
-            "https://amzn.to/4qXRrWb", "https://amzn.to/4qYh5KH", "https://amzn.to/49qnnwD", 
-            "https://amzn.to/3Nvg91N", "https://amzn.to/4sHWTOM", "https://amzn.to/4sLF5SM", 
-            "https://amzn.to/4sRPi0j", "https://amzn.to/4qX4BCS", "https://amzn.to/4r1JUWI", 
-            "https://amzn.to/4riIes3", "https://amzn.to/4sPKZCK", "https://amzn.to/45fnwRd", 
-            "https://amzn.to/4sIELnN", "https://amzn.to/4qqxg3r", "https://amzn.to/4quiOaK", 
-            "https://amzn.to/3LvT7r9", "https://amzn.to/4qnkYZB", "https://amzn.to/4jKBAYV", 
-            "https://amzn.to/4jM9FI6", "https://amzn.to/4jHMRci", "https://amzn.to/45eVftW", 
-            "https://amzn.to/4quExiT", "https://amzn.to/45iqd4t", "https://amzn.to/4quiQPU", 
-            "https://amzn.to/3Lnk93Y", "https://amzn.to/4bCsL16"
-        ],
-        "visual": {
-            "badge": "🎁 SELEÇÃO ESPECIAL",
-            "titulo": "ESSENCIAIS DO ESTUDANTE",
-            "subtitulo": "Kindle, Fones e tudo para seu foco.",
-            "icone": "🎒",
-            "bg_style": "background: rgb(255,0,168); background: linear-gradient(135deg, rgba(255,0,168,1) 0%, rgba(138,43,226,1) 100%);",
-            "btn_color": "#FFF", "btn_text": "#8A2BE2"
-        }
+        "links": ["https://amzn.to/3NpLfYP", "https://amzn.to/49Z1vsr", "https://amzn.to/4sL9elk"],
+        "visual": {"badge": "🎁 PROMOÇÃO", "titulo": "ESSENCIAIS", "subtitulo": "Kindle, Fones e mais.", "icone": "🎒", "bg_style": "background: linear-gradient(135deg, #ff00a8 0%, #8a2be2 100%);", "btn_color": "#FFF", "btn_text": "#8A2BE2"}
     }
 }
 
 def ia_escolher_categoria(contexto_usuario):
-    if not contexto_usuario or len(contexto_usuario) < 5:
-        return random.choice(["geral", "tecnologia"])
+    if not contexto_usuario or len(contexto_usuario) < 5: return random.choice(["geral", "tecnologia"])
     if API_KEY:
         try:
             model = genai.GenerativeModel('gemini-flash-latest')
-            prompt = f"""Classifique o texto: "{contexto_usuario[:500]}"
-            Categorias: direito, tecnologia, policial, geral.
-            Responda APENAS a palavra da categoria em minúsculo."""
-            resp = model.generate_content(prompt).text.strip().lower()
+            resp = model.generate_content(f"Classifique: '{contexto_usuario[:500]}' em: direito, tecnologia, policial, geral. Só a palavra.").text.strip().lower()
             if "direito" in resp: return "direito"
             if "tecnolo" in resp: return "tecnologia"
             if "policia" in resp: return "policial"
         except: pass
-    ctx_lower = contexto_usuario.lower()
-    if any(x in ctx_lower for x in ["lei", "juridico", "oab", "penal"]): return "direito"
-    if any(x in ctx_lower for x in ["python", "java", "código", "computador"]): return "tecnologia"
-    if any(x in ctx_lower for x in ["policia", "militar", "taf"]): return "policial"
+    ctx = contexto_usuario.lower()
+    if any(x in ctx for x in ["lei", "juridico"]): return "direito"
+    if any(x in ctx for x in ["python", "code"]): return "tecnologia"
+    if any(x in ctx for x in ["policia", "taf"]): return "policial"
     return "geral"
 
-# --- 5. CSS (VISUAL DE VENDAS + GATOS) ---
+# --- 5. CSS (VISUAL DE VENDAS + GATOS + ABAS) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
@@ -170,52 +114,60 @@ st.markdown("""
     .stApp { background-color: #050505; }
     section[data-testid="stSidebar"] { background-color: #0F0F0F; border-right: 1px solid #222; }
     
+    /* ABAS ESTILO GOOGLE */
+    .stTabs [data-baseweb="tab-list"] { gap: 10px; }
+    .stTabs [data-baseweb="tab"] {
+        background-color: #111; border-radius: 8px 8px 0 0; padding: 10px 20px; color: #888; border: 1px solid #333; border-bottom: none;
+    }
+    .stTabs [data-baseweb="tab"]:hover { color: #FFF; background-color: #222; }
+    .stTabs [aria-selected="true"] {
+        background-color: #050505 !important; color: #FFF !important; border-top: 2px solid #F0C14B !important; font-weight: bold;
+    }
+
+    /* CARD BIBLIOTECA */
+    .lib-card {
+        background: #111; border: 1px solid #333; border-radius: 12px; padding: 20px;
+        transition: 0.2s; cursor: pointer; text-align: left; height: 100%;
+    }
+    .lib-card:hover { border-color: #555; background: #161616; transform: translateY(-2px); }
+    .lib-title { font-weight: 700; color: #FFF; font-size: 1rem; margin-bottom: 5px; }
+    .lib-date { color: #666; font-size: 0.8rem; }
+    .lib-icon { font-size: 1.5rem; float: right; opacity: 0.5; }
+
     /* SUPER BANNER */
     .super-banner {
         display: block; text-decoration: none; border-radius: 16px; padding: 20px; margin: 20px 0;
         position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        transition: transform 0.3s ease, box-shadow 0.3s ease; border: 2px solid rgba(255,255,255,0.1);
+        transition: transform 0.3s ease; border: 2px solid rgba(255,255,255,0.1);
     }
-    .super-banner:hover { transform: scale(1.03); box-shadow: 0 15px 40px rgba(0,0,0,0.7); }
-    .sb-badge {
-        position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); color: #FFF;
-        font-size: 0.7rem; font-weight: 900; padding: 4px 10px; border-radius: 20px; backdrop-filter: blur(5px);
-    }
+    .super-banner:hover { transform: scale(1.03); }
+    .sb-badge { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); color: #FFF; font-size: 0.7rem; font-weight: 900; padding: 4px 10px; border-radius: 20px; }
     .sb-icon { font-size: 3.5rem; margin-bottom: 10px; display: block; }
     .sb-title { color: #FFF; font-weight: 900; font-size: 1.4rem; line-height: 1.1; margin-bottom: 8px; display: block; }
     .sb-subtitle { color: rgba(255,255,255,0.9); font-size: 0.9rem; display: block; margin-bottom: 20px; font-weight: 500; }
-    .sb-button {
-        background: #FFF; color: #000; text-align: center; font-weight: 800; padding: 12px 20px;
-        border-radius: 50px; display: block; font-size: 1rem; text-transform: uppercase;
-    }
+    .sb-button { background: #FFF; color: #000; text-align: center; font-weight: 800; padding: 12px 20px; border-radius: 50px; display: block; font-size: 1rem; text-transform: uppercase; }
 
     /* PIX & GATOS */
     .pix-container { background: #111; border: 1px dashed #444; border-radius: 15px; padding: 30px; text-align: center; }
-    .pix-key {
-        font-family: monospace; background: #222; padding: 15px; border-radius: 8px;
-        color: #00FF7F; font-size: 1.1rem; margin: 20px 0; word-break: break-all; select-all;
-    }
-    
-    /* ESTILIZAÇÃO DAS IMAGENS DOS GATOS (BORDAS ARREDONDADAS) */
+    .pix-key { font-family: monospace; background: #222; padding: 15px; border-radius: 8px; color: #00FF7F; font-size: 1.1rem; margin: 20px 0; word-break: break-all; select-all; }
     img { border-radius: 12px; }
     
-    /* GERAL */
-    .stButton button { text-align: left; padding: 12px; background: transparent; color: #999; width: 100%; border-radius: 8px !important; }
-    .stButton button:hover { color: #FFF; background: #1A1A1A; border: 1px solid #333; }
+    /* QUESTÕES */
+    .stButton button { text-align: left; background: transparent; color: #DDD; width: 100%; border-radius: 8px !important; }
+    .stButton button:hover { background: #222; }
     .questao-container { background-color: #111; border: 1px solid #333; border-left: 4px solid #333; padding: 30px; margin-bottom: 40px; }
-    .questao-texto { font-size: 1.2rem; line-height: 1.6; color: #FFF; margin-bottom: 25px; }
-    .feedback-box { margin-top: 20px; padding: 20px; }
-    .feedback-correct { background-color: #051B11; border-left: 4px solid #198754; color: #75B798; }
-    .feedback-wrong { background-color: #2C0B0E; border-left: 4px solid #DC3545; color: #EA868F; }
-    input[type="text"] { background-color: #111 !important; color: white !important; border: 1px solid #333 !important; }
+    .feedback-correct { background-color: #051B11; border-left: 4px solid #198754; color: #75B798; padding: 15px;}
+    .feedback-wrong { background-color: #2C0B0E; border-left: 4px solid #DC3545; color: #EA868F; padding: 15px;}
+    
+    /* LOJA */
+    .amazon-card { background: #FFF; border-radius: 8px; padding: 15px; text-align: center; display: block; text-decoration: none; border: 1px solid #DDD; }
+    .amz-button { background: #FFD814; color: #000; padding: 8px; border-radius: 20px; display: block; margin-top: 10px; font-weight: bold; }
 </style>
 """, unsafe_allow_html=True)
 
 # --- 6. GERENCIAMENTO DE ESTADO ---
 if "historico" not in st.session_state: st.session_state.historico = carregar_historico_bd()
-if "pagina_atual" not in st.session_state: st.session_state.pagina_atual = "upload"
 if "chat_ativo_id" not in st.session_state: st.session_state.chat_ativo_id = None
-if "editando_id" not in st.session_state: st.session_state.editando_id = None
 if "mensagens_ia" not in st.session_state: st.session_state.mensagens_ia = [{"role": "model", "content": "Olá! Sou seu Tutor IA."}]
 
 # --- 7. FUNÇÕES ---
@@ -226,15 +178,15 @@ def ler_pdf(arquivo):
         for pagina in leitor.pages:
             res = pagina.extract_text()
             if res: texto += res + "\n"
-        if len(texto.strip()) < 50: return None, "PDF ilegível (Imagem)."
+        if len(texto.strip()) < 50: return None, "PDF ilegível."
         return texto, None
     except Exception as e: return None, str(e)
 
 def chamar_ia_json(texto, tipo):
     model = genai.GenerativeModel('gemini-flash-latest')
     prompt = """Gere um JSON estrito. Estrutura: [{"id": 1, "pergunta": "...", "opcoes": ["A) ...", "B) ..."], "correta": "A", "comentario": "..."}]"""
-    if len(texto) < 500: contexto = f"Crie um simulado de concurso nível difícil sobre o Assunto: {texto}"
-    else: contexto = f"Modo: {tipo}. Baseado no Texto: {texto[:30000]}"
+    if len(texto) < 500: contexto = f"Assunto: {texto}"
+    else: contexto = f"Modo: {tipo}. Texto: {texto[:30000]}"
     try:
         response = model.generate_content(prompt + "\n\n" + contexto)
         limpo = response.text.replace("```json", "").replace("```", "").strip()
@@ -251,179 +203,201 @@ def criar_novo_estudo(nome_arquivo, questoes):
     salvar_estudo_bd(novo_estudo)
     st.session_state.historico = carregar_historico_bd()
     st.session_state.chat_ativo_id = novo_id
-    st.session_state.pagina_atual = "visualizacao"
+    # Ao criar, vamos direto para a aba biblioteca (que vai detectar o ID ativo e abrir a prova)
+    st.rerun()
 
-# --- 8. BARRA LATERAL ---
+# --- 8. BARRA LATERAL (SÓ ANÚNCIOS AGORA) ---
 with st.sidebar:
-    st.markdown("<h2 style='color: white; font-family: Inter; font-weight: 900; letter-spacing: -1px;'>Pratica.ai <span style='color:#444'>.</span></h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='color: white; font-family: Inter; font-weight: 900; letter-spacing: -1px;'>Pratica.ai <span style='color:#F0C14B'>.</span></h2>", unsafe_allow_html=True)
+    st.caption("Menu de navegação movido para o topo ↗")
     st.markdown("---")
     
-    if st.button("📄 NOVO UPLOAD", use_container_width=True):
-        st.session_state.pagina_atual = "upload"; st.session_state.chat_ativo_id = None; st.rerun()
-    if st.button("🤖 TUTOR IA", use_container_width=True):
-        st.session_state.pagina_atual = "chat_ia"; st.session_state.chat_ativo_id = None; st.rerun()
-    if st.button("🐱 APOIE NOSSO PROJETO", use_container_width=True):
-        st.session_state.pagina_atual = "apoio"; st.session_state.chat_ativo_id = None; st.rerun()
-    
-    # --- ÁREA DO SUPER BANNER (OFERTAS) ---
-    st.markdown("---")
-    st.markdown("<p style='font-size: 0.75rem; color: #888; font-weight: 800; letter-spacing: 1px; margin-bottom: 10px;'>PATROCINADO</p>", unsafe_allow_html=True)
-    
+    # Contexto para o Anúncio
     contexto_usuario = ""
-    if st.session_state.pagina_atual == "visualizacao" and st.session_state.chat_ativo_id:
+    if st.session_state.chat_ativo_id:
         estudo_ativo = next((e for e in st.session_state.historico if e["id"] == st.session_state.chat_ativo_id), None)
         if estudo_ativo: contexto_usuario = estudo_ativo['titulo']
-    elif st.session_state.pagina_atual == "chat_ia" and len(st.session_state.mensagens_ia) > 1:
-             contexto_usuario = st.session_state.mensagens_ia[-2]['content']
+    elif len(st.session_state.mensagens_ia) > 1:
+        contexto_usuario = st.session_state.mensagens_ia[-2]['content']
 
     cat_nome = ia_escolher_categoria(contexto_usuario)
     cat_data = CATALOGO_PREMIUM[cat_nome]
     link_final = random.choice(cat_data["links"])
     visual = cat_data["visual"]
 
+    st.markdown("<p style='font-size: 0.75rem; color: #888; font-weight: 800; letter-spacing: 1px; margin-bottom: 10px;'>OFERTA SUGERIDA</p>", unsafe_allow_html=True)
     st.markdown(f"""
     <a href="{link_final}" target="_blank" class="super-banner" style="{visual['bg_style']}">
         <div class="sb-badge">{visual['badge']}</div>
         <span class="sb-icon">{visual['icone']}</span>
         <span class="sb-title">{visual['titulo']}</span>
         <span class="sb-subtitle">{visual['subtitulo']}</span>
-        <span class="sb-button" style="background: {visual['btn_color']}; color: {visual['btn_text']};">VER OFERTA AGORA</span>
+        <span class="sb-button" style="background: {visual['btn_color']}; color: {visual['btn_text']};">VER OFERTA</span>
     </a>
     """, unsafe_allow_html=True)
-    st.markdown("---")
 
-    st.markdown("<p style='font-size: 0.7rem; color: #666; text-transform: uppercase; font-weight: bold;'>Biblioteca</p>", unsafe_allow_html=True)
-    for estudo in st.session_state.historico:
-        if st.session_state.editando_id == estudo["id"]:
-            def salvar_nome(): st.session_state.editando_id = None
-            novo_nome = st.text_input("Nome:", value=estudo["titulo"], key=f"input_{estudo['id']}", on_change=salvar_nome)
-            estudo["titulo"] = novo_nome 
-            if st.button("Salvar", key=f"save_{estudo['id']}"):
-                salvar_estudo_bd(estudo); st.session_state.editando_id = None; st.rerun()
-        else:
-            col_nav, col_edit = st.columns([5, 1])
-            with col_nav:
-                icone = "📂" if st.session_state.chat_ativo_id == estudo["id"] else "📁"
-                if st.button(f"{icone} {estudo['titulo']}", key=f"btn_{estudo['id']}", use_container_width=True):
-                    st.session_state.chat_ativo_id = estudo["id"]; st.session_state.pagina_atual = "visualizacao"; st.rerun()
-            with col_edit:
-                if st.button("✎", key=f"edit_{estudo['id']}"): st.session_state.editando_id = estudo["id"]; st.rerun()
+# --- 9. NAVEGAÇÃO SUPERIOR (ABAS) ---
 
-# --- 9. ÁREA PRINCIPAL ---
+tab_inicio, tab_biblio, tab_tutor, tab_loja, tab_apoio = st.tabs(["☁️ Início", "📚 Biblioteca", "🤖 Tutor IA", "🛒 Loja", "🐱 Apoio"])
 
-if st.session_state.pagina_atual == "upload":
+# >>> ABA 1: INÍCIO (UPLOAD) <<<
+with tab_inicio:
     st.markdown("""
-    <div style="text-align: left; margin-top: 80px;">
-        <h1 style="font-size: 4rem; color: #FFF; font-weight: 900; letter-spacing: -2px;">PRATICA<span style="color: #444;">.AI</span></h1>
-        <p style="color: #888; font-size: 1.2rem;">A melhor forma de estudar, potencializada por IA.</p>
+    <div style="text-align: center; margin: 50px 0;">
+        <h1 style="font-size: 3.5rem; color: #FFF; font-weight: 900; letter-spacing: -2px;">PRATICA<span style="color: #444;">.AI</span></h1>
+        <p style="color: #888; font-size: 1.2rem;">Transforme seus PDFs em simulados interativos em segundos.</p>
     </div>
     """, unsafe_allow_html=True)
-    col_up, _ = st.columns([1, 1])
-    with col_up:
-        st.markdown("<br>", unsafe_allow_html=True)
-        modo = st.radio("O QUE VAMOS FAZER?", ["Criar Questões", "Extrair Prova"])
-        arquivo = st.file_uploader("ARRASTE SEU PDF", type="pdf")
-        if arquivo and st.button("PROCESSAR ->", type="primary"):
-            with st.spinner("LENDO ARQUIVO..."):
+    
+    c1, c2, c3 = st.columns([1, 2, 1])
+    with c2:
+        modo = st.radio("O que vamos estudar?", ["Criar Questões Inéditas", "Extrair Prova Existente"], horizontal=True)
+        arquivo = st.file_uploader("Arraste seu PDF aqui", type="pdf")
+        if arquivo and st.button("🚀 Gerar Simulado", type="primary", use_container_width=True):
+            with st.spinner("A IA está lendo seu material..."):
                 texto, erro = ler_pdf(arquivo)
                 if erro: st.error(erro)
                 else:
                     tipo = "criar" if "Criar" in modo else "extrair"
                     questoes = chamar_ia_json(texto, tipo)
-                    if questoes: criar_novo_estudo(arquivo.name, questoes); st.rerun()
+                    if questoes: 
+                        criar_novo_estudo(arquivo.name, questoes) # Isso já dá rerun
                     else: st.error("Erro ao processar.")
 
-# >>> PÁGINA DE APOIO ATUALIZADA (Layout Pirâmide) <<<
-elif st.session_state.pagina_atual == "apoio":
-    st.title("🐱 Apoie o Projeto")
-    
-    st.markdown("""
-    <h3 style="color: #CCC;">Ajude a manter o servidor ligado!</h3>
-    O site é grátis, mas se quiser pagar um sachê para o <b>Gerente de TI (o gato)</b>, ficaremos felizes!
-    """, unsafe_allow_html=True)
-    
-    # LAYOUT PIRÂMIDE
-    # 1. Foto do Topo (Centralizada) - gato1
-    c_top_left, c_top_center, c_top_right = st.columns([1, 2, 1]) # Coluna do meio é maior
-    with c_top_center:
-        if os.path.exists("gato1.jpeg"):
-            st.image("gato1.jpeg", caption="O Gerente julgando seu estudo.", use_container_width=True)
-        else:
-            st.warning("Foto gato1.jpeg não encontrada.")
+# >>> ABA 2: BIBLIOTECA (SEUS ESTUDOS) <<<
+with tab_biblio:
+    # Se tem um chat ativo, mostra a PROVA
+    if st.session_state.chat_ativo_id:
+        estudo_ativo = next((e for e in st.session_state.historico if e["id"] == st.session_state.chat_ativo_id), None)
+        if estudo_ativo:
+            b1, b2 = st.columns([6, 1])
+            with b1: st.title(estudo_ativo['titulo'])
+            with b2: 
+                if st.button("⬅ VOLTAR"): 
+                    st.session_state.chat_ativo_id = None
+                    st.rerun()
 
-    # 2. Fotos da Base (Lado a Lado) - gato2 e gato3
-    st.markdown("<br>", unsafe_allow_html=True)
-    c_bot1, c_bot2 = st.columns(2)
-    
-    with c_bot1:
-        if os.path.exists("gato2.jpeg"):
-            st.image("gato2.jpeg", caption="Tirando um cochilo pós-deploy.", use_container_width=True)
-        else: st.warning("gato2.jpeg faltando.")
+            # Área da Prova
+            for index, q in enumerate(estudo_ativo['questoes']):
+                st.markdown(f"""
+                <div class="questao-container">
+                    <div style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">QUESTÃO {index + 1:02d}</div>
+                    <div class="questao-texto">{q['pergunta']}</div>
+                </div>""", unsafe_allow_html=True)
+                
+                res_salva = estudo_ativo["respostas_usuario"].get(str(q['id']))
+                idx = q['opcoes'].index(res_salva) if res_salva in q['opcoes'] else None
+                escolha = st.radio("Resposta:", q['opcoes'], index=idx, key=f"q_{estudo_ativo['id']}_{q['id']}", label_visibility="collapsed")
+                
+                if escolha and escolha != res_salva:
+                    estudo_ativo["respostas_usuario"][str(q['id'])] = escolha
+                    salvar_estudo_bd(estudo_ativo)
+                    st.rerun()
+                
+                if res_salva:
+                    letra_user = res_salva.split(")")[0].strip().upper()
+                    letra_correta = q['correta'].strip().upper()
+                    if letra_user == letra_correta: 
+                        st.markdown(f"""<div class="feedback-correct"><b>✓ ACERTOU</b><br>{q['comentario']}</div>""", unsafe_allow_html=True)
+                    else: 
+                        st.markdown(f"""<div class="feedback-wrong"><b>✕ ERROU (Correta: {letra_correta})</b><br>{q['comentario']}</div>""", unsafe_allow_html=True)
+                st.markdown("<br>", unsafe_allow_html=True)
             
-    with c_bot2:
-        if os.path.exists("gato3.jpeg"):
-            st.image("gato3.jpeg", caption="Esperando o Pix do sachê.", use_container_width=True)
-        else: st.warning("gato3.jpeg faltando.")
+            if st.button("↺ Reiniciar Simulado", use_container_width=True):
+                estudo_ativo["respostas_usuario"] = {}
+                salvar_estudo_bd(estudo_ativo); st.rerun()
 
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("### 💠 Chave Pix Copia e Cola")
-    st.markdown("""
-    <div class="pix-container">
-        <p style="color: #888; margin-bottom: 10px;">Clique duas vezes na chave abaixo para copiar:</p>
-        <div class="pix-key">5b84b80d-c11a-4129-b897-74fb6371dfce</div>
-        <p style="margin-top: 20px; color: #FFF;"><i>Obrigado por apoiar a educação! ❤️</i></p>
-    </div>
-    """, unsafe_allow_html=True)
+    # Se NÃO tem chat ativo, mostra a GRADE DE CARDS
+    else:
+        st.title("📚 Minha Biblioteca")
+        if not st.session_state.historico:
+            st.info("Você ainda não tem estudos. Vá na aba 'Início' e suba um PDF!")
+        else:
+            # Grid de Estudos
+            cols = st.columns(3)
+            for i, estudo in enumerate(st.session_state.historico):
+                with cols[i % 3]:
+                    # Card Interativo (Gambiarra visual com Button)
+                    # Usamos um botão invisível por cima ou apenas o botão nativo estilizado
+                    st.markdown(f"""
+                    <div class="lib-card">
+                        <div class="lib-icon">📄</div>
+                        <div class="lib-title">{estudo['titulo']}</div>
+                        <div class="lib-date">Criado em: {estudo['data']}</div>
+                        <div style="font-size: 0.8rem; color: #555; margin-top: 5px;">{len(estudo['questoes'])} questões</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    c_open, c_del = st.columns([4, 1])
+                    with c_open:
+                        if st.button("ABRIR", key=f"open_{estudo['id']}", use_container_width=True):
+                            st.session_state.chat_ativo_id = estudo['id']
+                            st.rerun()
+                    with c_del:
+                        if st.button("🗑️", key=f"del_{estudo['id']}", use_container_width=True):
+                            deletar_estudo_bd(estudo['id'])
+                            st.session_state.historico = carregar_historico_bd()
+                            st.rerun()
 
-elif st.session_state.pagina_atual == "chat_ia":
+# >>> ABA 3: TUTOR IA <<<
+with tab_tutor:
     st.title("🤖 Tutor IA")
-    modo_tutor = st.radio("OPÇÕES:", ["💬 Conversar", "📝 Criar Simulado"], horizontal=True)
-    st.markdown("<hr style='border-color: #333;'>", unsafe_allow_html=True)
+    modo_tutor = st.radio("", ["💬 Conversar", "📝 Gerar Simulado Rápido"], horizontal=True)
+    
     if modo_tutor == "💬 Conversar":
         for msg in st.session_state.mensagens_ia:
             role = "user" if msg["role"] == "user" else "assistant"
             with st.chat_message(role): st.markdown(msg["content"])
-        if prompt := st.chat_input("Dúvida ou assunto..."):
+        if prompt := st.chat_input("Dúvida..."):
             st.session_state.mensagens_ia.append({"role": "user", "content": prompt})
             with st.chat_message("user"): st.markdown(prompt)
             with st.chat_message("assistant"):
                 with st.spinner("..."):
                     model = genai.GenerativeModel('gemini-flash-latest')
-                    response = model.generate_content(f"Seja didático. Usuário: {prompt}")
-                    st.markdown(response.text)
-                    st.session_state.mensagens_ia.append({"role": "model", "content": response.text})
+                    resp = model.generate_content(f"Seja didático. User: {prompt}").text
+                    st.markdown(resp)
+                    st.session_state.mensagens_ia.append({"role": "model", "content": resp})
     else:
-        st.info("Digite um tema para gerar um simulado completo.")
-        if assunto := st.chat_input("Ex: Direito Constitucional..."):
-            with st.spinner(f"Criando: {assunto}..."):
+        assunto = st.text_input("Sobre qual assunto você quer treinar agora?")
+        if assunto and st.button("Gerar Simulado Agora"):
+             with st.spinner(f"Criando prova sobre {assunto}..."):
                 questoes = chamar_ia_json(assunto, "criar")
-                if questoes: criar_novo_estudo(f"Simulado: {assunto}", questoes); st.rerun()
+                if questoes: criar_novo_estudo(f"Simulado: {assunto}", questoes)
 
-elif st.session_state.pagina_atual == "visualizacao" and st.session_state.chat_ativo_id:
-    estudo_ativo = next((e for e in st.session_state.historico if e["id"] == st.session_state.chat_ativo_id), None)
-    if estudo_ativo:
-        c1, c2 = st.columns([5, 1])
-        with c1: st.title(estudo_ativo['titulo'])
-        with c2:
-            if st.button("↺ REINICIAR", use_container_width=True):
-                estudo_ativo["respostas_usuario"] = {}
-                salvar_estudo_bd(estudo_ativo); st.rerun()
-        st.markdown("<div style='height: 1px; background-color: #333; margin-bottom: 40px;'></div>", unsafe_allow_html=True)
-        for index, q in enumerate(estudo_ativo['questoes']):
-            st.markdown(f"""
-            <div class="questao-container">
-                <div style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">QUESTÃO {index + 1:02d}</div>
-                <div class="questao-texto">{q['pergunta']}</div>
-            </div>""", unsafe_allow_html=True)
-            res_salva = estudo_ativo["respostas_usuario"].get(str(q['id']))
-            idx = q['opcoes'].index(res_salva) if res_salva in q['opcoes'] else None
-            escolha = st.radio("Alternativas:", q['opcoes'], index=idx, key=f"r_{estudo_ativo['id']}_{q['id']}", label_visibility="collapsed")
-            if escolha and escolha != res_salva:
-                estudo_ativo["respostas_usuario"][str(q['id'])] = escolha
-                salvar_estudo_bd(estudo_ativo); st.rerun()
-            if res_salva:
-                letra_user = res_salva.split(")")[0].strip().upper()
-                letra_correta = q['correta'].strip().upper()
-                if letra_user == letra_correta: st.markdown(f"""<div class="feedback-box feedback-correct"><b>✓ ACERTOU</b><br>{q['comentario']}</div>""", unsafe_allow_html=True)
-                else: st.markdown(f"""<div class="feedback-box feedback-wrong"><b>✕ ERROU (Correta: {letra_correta})</b><br>{q['comentario']}</div>""", unsafe_allow_html=True)
-            st.markdown("<br><br>", unsafe_allow_html=True)
+# >>> ABA 4: LOJA <<<
+with tab_loja:
+    st.title("🛒 Loja Oficial")
+    st.caption("Produtos selecionados com curadoria.")
+    cat_tabs = st.tabs(CATALOGO_PREMIUM.keys())
+    for aba, cat in zip(cat_tabs, CATALOGO_PREMIUM):
+        with aba:
+            links = CATALOGO_PREMIUM[cat]["links"]
+            l_cols = st.columns(4)
+            for i, link in enumerate(links):
+                with l_cols[i % 4]:
+                    st.markdown(f"""
+                    <a href="{link}" target="_blank" class="amazon-card">
+                        <span style="font-weight:bold; color:#333">Oferta #{i+1}</span>
+                        <span class="amz-button">Ver na Amazon</span>
+                    </a>
+                    """, unsafe_allow_html=True)
+
+# >>> ABA 5: APOIO <<<
+with tab_apoio:
+    st.title("🐱 Apoie o Projeto")
+    # LAYOUT PIRÂMIDE
+    c_top_left, c_top_center, c_top_right = st.columns([1, 2, 1])
+    with c_top_center:
+        if os.path.exists("static/gato1.jpeg"): # Ajuste o caminho se necessário
+            st.image("static/gato1.jpeg", caption="O Gerente julgando seu estudo.", use_container_width=True)
+        elif os.path.exists("gato1.jpeg"):
+            st.image("gato1.jpeg", caption="O Gerente julgando seu estudo.", use_container_width=True)
+
+    c_bot1, c_bot2 = st.columns(2)
+    with c_bot1:
+        if os.path.exists("gato2.jpeg"): st.image("gato2.jpeg", caption="Cochilo pós-deploy.", use_container_width=True)
+    with c_bot2:
+        if os.path.exists("gato3.jpeg"): st.image("gato3.jpeg", caption="Esperando o Pix.", use_container_width=True)
+
+    st.markdown("### 💠 Chave Pix")
+    st.markdown("""<div class="pix-container"><div class="pix-key">5b84b80d-c11a-4129-b897-74fb6371dfce</div></div>""", unsafe_allow_html=True)
