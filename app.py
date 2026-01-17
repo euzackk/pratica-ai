@@ -8,8 +8,7 @@ import random
 import os
 from datetime import datetime
 
-# --- 1. CONFIGURAÇÃO DE SEGURANÇA (CORRIGIDO) ---
-# Tenta pegar a chave dos Segredos. Se não achar, o site abre mas avisa na hora de usar a IA.
+# --- 1. CONFIGURAÇÃO DE SEGURANÇA ---
 try:
     API_KEY = st.secrets["GOOGLE_API_KEY"]
 except:
@@ -70,41 +69,34 @@ def deletar_estudo_bd(id_estudo):
 
 init_db()
 
-# --- 4. CATÁLOGO DE VENDAS (Nomes Reais) ---
+# --- 4. CATÁLOGO DE VENDAS ---
 CATALOGO_PREMIUM = {
     "direito": {
-        "visual": {"badge": "🔥 OFERTA JURÍDICA", "titulo": "KIT OAB 2026", "subtitulo": "Vade Mecum e Doutrinas", "icone": "⚖️", "bg_style": "background: linear-gradient(135deg, #240b36 0%, #c31432 100%);", "btn_text": "VER PREÇO NA AMAZON"},
+        "visual": {"badge": "🔥 OFERTA", "titulo": "KIT OAB 2026", "icone": "⚖️", "bg_style": "background: linear-gradient(135deg, #240b36 0%, #c31432 100%);", "btn_text": "VER PREÇO"},
         "produtos": [
             {"nome": "Vade Mecum Saraiva 2026", "link": "https://amzn.to/4qJymYt"},
-            {"nome": "Vade Mecum Rideel Compacto", "link": "https://amzn.to/4qAOVWf"},
-            {"nome": "CLT Organizada - LTr", "link": "https://amzn.to/45jNwuK"},
-            {"nome": "Manual Direito Civil", "link": "https://amzn.to/4sKGLft"}
+            {"nome": "Vade Mecum Rideel Compacto", "link": "https://amzn.to/4qAOVWf"}
         ]
     },
     "tecnologia": {
-        "visual": {"badge": "⚡ SETUP PRO", "titulo": "NOTEBOOKS & GAMER", "subtitulo": "Potência para programar.", "icone": "💻", "bg_style": "background: linear-gradient(135deg, #000428 0%, #004e92 100%);", "btn_text": "CONFIRMAR OFERTA"},
+        "visual": {"badge": "⚡ SETUP", "titulo": "NOTEBOOKS & GAMER", "icone": "💻", "bg_style": "background: linear-gradient(135deg, #000428 0%, #004e92 100%);", "btn_text": "CONFIRMAR"},
         "produtos": [
             {"nome": "Notebook Acer Aspire 5", "link": "https://amzn.to/4pJLkUC"},
-            {"nome": "Mouse Logitech MX Master", "link": "https://amzn.to/3LyNpVu"},
-            {"nome": "Teclado Mecânico Keychron", "link": "https://amzn.to/49BErP3"},
-            {"nome": "Monitor Dell IPS 24", "link": "https://amzn.to/4pFde4d"}
+            {"nome": "Mouse Logitech MX Master", "link": "https://amzn.to/3LyNpVu"}
         ]
     },
     "policial": {
-        "visual": {"badge": "🛡️ OPERACIONAL", "titulo": "KIT APROVAÇÃO POLÍCIA", "subtitulo": "Apostilas e Tático.", "icone": "🚓", "bg_style": "background: linear-gradient(135deg, #16222A 0%, #3A6073 100%);", "btn_text": "VER EQUIPAMENTOS"},
+        "visual": {"badge": "🛡️ TÁTICO", "titulo": "KIT POLÍCIA", "icone": "🚓", "bg_style": "background: linear-gradient(135deg, #16222A 0%, #3A6073 100%);", "btn_text": "EQUIPAMENTOS"},
         "produtos": [
             {"nome": "Apostila Alfacon Policial", "link": "https://amzn.to/4qPWLeq"},
-            {"nome": "Vade Mecum Carreiras Policiais", "link": "https://amzn.to/4jK4vMs"},
             {"nome": "Coturno Tático Militar", "link": "https://amzn.to/4qXVCBy"}
         ]
     },
     "geral": {
-        "visual": {"badge": "🎁 IMPERDÍVEL", "titulo": "KINDLE & FOCO", "subtitulo": "O essencial do estudante.", "icone": "🎒", "bg_style": "background: linear-gradient(135deg, #1A2980 0%, #26D0CE 100%);", "btn_text": "APROVEITAR AGORA"},
+        "visual": {"badge": "🎁 PROMO", "titulo": "KINDLE & FOCO", "icone": "🎒", "bg_style": "background: linear-gradient(135deg, #1A2980 0%, #26D0CE 100%);", "btn_text": "APROVEITAR"},
         "produtos": [
             {"nome": "Kindle 11ª Geração", "link": "https://amzn.to/3NpLfYP"},
-            {"nome": "Fone JBL Cancelamento Ruído", "link": "https://amzn.to/49Z1vsr"},
-            {"nome": "Garrafa Térmica", "link": "https://amzn.to/4sL9elk"},
-            {"nome": "Mochila Antifurto", "link": "https://amzn.to/4sKkRZD"}
+            {"nome": "Fone JBL Cancelamento Ruído", "link": "https://amzn.to/49Z1vsr"}
         ]
     }
 }
@@ -125,17 +117,27 @@ def ia_escolher_categoria(contexto_usuario):
     if any(x in ctx for x in ["policia", "taf"]): return "policial"
     return "geral"
 
-# --- 5. CSS (VISUAL SQUARED, DARK & CLEAN) ---
+# --- 5. CSS (MODO APP ULTRA COMPACTO) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap');
     
-    /* 1. Ocultar Cabeçalho e Rodapé do Streamlit */
-    header[data-testid="stHeader"] { visibility: hidden; height: 0%; }
-    footer { visibility: hidden; }
-    div[data-testid="stToolbar"] { visibility: hidden; height: 0%; }
+    /* 1. REMOÇÃO TOTAL DA INTERFACE DO STREAMLIT */
+    header, [data-testid="stHeader"], [data-testid="stToolbar"] { display: none !important; }
+    footer, .stDeployButton { display: none !important; }
     
-    /* 2. Forçar Dark Mode Absoluto */
+    /* 2. AJUSTE DE MARGENS PARA PARECER APP (Removed Padding) */
+    .block-container {
+        padding-top: 1rem !important;
+        padding-bottom: 2rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    
+    /* Ajuste da Sidebar para não ter buraco em cima */
+    [data-testid="stSidebar"] { top: 0px !important; margin-top: 0px !important; }
+
+    /* 3. DARK MODE ABSOLUTO */
     :root {
         --primary-color: #F0C14B;
         --background-color: #000000;
@@ -144,60 +146,71 @@ st.markdown("""
         --font: 'Inter', sans-serif;
     }
     .stApp, [data-testid="stAppViewContainer"] { background-color: #000000 !important; color: #ffffff !important; }
-    [data-testid="stSidebar"] { background-color: #050505 !important; border-right: 1px solid #222; margin-top: -60px; padding-top: 20px; }
     
-    /* Inputs Escuros */
+    /* Inputs */
     .stTextInput input, .stSelectbox, div[data-baseweb="select"] > div {
-        background-color: #111 !important; color: white !important; border-color: #333 !important; border-radius: 0px !important;
+        background-color: #111 !important; color: white !important; border-color: #333 !important; border-radius: 0px !important; height: 50px;
     }
     
-    /* Texto */
     p, label, h1, h2, h3, h4, span, li { color: #e0e0e0 !important; }
 
-    /* 3. Estilo Quadrado (Squared) */
-    .stButton button, img, .super-banner, .lib-card, .pix-container, .questao-container { border-radius: 0px !important; }
+    /* 4. ESTILO APP (SQUARED & TOUCH FRIENDLY) */
+    .stButton button {
+        border-radius: 0px !important;
+        border: 1px solid #333;
+        background: #111;
+        color: #EEE;
+        padding: 15px 0px !important; /* Mais alto para o dedo */
+        font-size: 1rem;
+        font-weight: 600;
+        width: 100%;
+        margin-top: 5px;
+    }
+    .stButton button:active { background: #333; }
 
-    /* Super Banner */
+    /* --- SUPER BANNER --- */
     @keyframes pulse-border {
         0% { box-shadow: 0 0 0 0 rgba(240, 193, 75, 0.4); }
         70% { box-shadow: 0 0 0 10px rgba(240, 193, 75, 0); }
         100% { box-shadow: 0 0 0 0 rgba(240, 193, 75, 0); }
     }
     .super-banner {
-        display: block; text-decoration: none; padding: 25px 20px; margin: 20px 0;
+        display: block; text-decoration: none; padding: 20px; margin: 15px 0;
         position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);
-        animation: pulse-border 2s infinite; transition: transform 0.2s;
+        animation: pulse-border 2s infinite; 
     }
-    .super-banner:hover { transform: scale(1.02); filter: brightness(1.1); }
-    .sb-badge { position: absolute; top: 0; right: 0; background: #FFD700; color: #000 !important; font-size: 0.6rem; font-weight: 900; padding: 4px 8px; text-transform: uppercase; }
-    .sb-icon { font-size: 3.5rem; margin-bottom: 15px; display: block; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-    .sb-title { color: #FFF !important; font-weight: 900; font-size: 1.3rem; line-height: 1; margin-bottom: 5px; display: block; text-transform: uppercase;}
-    .sb-prod-name { background: rgba(0,0,0,0.4); color: #FFF !important; font-size: 0.8rem; padding: 5px; display: inline-block; margin-bottom: 15px; font-weight: bold; border-left: 3px solid #FFD700;}
-    .sb-button { background: #FFF; color: #000 !important; text-align: center; font-weight: 900; padding: 12px; display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;}
+    .sb-badge { position: absolute; top: 0; right: 0; background: #FFD700; color: #000 !important; font-size: 0.6rem; font-weight: 900; padding: 4px 8px; }
+    .sb-title { color: #FFF !important; font-weight: 900; font-size: 1.2rem; margin-bottom: 5px; display: block; }
+    .sb-prod-name { background: rgba(0,0,0,0.4); color: #FFF !important; font-size: 0.8rem; padding: 5px; margin-bottom: 15px; border-left: 3px solid #FFD700;}
+    .sb-button { background: #FFF; color: #000 !important; text-align: center; font-weight: 900; padding: 12px; display: block; font-size: 0.8rem; }
 
-    /* Card Biblioteca */
+    /* --- CARD BIBLIOTECA --- */
     .lib-card {
-        background: #111; border: 1px solid #333; padding: 20px; height: 100%;
-        transition: 0.2s; cursor: pointer; text-align: left; border-left: 2px solid #333;
+        background: #111; border: 1px solid #333; padding: 20px;
+        cursor: pointer; border-left: 3px solid #333; margin-bottom: 10px;
     }
-    .lib-card:hover { background: #1a1a1a; border-left-color: #F0C14B; }
     .lib-title { font-weight: 700; color: #EEE !important; font-size: 1.1rem; margin-bottom: 8px; }
     .lib-info { color: #666 !important; font-size: 0.8rem; display: flex; justify-content: space-between; }
 
-    /* Responsividade */
+    /* --- MOBILE RESPONSIVENESS CRÍTICO --- */
     @media only screen and (max-width: 600px) {
-        h1 { font-size: 2.2rem !important; }
-        .stButton button { padding: 15px !important; font-size: 1rem !important; }
-        .lib-card { margin-bottom: 10px; }
-        [data-testid="column"] { width: 100% !important; flex: 1 1 auto !important; min-width: 100% !important; }
-        .super-banner { margin: 10px 0; }
-        .stApp { margin-top: 10px; }
+        h1 { font-size: 2rem !important; line-height: 1.1 !important; }
+        
+        /* Upload Area */
+        [data-testid="stFileUploader"] { padding: 5px; border: 1px dashed #444; }
+        [data-testid="stFileUploader"] section { padding: 20px; background-color: #050505; }
+        
+        /* Botões Full Width */
+        .stButton button { width: 100% !important; margin-bottom: 8px; }
+        
+        /* Ajuste do Título da Biblioteca */
+        h2 { font-size: 1.5rem !important; }
     }
 
-    /* Pix & Questões */
+    /* PIX & QUESTÕES */
     .pix-container { background: #111; border: 1px dashed #555; padding: 20px; text-align: center; margin-top: 20px;}
-    .pix-key { font-family: monospace; background: #000; padding: 15px; color: #00FF7F !important; font-size: 1rem; word-break: break-all; border: 1px solid #333; }
-    .questao-container { background-color: #111; border: 1px solid #333; border-left: 3px solid #444; padding: 25px; margin-bottom: 30px; }
+    .pix-key { font-family: monospace; background: #000; padding: 15px; color: #00FF7F !important; font-size: 0.9rem; word-break: break-all; border: 1px solid #333; }
+    .questao-container { background-color: #111; border: 1px solid #333; border-left: 3px solid #444; padding: 20px; margin-bottom: 30px; }
     .feedback-correct { background: rgba(5, 50, 20, 0.5); border: 1px solid #0F5132; color: #75B798 !important; padding: 15px; margin-top: 10px; font-weight: bold;}
     .feedback-wrong { background: rgba(50, 5, 10, 0.5); border: 1px solid #842029; color: #EA868F !important; padding: 15px; margin-top: 10px; font-weight: bold;}
 
@@ -210,7 +223,7 @@ if "pagina_atual" not in st.session_state: st.session_state.pagina_atual = "uplo
 if "chat_ativo_id" not in st.session_state: st.session_state.chat_ativo_id = None
 if "mensagens_ia" not in st.session_state: st.session_state.mensagens_ia = [{"role": "model", "content": "Olá! Sou seu Tutor IA."}]
 
-# --- 7. FUNÇÕES DE IA (COM TRATAMENTO DE ERRO DE CHAVE) ---
+# --- 7. FUNÇÕES ---
 def ler_pdf(arquivo):
     try:
         leitor = pypdf.PdfReader(arquivo)
@@ -218,17 +231,14 @@ def ler_pdf(arquivo):
         for pagina in leitor.pages:
             res = pagina.extract_text()
             if res: texto += res + "\n"
-        if len(texto.strip()) < 50: return None, "PDF ilegível (pode ser imagem)."
+        if len(texto.strip()) < 50: return None, "PDF ilegível."
         return texto, None
     except Exception as e: return None, str(e)
 
 def chamar_ia_json(texto, tipo):
-    # SEGURANÇA: Verifica se a chave existe antes de chamar
     if not API_KEY:
-        st.error("⚠️ CONFIGURAÇÃO NECESSÁRIA: A chave 'GOOGLE_API_KEY' não foi encontrada nos Segredos.")
-        st.info("No PC: Adicione em .streamlit/secrets.toml \n\n Na Nuvem: Adicione nas Settings do App.")
+        st.error("⚠️ Configure a API KEY no secrets.toml")
         return None
-
     model = genai.GenerativeModel('gemini-flash-latest')
     prompt = """Gere um JSON estrito. Estrutura: [{"id": 1, "pergunta": "...", "opcoes": ["A) ...", "B) ..."], "correta": "A", "comentario": "..."}]"""
     if len(texto) < 500: contexto = f"Assunto: {texto}"
@@ -239,7 +249,7 @@ def chamar_ia_json(texto, tipo):
         if "[" in limpo: limpo = limpo[limpo.find("["):limpo.rfind("]")+1]
         return json.loads(limpo)
     except Exception as e: 
-        st.error(f"Erro ao processar com a IA: {e}")
+        st.error(f"Erro IA: {e}")
         return None
 
 def criar_novo_estudo(nome_arquivo, questoes):
@@ -257,17 +267,16 @@ def criar_novo_estudo(nome_arquivo, questoes):
 # --- 8. BARRA LATERAL ---
 with st.sidebar:
     st.markdown("<h1 style='color: white; font-family: Inter; font-weight: 900; letter-spacing: -2px; margin:0;'>PRATICA<span style='color:#F0C14B'>.AI</span></h1>", unsafe_allow_html=True)
-    st.caption("v5.1")
     st.markdown("---")
     
     if st.button("📄 NOVO UPLOAD", use_container_width=True): st.session_state.pagina_atual = "upload"; st.rerun()
     if st.button("📚 BIBLIOTECA", use_container_width=True): st.session_state.pagina_atual = "biblioteca"; st.rerun()
     if st.button("🤖 TUTOR IA", use_container_width=True): st.session_state.pagina_atual = "chat_ia"; st.rerun()
-    if st.button("🐱 APOIE", use_container_width=True): st.session_state.pagina_atual = "apoio"; st.rerun()
+    if st.button("🐱 APOIE!!", use_container_width=True): st.session_state.pagina_atual = "apoio"; st.rerun()
     
     st.markdown("---")
     
-    # SUPER BANNER INTELIGENTE
+    # BANNER
     contexto_usuario = ""
     if st.session_state.chat_ativo_id:
         estudo_ativo = next((e for e in st.session_state.historico if e["id"] == st.session_state.chat_ativo_id), None)
@@ -296,40 +305,37 @@ with st.sidebar:
 # >>> UPLOAD <<<
 if st.session_state.pagina_atual == "upload":
     st.markdown("""
-    <div style="text-align: left; margin-top: 40px; margin-bottom: 40px;">
-        <h1 style="font-size: 3rem !important; color: #FFF !important; font-weight: 900; line-height: 1.1;">ESTUDE MENOS,<br><span style="color: #444;">APRENDA MAIS.</span></h1>
-        <p style="color: #888 !important; font-size: 1.1rem; margin-top: 10px;">Suba seu PDF e deixe a IA criar sua prova.</p>
+    <div style="text-align: left; margin-bottom: 30px;">
+        <h1 style="font-size: 3rem !important; color: #FFF !important; font-weight: 900; line-height: 1;">ESTUDE MENOS,<br><span style="color: #444;">APRENDA MAIS.</span></h1>
+        <p style="color: #888 !important; font-size: 1rem; margin-top: 10px;">Suba seu PDF e deixe a IA criar sua prova.</p>
     </div>
     """, unsafe_allow_html=True)
     
-    c1, c2 = st.columns([2, 1])
-    with c1:
-        arquivo = st.file_uploader("SELECIONE O ARQUIVO (PDF)", type="pdf")
-    with c2:
-        modo = st.radio("OBJETIVO:", ["Criar Questões", "Extrair Prova"])
-        if arquivo and st.button("INICIAR PROCESSAMENTO ->", type="primary", use_container_width=True):
-            with st.spinner("ANALISANDO..."):
-                texto, erro = ler_pdf(arquivo)
-                if erro: st.error(erro)
-                else:
-                    tipo = "criar" if "Criar" in modo else "extrair"
-                    questoes = chamar_ia_json(texto, tipo)
-                    if questoes: criar_novo_estudo(arquivo.name, questoes)
-                    else: st.error("Erro ao processar.")
+    # Upload Full Width no Mobile
+    arquivo = st.file_uploader("SELECIONE O ARQUIVO (PDF)", type="pdf")
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    modo = st.radio("OBJETIVO:", ["Criar Questões", "Extrair Prova"])
+    
+    if arquivo and st.button("INICIAR PROCESSAMENTO ->", type="primary", use_container_width=True):
+        with st.spinner("ANALISANDO..."):
+            texto, erro = ler_pdf(arquivo)
+            if erro: st.error(erro)
+            else:
+                tipo = "criar" if "Criar" in modo else "extrair"
+                questoes = chamar_ia_json(texto, tipo)
+                if questoes: criar_novo_estudo(arquivo.name, questoes)
+                else: st.error("Erro ao processar.")
 
-# >>> BIBLIOTECA (CLEAN - SEM ABAS) <<<
+# >>> BIBLIOTECA <<<
 elif st.session_state.pagina_atual == "biblioteca":
     
-    # 1. MODO DETALHE (ESTUDO ABERTO)
+    # ESTUDO ABERTO
     if st.session_state.chat_ativo_id:
         estudo_ativo = next((e for e in st.session_state.historico if e["id"] == st.session_state.chat_ativo_id), None)
         if estudo_ativo:
-            c_back, c_title = st.columns([1, 6])
-            with c_back:
-                if st.button("⬅ VOLTAR"):
-                    st.session_state.chat_ativo_id = None; st.rerun()
-            with c_title:
-                st.markdown(f"<h2 style='margin:0'>{estudo_ativo['titulo']}</h2>", unsafe_allow_html=True)
+            if st.button("⬅ VOLTAR", use_container_width=True): st.session_state.chat_ativo_id = None; st.rerun()
+            st.markdown(f"<h3 style='margin-top:10px'>{estudo_ativo['titulo']}</h3>", unsafe_allow_html=True)
             
             st.markdown("---")
             for index, q in enumerate(estudo_ativo['questoes']):
@@ -338,6 +344,7 @@ elif st.session_state.pagina_atual == "biblioteca":
                     <div style="color: #666; font-size: 0.8rem; margin-bottom: 10px; font-weight:bold;">QUESTÃO {index + 1:02d}</div>
                     <div class="questao-texto">{q['pergunta']}</div>
                 </div>""", unsafe_allow_html=True)
+                
                 res_salva = estudo_ativo["respostas_usuario"].get(str(q['id']))
                 idx = q['opcoes'].index(res_salva) if res_salva in q['opcoes'] else None
                 escolha = st.radio("Sua resposta:", q['opcoes'], index=idx, key=f"q_{estudo_ativo['id']}_{q['id']}", label_visibility="collapsed")
@@ -357,33 +364,32 @@ elif st.session_state.pagina_atual == "biblioteca":
                 estudo_ativo["respostas_usuario"] = {}
                 salvar_estudo_bd(estudo_ativo); st.rerun()
                 
-    # 2. MODO LISTA (GRADE)
+    # LISTA
     else:
         st.title("Minha Biblioteca")
         if not st.session_state.historico:
             st.info("Sua biblioteca está vazia. Faça um upload!")
         else:
-            cols = st.columns(3)
+            # Lista Vertical no Mobile
             for i, estudo in enumerate(st.session_state.historico):
-                with cols[i % 3]:
-                    st.markdown(f"""
-                    <div class="lib-card">
-                        <div class="lib-title">{estudo['titulo']}</div>
-                        <div class="lib-info">
-                            <span>{estudo['data']}</span>
-                            <span>{len(estudo['questoes'])} questões</span>
-                        </div>
+                st.markdown(f"""
+                <div class="lib-card">
+                    <div class="lib-title">{estudo['titulo']}</div>
+                    <div class="lib-info">
+                        <span>{estudo['data']}</span>
+                        <span>{len(estudo['questoes'])} questões</span>
                     </div>
-                    """, unsafe_allow_html=True)
-                    
-                    c_act1, c_act2 = st.columns([3, 1])
-                    with c_act1:
-                        if st.button("ABRIR ESTUDO", key=f"open_{estudo['id']}", use_container_width=True):
-                            st.session_state.chat_ativo_id = estudo['id']; st.rerun()
-                    with c_act2:
-                        if st.button("✕", key=f"del_{estudo['id']}", use_container_width=True):
-                            deletar_estudo_bd(estudo['id'])
-                            st.session_state.historico = carregar_historico_bd(); st.rerun()
+                </div>
+                """, unsafe_allow_html=True)
+                
+                c1, c2 = st.columns([3, 1])
+                with c1:
+                    if st.button("ABRIR", key=f"open_{estudo['id']}", use_container_width=True):
+                        st.session_state.chat_ativo_id = estudo['id']; st.rerun()
+                with c2:
+                    if st.button("✕", key=f"del_{estudo['id']}", use_container_width=True):
+                        deletar_estudo_bd(estudo['id'])
+                        st.session_state.historico = carregar_historico_bd(); st.rerun()
 
 # >>> TUTOR IA <<<
 elif st.session_state.pagina_atual == "chat_ia":
@@ -398,7 +404,6 @@ elif st.session_state.pagina_atual == "chat_ia":
             st.session_state.mensagens_ia.append({"role": "user", "content": prompt})
             with st.chat_message("user"): st.markdown(prompt)
             with st.chat_message("assistant"):
-                # Verifica a chave antes de tentar responder
                 if API_KEY:
                     with st.spinner("..."):
                         try:
@@ -406,10 +411,8 @@ elif st.session_state.pagina_atual == "chat_ia":
                             resp = model.generate_content(f"Seja didático. User: {prompt}").text
                             st.markdown(resp)
                             st.session_state.mensagens_ia.append({"role": "model", "content": resp})
-                        except Exception as e:
-                            st.error(f"Erro na API: {e}")
-                else:
-                    st.error("Chave de API não configurada.")
+                        except Exception as e: st.error(f"Erro na API: {e}")
+                else: st.error("Chave API não configurada.")
     else:
         if assunto := st.chat_input("Gerar simulado sobre..."):
              with st.spinner(f"Criando: {assunto}..."):
@@ -421,6 +424,7 @@ elif st.session_state.pagina_atual == "apoio":
     st.title("🐱 APOIE NOSSO PROJETO!!")
     st.markdown("<h3 style='color: #888 !important;'>Ajude a manter o servidor ligado!</h3>", unsafe_allow_html=True)
     
+    # Ajuste de imagens para ocupar largura total no mobile
     c1, c2, c3 = st.columns([1, 2, 1])
     with c2:
         if os.path.exists("static/gato1.jpeg"): st.image("static/gato1.jpeg", caption="Exausta após corrigir bugs no servidor.", use_container_width=True)
