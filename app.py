@@ -105,7 +105,7 @@ def ia_escolher_categoria(contexto_usuario):
     if any(x in ctx for x in ["policia", "taf"]): return "policial"
     return "geral"
 
-# --- 5. CSS (VISUAL DE VENDAS + GATOS + ABAS) ---
+# --- 5. CSS (VISUAL SQUARED/QUADRADO) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
@@ -114,59 +114,61 @@ st.markdown("""
     .stApp { background-color: #050505; }
     section[data-testid="stSidebar"] { background-color: #0F0F0F; border-right: 1px solid #222; }
     
-    /* ABAS ESTILO GOOGLE */
-    .stTabs [data-baseweb="tab-list"] { gap: 10px; }
-    .stTabs [data-baseweb="tab"] {
-        background-color: #111; border-radius: 8px 8px 0 0; padding: 10px 20px; color: #888; border: 1px solid #333; border-bottom: none;
+    /* GERAL QUADRADO (SQUARED) */
+    .stButton button, img, .super-banner, .lib-card, .amazon-card, input, .pix-container, .questao-container {
+        border-radius: 0px !important;
     }
-    .stTabs [data-baseweb="tab"]:hover { color: #FFF; background-color: #222; }
-    .stTabs [aria-selected="true"] {
-        background-color: #050505 !important; color: #FFF !important; border-top: 2px solid #F0C14B !important; font-weight: bold;
+
+    /* SUPER BANNER LATERAL */
+    .super-banner {
+        display: block; text-decoration: none; padding: 20px; margin: 20px 0;
+        position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        transition: transform 0.3s ease; border: 1px solid rgba(255,255,255,0.1);
     }
+    .super-banner:hover { transform: scale(1.02); border-color: #FFF; }
+    .sb-badge { position: absolute; top: 0; right: 0; background: #000; color: #FFF; font-size: 0.6rem; font-weight: 900; padding: 5px 10px; }
+    .sb-icon { font-size: 3rem; margin-bottom: 10px; display: block; }
+    .sb-title { color: #FFF; font-weight: 900; font-size: 1.2rem; line-height: 1.1; margin-bottom: 5px; display: block; }
+    .sb-subtitle { color: rgba(255,255,255,0.8); font-size: 0.8rem; display: block; margin-bottom: 15px; }
+    .sb-button { background: #FFF; color: #000; text-align: center; font-weight: 800; padding: 10px; display: block; font-size: 0.9rem; text-transform: uppercase; border: none; }
 
     /* CARD BIBLIOTECA */
     .lib-card {
-        background: #111; border: 1px solid #333; border-radius: 12px; padding: 20px;
+        background: #111; border: 1px solid #333; padding: 20px;
         transition: 0.2s; cursor: pointer; text-align: left; height: 100%;
+        border-left: 4px solid #333;
     }
-    .lib-card:hover { border-color: #555; background: #161616; transform: translateY(-2px); }
+    .lib-card:hover { border-color: #555; background: #161616; border-left-color: #F0C14B; }
     .lib-title { font-weight: 700; color: #FFF; font-size: 1rem; margin-bottom: 5px; }
     .lib-date { color: #666; font-size: 0.8rem; }
     .lib-icon { font-size: 1.5rem; float: right; opacity: 0.5; }
 
-    /* SUPER BANNER */
-    .super-banner {
-        display: block; text-decoration: none; border-radius: 16px; padding: 20px; margin: 20px 0;
-        position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        transition: transform 0.3s ease; border: 2px solid rgba(255,255,255,0.1);
-    }
-    .super-banner:hover { transform: scale(1.03); }
-    .sb-badge { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); color: #FFF; font-size: 0.7rem; font-weight: 900; padding: 4px 10px; border-radius: 20px; }
-    .sb-icon { font-size: 3.5rem; margin-bottom: 10px; display: block; }
-    .sb-title { color: #FFF; font-weight: 900; font-size: 1.4rem; line-height: 1.1; margin-bottom: 8px; display: block; }
-    .sb-subtitle { color: rgba(255,255,255,0.9); font-size: 0.9rem; display: block; margin-bottom: 20px; font-weight: 500; }
-    .sb-button { background: #FFF; color: #000; text-align: center; font-weight: 800; padding: 12px 20px; border-radius: 50px; display: block; font-size: 1rem; text-transform: uppercase; }
-
     /* PIX & GATOS */
-    .pix-container { background: #111; border: 1px dashed #444; border-radius: 15px; padding: 30px; text-align: center; }
-    .pix-key { font-family: monospace; background: #222; padding: 15px; border-radius: 8px; color: #00FF7F; font-size: 1.1rem; margin: 20px 0; word-break: break-all; select-all; }
-    img { border-radius: 12px; }
+    .pix-container { background: #111; border: 1px dashed #444; padding: 30px; text-align: center; }
+    .pix-key { font-family: monospace; background: #222; padding: 15px; color: #00FF7F; font-size: 1.1rem; margin: 20px 0; word-break: break-all; select-all; }
     
     /* QUESTÕES */
-    .stButton button { text-align: left; background: transparent; color: #DDD; width: 100%; border-radius: 8px !important; }
-    .stButton button:hover { background: #222; }
+    .stButton button { text-align: left; background: transparent; color: #DDD; width: 100%; border: 1px solid transparent; }
+    .stButton button:hover { background: #222; border: 1px solid #333; }
     .questao-container { background-color: #111; border: 1px solid #333; border-left: 4px solid #333; padding: 30px; margin-bottom: 40px; }
-    .feedback-correct { background-color: #051B11; border-left: 4px solid #198754; color: #75B798; padding: 15px;}
-    .feedback-wrong { background-color: #2C0B0E; border-left: 4px solid #DC3545; color: #EA868F; padding: 15px;}
+    .feedback-correct { background-color: #051B11; border-left: 4px solid #198754; color: #75B798; padding: 15px; margin-top: 10px;}
+    .feedback-wrong { background-color: #2C0B0E; border-left: 4px solid #DC3545; color: #EA868F; padding: 15px; margin-top: 10px;}
     
     /* LOJA */
-    .amazon-card { background: #FFF; border-radius: 8px; padding: 15px; text-align: center; display: block; text-decoration: none; border: 1px solid #DDD; }
-    .amz-button { background: #FFD814; color: #000; padding: 8px; border-radius: 20px; display: block; margin-top: 10px; font-weight: bold; }
+    .amazon-card { background: #FFF; padding: 15px; text-align: center; display: block; text-decoration: none; border: 1px solid #DDD; }
+    .amz-button { background: #FFD814; color: #000; padding: 8px; display: block; margin-top: 10px; font-weight: bold; }
+    
+    /* ABAS CUSTOMIZADAS */
+    .stTabs [data-baseweb="tab-list"] { gap: 5px; }
+    .stTabs [data-baseweb="tab"] { border-radius: 0px; background-color: #111; color: #666; border: 1px solid #333; border-bottom: none; }
+    .stTabs [aria-selected="true"] { background-color: #000 !important; color: #FFF !important; border-top: 3px solid #FFF !important; }
+
 </style>
 """, unsafe_allow_html=True)
 
 # --- 6. GERENCIAMENTO DE ESTADO ---
 if "historico" not in st.session_state: st.session_state.historico = carregar_historico_bd()
+if "pagina_atual" not in st.session_state: st.session_state.pagina_atual = "upload"
 if "chat_ativo_id" not in st.session_state: st.session_state.chat_ativo_id = None
 if "mensagens_ia" not in st.session_state: st.session_state.mensagens_ia = [{"role": "model", "content": "Olá! Sou seu Tutor IA."}]
 
@@ -203,16 +205,24 @@ def criar_novo_estudo(nome_arquivo, questoes):
     salvar_estudo_bd(novo_estudo)
     st.session_state.historico = carregar_historico_bd()
     st.session_state.chat_ativo_id = novo_id
-    # Ao criar, vamos direto para a aba biblioteca (que vai detectar o ID ativo e abrir a prova)
+    st.session_state.pagina_atual = "biblioteca" # Vai direto pra aba de estudos
     st.rerun()
 
-# --- 8. BARRA LATERAL (SÓ ANÚNCIOS AGORA) ---
+# --- 8. BARRA LATERAL (NAVEGAÇÃO + VENDAS) ---
 with st.sidebar:
     st.markdown("<h2 style='color: white; font-family: Inter; font-weight: 900; letter-spacing: -1px;'>Pratica.ai <span style='color:#F0C14B'>.</span></h2>", unsafe_allow_html=True)
-    st.caption("Menu de navegação movido para o topo ↗")
     st.markdown("---")
     
-    # Contexto para o Anúncio
+    # Navegação
+    if st.button("📄 NOVO UPLOAD", use_container_width=True): st.session_state.pagina_atual = "upload"; st.rerun()
+    if st.button("📚 BIBLIOTECA", use_container_width=True): st.session_state.pagina_atual = "biblioteca"; st.rerun()
+    if st.button("🤖 TUTOR IA", use_container_width=True): st.session_state.pagina_atual = "chat_ia"; st.rerun()
+    if st.button("🛒 LOJA", use_container_width=True): st.session_state.pagina_atual = "loja"; st.rerun()
+    if st.button("🐱 APOIE (PIX)", use_container_width=True): st.session_state.pagina_atual = "apoio"; st.rerun()
+    
+    st.markdown("---")
+    
+    # Super Banner de Vendas (IA Contextual)
     contexto_usuario = ""
     if st.session_state.chat_ativo_id:
         estudo_ativo = next((e for e in st.session_state.historico if e["id"] == st.session_state.chat_ativo_id), None)
@@ -225,7 +235,7 @@ with st.sidebar:
     link_final = random.choice(cat_data["links"])
     visual = cat_data["visual"]
 
-    st.markdown("<p style='font-size: 0.75rem; color: #888; font-weight: 800; letter-spacing: 1px; margin-bottom: 10px;'>OFERTA SUGERIDA</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 0.7rem; color: #666; font-weight: 800; letter-spacing: 1px;'>PATROCINADO</p>", unsafe_allow_html=True)
     st.markdown(f"""
     <a href="{link_final}" target="_blank" class="super-banner" style="{visual['bg_style']}">
         <div class="sb-badge">{visual['badge']}</div>
@@ -236,95 +246,61 @@ with st.sidebar:
     </a>
     """, unsafe_allow_html=True)
 
-# --- 9. NAVEGAÇÃO SUPERIOR (ABAS) ---
+# --- 9. ÁREA PRINCIPAL ---
 
-tab_inicio, tab_biblio, tab_tutor, tab_loja, tab_apoio = st.tabs(["☁️ Início", "📚 Biblioteca", "🤖 Tutor IA", "🛒 Loja", "🐱 Apoio"])
-
-# >>> ABA 1: INÍCIO (UPLOAD) <<<
-with tab_inicio:
+# >>> PÁGINA 1: UPLOAD <<<
+if st.session_state.pagina_atual == "upload":
     st.markdown("""
-    <div style="text-align: center; margin: 50px 0;">
-        <h1 style="font-size: 3.5rem; color: #FFF; font-weight: 900; letter-spacing: -2px;">PRATICA<span style="color: #444;">.AI</span></h1>
-        <p style="color: #888; font-size: 1.2rem;">Transforme seus PDFs em simulados interativos em segundos.</p>
+    <div style="text-align: left; margin-top: 50px;">
+        <h1 style="font-size: 4rem; color: #FFF; font-weight: 900; letter-spacing: -2px;">PRATICA<span style="color: #444;">.AI</span></h1>
+        <p style="color: #888; font-size: 1.2rem;">Inteligência Artificial para Concursos.</p>
     </div>
     """, unsafe_allow_html=True)
-    
-    c1, c2, c3 = st.columns([1, 2, 1])
-    with c2:
-        modo = st.radio("O que vamos estudar?", ["Criar Questões Inéditas", "Extrair Prova Existente"], horizontal=True)
-        arquivo = st.file_uploader("Arraste seu PDF aqui", type="pdf")
-        if arquivo and st.button("🚀 Gerar Simulado", type="primary", use_container_width=True):
-            with st.spinner("A IA está lendo seu material..."):
+    c1, c2 = st.columns([1, 1])
+    with c1:
+        st.markdown("<br>", unsafe_allow_html=True)
+        modo = st.radio("MODO:", ["Criar Questões", "Extrair Prova"])
+        arquivo = st.file_uploader("ARRASTE SEU PDF", type="pdf")
+        if arquivo and st.button("PROCESSAR ->", type="primary"):
+            with st.spinner("LENDO ARQUIVO..."):
                 texto, erro = ler_pdf(arquivo)
                 if erro: st.error(erro)
                 else:
                     tipo = "criar" if "Criar" in modo else "extrair"
                     questoes = chamar_ia_json(texto, tipo)
-                    if questoes: 
-                        criar_novo_estudo(arquivo.name, questoes) # Isso já dá rerun
+                    if questoes: criar_novo_estudo(arquivo.name, questoes)
                     else: st.error("Erro ao processar.")
 
-# >>> ABA 2: BIBLIOTECA (SEUS ESTUDOS) <<<
-with tab_biblio:
-    # Se tem um chat ativo, mostra a PROVA
+# >>> PÁGINA 2: BIBLIOTECA (COM ABAS NO TOPO) <<<
+elif st.session_state.pagina_atual == "biblioteca":
+    
+    # Determina quais abas mostrar
+    abas_titulos = ["📂 Todos os Arquivos"]
+    estudo_ativo = None
+    
+    # Se tiver um estudo ativo, cria uma aba para ele
     if st.session_state.chat_ativo_id:
         estudo_ativo = next((e for e in st.session_state.historico if e["id"] == st.session_state.chat_ativo_id), None)
         if estudo_ativo:
-            b1, b2 = st.columns([6, 1])
-            with b1: st.title(estudo_ativo['titulo'])
-            with b2: 
-                if st.button("⬅ VOLTAR"): 
-                    st.session_state.chat_ativo_id = None
-                    st.rerun()
-
-            # Área da Prova
-            for index, q in enumerate(estudo_ativo['questoes']):
-                st.markdown(f"""
-                <div class="questao-container">
-                    <div style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">QUESTÃO {index + 1:02d}</div>
-                    <div class="questao-texto">{q['pergunta']}</div>
-                </div>""", unsafe_allow_html=True)
-                
-                res_salva = estudo_ativo["respostas_usuario"].get(str(q['id']))
-                idx = q['opcoes'].index(res_salva) if res_salva in q['opcoes'] else None
-                escolha = st.radio("Resposta:", q['opcoes'], index=idx, key=f"q_{estudo_ativo['id']}_{q['id']}", label_visibility="collapsed")
-                
-                if escolha and escolha != res_salva:
-                    estudo_ativo["respostas_usuario"][str(q['id'])] = escolha
-                    salvar_estudo_bd(estudo_ativo)
-                    st.rerun()
-                
-                if res_salva:
-                    letra_user = res_salva.split(")")[0].strip().upper()
-                    letra_correta = q['correta'].strip().upper()
-                    if letra_user == letra_correta: 
-                        st.markdown(f"""<div class="feedback-correct"><b>✓ ACERTOU</b><br>{q['comentario']}</div>""", unsafe_allow_html=True)
-                    else: 
-                        st.markdown(f"""<div class="feedback-wrong"><b>✕ ERROU (Correta: {letra_correta})</b><br>{q['comentario']}</div>""", unsafe_allow_html=True)
-                st.markdown("<br>", unsafe_allow_html=True)
+            abas_titulos.append(f"📝 {estudo_ativo['titulo']}")
             
-            if st.button("↺ Reiniciar Simulado", use_container_width=True):
-                estudo_ativo["respostas_usuario"] = {}
-                salvar_estudo_bd(estudo_ativo); st.rerun()
-
-    # Se NÃO tem chat ativo, mostra a GRADE DE CARDS
-    else:
-        st.title("📚 Minha Biblioteca")
+    # Cria as abas no topo
+    abas = st.tabs(abas_titulos)
+    
+    # ABA 1: LISTA DE ARQUIVOS
+    with abas[0]:
+        st.title("Minha Biblioteca")
         if not st.session_state.historico:
-            st.info("Você ainda não tem estudos. Vá na aba 'Início' e suba um PDF!")
+            st.info("Nenhum estudo encontrado.")
         else:
-            # Grid de Estudos
             cols = st.columns(3)
             for i, estudo in enumerate(st.session_state.historico):
                 with cols[i % 3]:
-                    # Card Interativo (Gambiarra visual com Button)
-                    # Usamos um botão invisível por cima ou apenas o botão nativo estilizado
                     st.markdown(f"""
                     <div class="lib-card">
                         <div class="lib-icon">📄</div>
                         <div class="lib-title">{estudo['titulo']}</div>
-                        <div class="lib-date">Criado em: {estudo['data']}</div>
-                        <div style="font-size: 0.8rem; color: #555; margin-top: 5px;">{len(estudo['questoes'])} questões</div>
+                        <div class="lib-date">{estudo['data']} • {len(estudo['questoes'])} questões</div>
                     </div>
                     """, unsafe_allow_html=True)
                     
@@ -336,14 +312,51 @@ with tab_biblio:
                     with c_del:
                         if st.button("🗑️", key=f"del_{estudo['id']}", use_container_width=True):
                             deletar_estudo_bd(estudo['id'])
+                            if st.session_state.chat_ativo_id == estudo['id']: st.session_state.chat_ativo_id = None
                             st.session_state.historico = carregar_historico_bd()
                             st.rerun()
 
-# >>> ABA 3: TUTOR IA <<<
-with tab_tutor:
+    # ABA 2: ESTUDO ABERTO (Se houver)
+    if estudo_ativo and len(abas) > 1:
+        with abas[1]:
+            st.markdown(f"## {estudo_ativo['titulo']}")
+            if st.button("⬅ Fechar Estudo"):
+                st.session_state.chat_ativo_id = None
+                st.rerun()
+                
+            st.markdown("---")
+            for index, q in enumerate(estudo_ativo['questoes']):
+                st.markdown(f"""
+                <div class="questao-container">
+                    <div style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">QUESTÃO {index + 1:02d}</div>
+                    <div class="questao-texto">{q['pergunta']}</div>
+                </div>""", unsafe_allow_html=True)
+                
+                res_salva = estudo_ativo["respostas_usuario"].get(str(q['id']))
+                idx = q['opcoes'].index(res_salva) if res_salva in q['opcoes'] else None
+                escolha = st.radio("Alternativas:", q['opcoes'], index=idx, key=f"q_{estudo_ativo['id']}_{q['id']}", label_visibility="collapsed")
+                
+                if escolha and escolha != res_salva:
+                    estudo_ativo["respostas_usuario"][str(q['id'])] = escolha
+                    salvar_estudo_bd(estudo_ativo); st.rerun()
+                
+                if res_salva:
+                    letra_user = res_salva.split(")")[0].strip().upper()
+                    letra_correta = q['correta'].strip().upper()
+                    if letra_user == letra_correta: st.markdown(f"""<div class="feedback-correct"><b>✓ ACERTOU</b><br>{q['comentario']}</div>""", unsafe_allow_html=True)
+                    else: st.markdown(f"""<div class="feedback-wrong"><b>✕ ERROU (Correta: {letra_correta})</b><br>{q['comentario']}</div>""", unsafe_allow_html=True)
+                st.markdown("<br>", unsafe_allow_html=True)
+            
+            if st.button("↺ Reiniciar Simulado", use_container_width=True):
+                estudo_ativo["respostas_usuario"] = {}
+                salvar_estudo_bd(estudo_ativo); st.rerun()
+
+
+# >>> PÁGINA 3: TUTOR IA <<<
+elif st.session_state.pagina_atual == "chat_ia":
     st.title("🤖 Tutor IA")
-    modo_tutor = st.radio("", ["💬 Conversar", "📝 Gerar Simulado Rápido"], horizontal=True)
-    
+    modo_tutor = st.radio("OPÇÕES:", ["💬 Conversar", "📝 Gerar Simulado"], horizontal=True)
+    st.markdown("<hr style='border-color: #333;'>", unsafe_allow_html=True)
     if modo_tutor == "💬 Conversar":
         for msg in st.session_state.mensagens_ia:
             role = "user" if msg["role"] == "user" else "assistant"
@@ -358,16 +371,14 @@ with tab_tutor:
                     st.markdown(resp)
                     st.session_state.mensagens_ia.append({"role": "model", "content": resp})
     else:
-        assunto = st.text_input("Sobre qual assunto você quer treinar agora?")
-        if assunto and st.button("Gerar Simulado Agora"):
-             with st.spinner(f"Criando prova sobre {assunto}..."):
+        if assunto := st.chat_input("Gerar simulado sobre..."):
+             with st.spinner(f"Criando: {assunto}..."):
                 questoes = chamar_ia_json(assunto, "criar")
                 if questoes: criar_novo_estudo(f"Simulado: {assunto}", questoes)
 
-# >>> ABA 4: LOJA <<<
-with tab_loja:
+# >>> PÁGINA 4: LOJA <<<
+elif st.session_state.pagina_atual == "loja":
     st.title("🛒 Loja Oficial")
-    st.caption("Produtos selecionados com curadoria.")
     cat_tabs = st.tabs(CATALOGO_PREMIUM.keys())
     for aba, cat in zip(cat_tabs, CATALOGO_PREMIUM):
         with aba:
@@ -382,22 +393,23 @@ with tab_loja:
                     </a>
                     """, unsafe_allow_html=True)
 
-# >>> ABA 5: APOIO <<<
-with tab_apoio:
+# >>> PÁGINA 5: APOIO (PIRÂMIDE GATOS) <<<
+elif st.session_state.pagina_atual == "apoio":
     st.title("🐱 Apoie o Projeto")
-    # LAYOUT PIRÂMIDE
-    c_top_left, c_top_center, c_top_right = st.columns([1, 2, 1])
-    with c_top_center:
-        if os.path.exists("static/gato1.jpeg"): # Ajuste o caminho se necessário
-            st.image("static/gato1.jpeg", caption="O Gerente julgando seu estudo.", use_container_width=True)
-        elif os.path.exists("gato1.jpeg"):
-            st.image("gato1.jpeg", caption="O Gerente julgando seu estudo.", use_container_width=True)
+    st.markdown("<h3 style='color: #CCC;'>Ajude a manter o servidor ligado!</h3>", unsafe_allow_html=True)
+    
+    # LAYOUT PIRÂMIDE CENTRALIZADA
+    c1, c2, c3 = st.columns([1, 2, 1])
+    with c2:
+        if os.path.exists("static/gato1.jpeg"): st.image("static/gato1.jpeg", caption="Gerente Julgando.", use_container_width=True)
+        elif os.path.exists("gato1.jpeg"): st.image("gato1.jpeg", caption="Gerente Julgando.", use_container_width=True)
+    
+    c_base1, c_base2 = st.columns(2)
+    with c_base1:
+        if os.path.exists("static/gato2.jpeg"): st.image("static/gato2.jpeg", caption="Cochilo.", use_container_width=True)
+        elif os.path.exists("gato2.jpeg"): st.image("gato2.jpeg", caption="Cochilo.", use_container_width=True)
+    with c_base2:
+        if os.path.exists("static/gato3.jpeg"): st.image("static/gato3.jpeg", caption="Esperando Pix.", use_container_width=True)
+        elif os.path.exists("gato3.jpeg"): st.image("gato3.jpeg", caption="Esperando Pix.", use_container_width=True)
 
-    c_bot1, c_bot2 = st.columns(2)
-    with c_bot1:
-        if os.path.exists("gato2.jpeg"): st.image("gato2.jpeg", caption="Cochilo pós-deploy.", use_container_width=True)
-    with c_bot2:
-        if os.path.exists("gato3.jpeg"): st.image("gato3.jpeg", caption="Esperando o Pix.", use_container_width=True)
-
-    st.markdown("### 💠 Chave Pix")
-    st.markdown("""<div class="pix-container"><div class="pix-key">5b84b80d-c11a-4129-b897-74fb6371dfce</div></div>""", unsafe_allow_html=True)
+    st.markdown("<br><div class='pix-container'><div class='pix-key'>5b84b80d-c11a-4129-b897-74fb6371dfce</div></div>", unsafe_allow_html=True)
