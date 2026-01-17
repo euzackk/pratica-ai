@@ -117,91 +117,18 @@ def ia_escolher_categoria(contexto_usuario):
     if any(x in ctx for x in ["policia", "taf"]): return "policial"
     return "geral"
 
-# --- 5. CSS (CORREÇÃO DE MENU MOBILE + REMOÇÃO DE RODAPÉ) ---
+# --- 5. CSS (LIMPEZA TOTAL - MODO NATIVO) ---
+# Removemos todas as cores forçadas. O app vai usar o tema do seu sistema (Claro/Escuro).
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap');
     
-    /* 1. CABEÇALHO E MENU (Correção Crítica Mobile) */
-    
-    /* Esconde decoração padrão */
-    [data-testid="stDecoration"] { display: none; }
-    [data-testid="stToolbar"] { visibility: hidden; }
-    
-    /* HEADER: Fundo Transparente mas ÍCONES BRANCOS */
-    header[data-testid="stHeader"] {
-        background-color: transparent !important;
-        color: white !important;
-        z-index: 999999;
-    }
-    
-    /* Força os ícones SVG (Menu Hamburguer) a ficarem brancos */
-    header[data-testid="stHeader"] svg {
-        fill: white !important;
-        color: white !important;
-    }
-    
-    /* Botão de colapsar sidebar */
-    [data-testid="stSidebarCollapsedControl"] {
-        display: block !important;
-        color: #FFFFFF !important;
-        background-color: transparent !important;
-    }
-
-    /* 2. REMOÇÃO DO RODAPÉ */
+    /* 1. REMOÇÃO DO RODAPÉ (Made with Streamlit) */
     footer { visibility: hidden; display: none !important; }
     .stDeployButton { display: none !important; }
     #MainMenu { visibility: hidden; display: none !important; }
 
-    /* 3. DARK MODE ABSOLUTO */
-    :root {
-        --primary-color: #F0C14B;
-        --background-color: #000000;
-        --secondary-background-color: #050505;
-        --text-color: #fafafa;
-        --font: 'Inter', sans-serif;
-    }
-    .stApp, [data-testid="stAppViewContainer"] { background-color: #000000 !important; color: #ffffff !important; }
-    [data-testid="stSidebar"] { background-color: #050505 !important; border-right: 1px solid #222; }
-    
-    /* Inputs */
-    .stTextInput input, .stSelectbox, div[data-baseweb="select"] > div {
-        background-color: #111 !important; color: white !important; border-color: #333 !important; border-radius: 0px !important; height: 50px;
-    }
-    
-    p, label, h1, h2, h3, h4, span, li { color: #e0e0e0 !important; }
-
-    /* 4. ESTILO APP (SQUARED) */
-    .stButton button {
-        border-radius: 0px !important;
-        border: 1px solid #333;
-        background: #111;
-        color: #EEE;
-        padding: 15px 0px !important; 
-        font-size: 1rem;
-        font-weight: 600;
-        width: 100%;
-        margin-top: 5px;
-    }
-    .stButton button:active { background: #333; }
-
-    /* --- UPLOADER (CORREÇÃO VISUAL) --- */
-    /* Deixa o fundo do uploader um pouco mais claro para não parecer um buraco preto */
-    [data-testid="stFileUploader"] {
-        padding: 10px;
-        border: 1px dashed #444;
-        background-color: #0f0f0f; 
-        border-radius: 5px;
-    }
-    [data-testid="stFileUploader"] section {
-        background-color: #0f0f0f !important;
-    }
-    /* Texto "Drag and drop" */
-    [data-testid="stFileUploader"] span {
-        color: #888 !important;
-    }
-
-    /* --- SUPER BANNER --- */
+    /* --- SUPER BANNER (Mantido pois tem cor própria) --- */
     @keyframes pulse-border {
         0% { box-shadow: 0 0 0 0 rgba(240, 193, 75, 0.4); }
         70% { box-shadow: 0 0 0 10px rgba(240, 193, 75, 0); }
@@ -209,36 +136,42 @@ st.markdown("""
     }
     .super-banner {
         display: block; text-decoration: none; padding: 20px; margin: 15px 0;
-        position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);
+        position: relative; overflow: hidden; border: 1px solid rgba(128,128,128,0.2);
         animation: pulse-border 2s infinite; 
+        border-radius: 8px;
     }
     .sb-badge { position: absolute; top: 0; right: 0; background: #FFD700; color: #000 !important; font-size: 0.6rem; font-weight: 900; padding: 4px 8px; }
-    .sb-title { color: #FFF !important; font-weight: 900; font-size: 1.2rem; margin-bottom: 5px; display: block; }
+    .sb-title { color: #FFF !important; font-weight: 900; font-size: 1.2rem; margin-bottom: 5px; display: block; text-shadow: 0px 1px 3px rgba(0,0,0,0.5); }
     .sb-prod-name { background: rgba(0,0,0,0.4); color: #FFF !important; font-size: 0.8rem; padding: 5px; margin-bottom: 15px; border-left: 3px solid #FFD700;}
-    .sb-button { background: #FFF; color: #000 !important; text-align: center; font-weight: 900; padding: 12px; display: block; font-size: 0.8rem; }
+    .sb-button { background: #FFF; color: #000 !important; text-align: center; font-weight: 900; padding: 12px; display: block; font-size: 0.8rem; border-radius: 4px; }
 
-    /* --- CARD BIBLIOTECA --- */
+    /* --- CARD BIBLIOTECA (Adaptável) --- */
     .lib-card {
-        background: #111; border: 1px solid #333; padding: 20px;
-        cursor: pointer; border-left: 3px solid #333; margin-bottom: 10px;
+        border: 1px solid #444; padding: 20px;
+        cursor: pointer; border-left: 5px solid #F0C14B; margin-bottom: 10px;
+        background-color: #262730; /* Fundo escuro padrão para cards */
+        color: white;
+        border-radius: 5px;
     }
-    .lib-title { font-weight: 700; color: #EEE !important; font-size: 1.1rem; margin-bottom: 8px; }
-    .lib-info { color: #666 !important; font-size: 0.8rem; display: flex; justify-content: space-between; }
+    .lib-title { font-weight: 700; color: #FFF !important; font-size: 1.1rem; margin-bottom: 8px; }
+    .lib-info { color: #CCC !important; font-size: 0.8rem; display: flex; justify-content: space-between; }
 
-    /* --- MOBILE RESPONSIVENESS --- */
-    @media only screen and (max-width: 600px) {
-        h1 { font-size: 2rem !important; line-height: 1.1 !important; }
-        
-        /* Ajuste margem topo para não ficar embaixo do botão de menu */
-        .block-container { padding-top: 4rem !important; }
+    /* --- QUESTÕES & PIX --- */
+    .pix-container { border: 2px dashed #888; padding: 20px; text-align: center; margin-top: 20px; border-radius: 10px;}
+    .pix-key { font-family: monospace; background: #EEE; padding: 15px; color: #333 !important; font-size: 0.9rem; word-break: break-all; border: 1px solid #CCC; margin-top: 5px; font-weight: bold;}
+    
+    .questao-container { 
+        background-color: #262730; /* Fundo escuro para destacar no modo claro */
+        color: white !important;
+        border: 1px solid #444; 
+        border-left: 5px solid #666; 
+        padding: 20px; margin-bottom: 30px; 
+        border-radius: 8px;
     }
-
-    /* PIX & QUESTÕES */
-    .pix-container { background: #111; border: 1px dashed #555; padding: 20px; text-align: center; margin-top: 20px;}
-    .pix-key { font-family: monospace; background: #000; padding: 15px; color: #00FF7F !important; font-size: 0.9rem; word-break: break-all; border: 1px solid #333; }
-    .questao-container { background-color: #111; border: 1px solid #333; border-left: 3px solid #444; padding: 20px; margin-bottom: 30px; }
-    .feedback-correct { background: rgba(5, 50, 20, 0.5); border: 1px solid #0F5132; color: #75B798 !important; padding: 15px; margin-top: 10px; font-weight: bold;}
-    .feedback-wrong { background: rgba(50, 5, 10, 0.5); border: 1px solid #842029; color: #EA868F !important; padding: 15px; margin-top: 10px; font-weight: bold;}
+    .questao-texto { color: white !important; }
+    
+    .feedback-correct { background: #d4edda; border: 1px solid #c3e6cb; color: #155724 !important; padding: 15px; margin-top: 10px; font-weight: bold; border-radius: 5px;}
+    .feedback-wrong { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24 !important; padding: 15px; margin-top: 10px; font-weight: bold; border-radius: 5px;}
 
 </style>
 """, unsafe_allow_html=True)
@@ -292,7 +225,7 @@ def criar_novo_estudo(nome_arquivo, questoes):
 
 # --- 8. BARRA LATERAL ---
 with st.sidebar:
-    st.markdown("<h1 style='color: white; font-family: Inter; font-weight: 900; letter-spacing: -2px; margin:0;'>PRATICA<span style='color:#F0C14B'>.AI</span></h1>", unsafe_allow_html=True)
+    st.header("PRATICA.AI 🐱")
     st.markdown("---")
     
     if st.button("📄 NOVO UPLOAD", use_container_width=True): st.session_state.pagina_atual = "upload"; st.rerun()
@@ -330,14 +263,9 @@ with st.sidebar:
 
 # >>> UPLOAD <<<
 if st.session_state.pagina_atual == "upload":
-    st.markdown("""
-    <div style="text-align: left; margin-bottom: 30px;">
-        <h1 style="font-size: 3rem !important; color: #FFF !important; font-weight: 900; line-height: 1;">ESTUDE MENOS,<br><span style="color: #444;">APRENDA MAIS.</span></h1>
-        <p style="color: #888 !important; font-size: 1rem; margin-top: 10px;">Suba seu PDF e deixe a IA criar sua prova.</p>
-    </div>
-    """, unsafe_allow_html=True)
+    st.title("Estude menos, aprenda mais.")
+    st.write("Suba seu PDF e deixe a IA criar sua prova.")
     
-    # Upload Full Width no Mobile
     arquivo = st.file_uploader("SELECIONE O ARQUIVO (PDF)", type="pdf")
     
     st.markdown("<br>", unsafe_allow_html=True)
@@ -367,7 +295,7 @@ elif st.session_state.pagina_atual == "biblioteca":
             for index, q in enumerate(estudo_ativo['questoes']):
                 st.markdown(f"""
                 <div class="questao-container">
-                    <div style="color: #666; font-size: 0.8rem; margin-bottom: 10px; font-weight:bold;">QUESTÃO {index + 1:02d}</div>
+                    <div style="color: #CCC; font-size: 0.8rem; margin-bottom: 10px; font-weight:bold;">QUESTÃO {index + 1:02d}</div>
                     <div class="questao-texto">{q['pergunta']}</div>
                 </div>""", unsafe_allow_html=True)
                 
@@ -396,7 +324,6 @@ elif st.session_state.pagina_atual == "biblioteca":
         if not st.session_state.historico:
             st.info("Sua biblioteca está vazia. Faça um upload!")
         else:
-            # Lista Vertical no Mobile
             for i, estudo in enumerate(st.session_state.historico):
                 st.markdown(f"""
                 <div class="lib-card">
@@ -448,7 +375,7 @@ elif st.session_state.pagina_atual == "chat_ia":
 # >>> APOIO <<<
 elif st.session_state.pagina_atual == "apoio":
     st.title("🐱 APOIE NOSSO PROJETO!!")
-    st.markdown("<h3 style='color: #888 !important;'>Ajude a manter o servidor ligado!</h3>", unsafe_allow_html=True)
+    st.write("Ajude a manter o servidor ligado!")
     
     pad_esq, c_base1, c_base2, pad_dir = st.columns([1, 2, 2, 1])
     
@@ -459,4 +386,4 @@ elif st.session_state.pagina_atual == "apoio":
         if os.path.exists("static/gato3.jpeg"): st.image("static/gato3.jpeg", caption="Esperando o Pix cair pra comprar sachê premium.", use_container_width=True)
         elif os.path.exists("gato3.jpeg"): st.image("gato3.jpeg", caption="Esperando o Pix cair pra comprar sachê premium.", use_container_width=True)
 
-    st.markdown("<br><div class='pix-container'><p style='color:#AAA; margin-bottom:10px;'>Copie a chave aleatória:</p><div class='pix-key'>5b84b80d-c11a-4129-b897-74fb6371dfce</div></div>", unsafe_allow_html=True)
+    st.markdown("<br><div class='pix-container'><p>Copie a chave aleatória:</p><div class='pix-key'>5b84b80d-c11a-4129-b897-74fb6371dfce</div></div>", unsafe_allow_html=True)
