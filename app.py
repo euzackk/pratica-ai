@@ -5,6 +5,7 @@ import json
 import uuid
 import sqlite3
 import random
+import os
 from datetime import datetime
 
 # --- 1. CONFIGURAÇÃO DE SEGURANÇA ---
@@ -19,7 +20,7 @@ if API_KEY:
 # --- 2. SETUP DA PÁGINA ---
 st.set_page_config(
     page_title="Pratica.ai",
-    page_icon="■",
+    page_icon="🐱", # Ícone mudou para gato em homenagem ao gerente
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -61,63 +62,45 @@ def salvar_estudo_bd(estudo):
 
 init_db()
 
-# --- 4. CATALOGO DE PRODUTOS "PREMIUM" ---
-# Aqui configuramos o visual de cada categoria
-CATALOGO_VISUAL = {
-    "direito": {
-        "icone": "⚖️",
-        "titulo": "Vade Mecum 2026",
-        "subtitulo": "Obrigatório para OAB",
-        "badge": "MAIS VENDIDO",
-        "cor_badge": "#FFD700", # Dourado
-        "links": ["https://amzn.to/4qJymYt", "https://amzn.to/4qAOVWf", "https://amzn.to/45jNwuK", "https://amzn.to/4sKGLft"]
-    },
-    "tecnologia": {
-        "icone": "💻",
-        "titulo": "Setup de Estudos",
-        "subtitulo": "Notebooks & Acessórios",
-        "badge": "OFERTA RELÂMPAGO",
-        "cor_badge": "#00FF7F", # Verde Neon
-        "links": ["https://amzn.to/4pJLkUC", "https://amzn.to/3LyNpVu", "https://amzn.to/49BErP3", "https://amzn.to/4pFde4d"]
-    },
-    "policial": {
-        "icone": "🛡️",
-        "titulo": "Kit Policial",
-        "subtitulo": "Apostilas & Tático",
-        "badge": "APROVAÇÃO",
-        "cor_badge": "#FF4500", # Laranja Forte
-        "links": ["https://amzn.to/4qPWLeq", "https://amzn.to/4jK4vMs", "https://amzn.to/4qXVCBy", "https://amzn.to/4jOjNjx"]
-    },
-    "geral": {
-        "icone": "🎒",
-        "titulo": "Essenciais",
-        "subtitulo": "Kindle, Fones e +",
-        "badge": "PROMOÇÃO",
-        "cor_badge": "#1E90FF", # Azul
-        "links": ["https://amzn.to/3NpLfYP", "https://amzn.to/49Z1vsr", "https://amzn.to/4sL9elk", "https://amzn.to/4sKkRZD"]
-    }
+# --- 4. LINKS DE AFILIADOS (SEUS LINKS) ---
+LINKS_AFILIADOS = {
+    "Direito ⚖️": [
+        "https://amzn.to/4qJymYt", "https://amzn.to/4qAOVWf", "https://amzn.to/45jNwuK", 
+        "https://amzn.to/4sKGLft", "https://amzn.to/4qslPZa"
+    ],
+    "Tecnologia 💻": [
+        "https://amzn.to/4pJLkUC", "https://amzn.to/3LyNpVu", "https://amzn.to/49BErP3", 
+        "https://amzn.to/4pFde4d", "https://amzn.to/4pCyW8J", "https://amzn.to/49Fvep3", 
+        "https://amzn.to/49Ey5yr", "https://amzn.to/3LHtK5z", "https://amzn.to/4qxDgaS", 
+        "https://amzn.to/49Egzue", "https://amzn.to/4aYslC1", "https://amzn.to/4qwxGW4", 
+        "https://amzn.to/49HXuXY", "https://amzn.to/4bn0coz", "https://amzn.to/4b3nWOj", 
+        "https://amzn.to/3LPR69e", "https://amzn.to/3NP6hQz", "https://amzn.to/3Zgb4Np", 
+        "https://amzn.to/4quE3cz", "https://amzn.to/3NQ8fQE", "https://amzn.to/3YK4Fdd", 
+        "https://amzn.to/45LnEbc", "https://amzn.to/4qs17sv", "https://amzn.to/3Nywpix", 
+        "https://amzn.to/4pF9wr7", "https://amzn.to/4r44fe1"
+    ],
+    "Policial 🛡️": [
+        "https://amzn.to/4qPWLeq", "https://amzn.to/4jK4vMs", "https://amzn.to/4qXVCBy", 
+        "https://amzn.to/4jOjNjx", "https://amzn.to/4qln2kV", "https://amzn.to/45cQFMP", 
+        "https://amzn.to/3Nhq3En"
+    ],
+    "Geral / Kindle 🎒": [
+        "https://amzn.to/3NpLfYP", "https://amzn.to/49Z1vsr", "https://amzn.to/4sL9elk", 
+        "https://amzn.to/4sKkRZD", "https://amzn.to/49Z1AML", "https://amzn.to/45X3YRE", 
+        "https://amzn.to/4qSYWxD", "https://amzn.to/45Ym7yx", "https://amzn.to/4qYh0GT", 
+        "https://amzn.to/4qXRrWb", "https://amzn.to/4qYh5KH", "https://amzn.to/49qnnwD", 
+        "https://amzn.to/3Nvg91N", "https://amzn.to/4sHWTOM", "https://amzn.to/4sLF5SM", 
+        "https://amzn.to/4sRPi0j", "https://amzn.to/4qX4BCS", "https://amzn.to/4r1JUWI", 
+        "https://amzn.to/4riIes3", "https://amzn.to/4sPKZCK", "https://amzn.to/45fnwRd", 
+        "https://amzn.to/4sIELnN", "https://amzn.to/4qqxg3r", "https://amzn.to/4quiOaK", 
+        "https://amzn.to/3LvT7r9", "https://amzn.to/4qnkYZB", "https://amzn.to/4jKBAYV", 
+        "https://amzn.to/4jM9FI6", "https://amzn.to/4jHMRci", "https://amzn.to/45eVftW", 
+        "https://amzn.to/4quExiT", "https://amzn.to/45iqd4t", "https://amzn.to/4quiQPU", 
+        "https://amzn.to/3Lnk93Y", "https://amzn.to/4bCsL16"
+    ]
 }
 
-def ia_escolher_anuncio(contexto_usuario):
-    """Define a categoria baseada no contexto"""
-    if not contexto_usuario or len(contexto_usuario) < 5:
-        return CATALOGO_VISUAL["geral"]
-
-    model = genai.GenerativeModel('gemini-flash-latest')
-    prompt = f"""
-    Contexto: "{contexto_usuario[:500]}"
-    Categorias: direito, tecnologia, policial, geral.
-    Responda APENAS a categoria.
-    """
-    try:
-        resp = model.generate_content(prompt).text.lower()
-        if "direito" in resp: return CATALOGO_VISUAL["direito"]
-        if "tec" in resp: return CATALOGO_VISUAL["tecnologia"]
-        if "poli" in resp: return CATALOGO_VISUAL["policial"]
-        return CATALOGO_VISUAL["geral"]
-    except: return CATALOGO_VISUAL["geral"]
-
-# --- 5. CSS REVOLUCIONÁRIO (VISUAL DE VENDAS) ---
+# --- 5. CSS PERSONALIZADO (VISUAL ATRAENTE) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
@@ -126,96 +109,50 @@ st.markdown("""
     .stApp { background-color: #050505; }
     section[data-testid="stSidebar"] { background-color: #0F0F0F; border-right: 1px solid #222; }
     
-    /* --- CARD DE PRODUTO AMAZON STYLE --- */
-    .product-card {
-        background: #141414;
-        border: 1px solid #333;
-        border-radius: 12px;
-        padding: 0;
-        margin: 20px 0;
-        text-decoration: none;
-        display: block;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-        border-color: #555;
-    }
-    
-    .card-badge {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: #FFD700;
-        color: #000;
-        font-size: 0.6rem;
-        font-weight: 900;
-        padding: 4px 8px;
-        border-radius: 4px;
-        text-transform: uppercase;
-        z-index: 2;
-    }
-    
-    .card-image-area {
-        height: 100px;
-        background: radial-gradient(circle, #2a2a2a 0%, #141414 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 3.5rem;
-    }
-    
-    .card-content {
+    /* ESTILO AMAZON CARD */
+    .amazon-card {
+        background: #FFF; /* Fundo Branco Amazon */
+        border-radius: 8px;
         padding: 15px;
-    }
-    
-    .card-title {
-        color: #FFF;
-        font-weight: 700;
-        font-size: 1.1rem;
-        margin-bottom: 4px;
-        display: block;
-    }
-    
-    .card-subtitle {
-        color: #888;
-        font-size: 0.8rem;
-        display: block;
-        margin-bottom: 10px;
-    }
-    
-    .card-rating {
-        color: #FFB800;
-        font-size: 0.8rem;
-        letter-spacing: 2px;
-        margin-bottom: 12px;
-        display: block;
-    }
-    
-    .card-btn {
-        background: #F0C14B; /* Cor do botão Amazon */
-        color: #111;
+        margin-bottom: 20px;
         text-align: center;
-        font-weight: 700;
-        padding: 10px;
-        border-radius: 6px;
+        transition: transform 0.2s;
+        text-decoration: none !important;
         display: block;
-        font-size: 0.9rem;
-        transition: 0.2s;
+        border: 1px solid #DDD;
+    }
+    .amazon-card:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1); }
+    
+    .amz-badge {
+        background: #CC0C39; color: white; font-size: 0.6rem; padding: 2px 6px; 
+        border-radius: 2px; font-weight: bold; text-transform: uppercase; float: left;
+    }
+    .amz-title {
+        color: #0F1111; font-size: 0.95rem; font-weight: 700; display: block; 
+        margin-top: 25px; margin-bottom: 5px; line-height: 1.3;
+    }
+    .amz-price { color: #B12704; font-size: 1.1rem; font-weight: 400; display: block; margin-bottom: 10px; }
+    .amz-button {
+        background: #FFD814; border: 1px solid #FCD200; border-radius: 20px;
+        color: #0F1111; padding: 8px 20px; font-size: 0.85rem; font-weight: 600;
+        display: block; width: 100%; box-shadow: 0 2px 5px rgba(213, 217, 217, .5);
+    }
+    .amz-logo { color: #000; font-weight: 900; font-style: italic; font-size: 1.2rem; }
+    .amz-logo span { color: #FF9900; }
+
+    /* ESTILO PIX/APOIO */
+    .pix-container {
+        background: #111; border: 1px dashed #444; border-radius: 15px; padding: 30px; text-align: center;
+    }
+    .pix-key {
+        font-family: monospace; background: #222; padding: 15px; border-radius: 8px;
+        color: #00FF7F; font-size: 1.1rem; margin: 20px 0; word-break: break-all; select-all;
     }
     
-    .card-btn:hover {
-        background: #eebb30;
-    }
-
-    /* Outros Estilos do App */
+    /* GERAL */
     .stButton button {
-        text-align: left; padding: 10px; border: 1px solid transparent;
-        background: transparent; color: #888; width: 100%; border-radius: 6px !important;
+        text-align: left; padding: 10px; background: transparent; color: #888; 
+        width: 100%; border: 1px solid transparent; border-radius: 6px !important;
     }
     .stButton button:hover { color: #FFF; background: #1A1A1A; border: 1px solid #333; }
     
@@ -224,11 +161,11 @@ st.markdown("""
         padding: 30px; margin-bottom: 40px; border-radius: 0px;
     }
     .questao-texto { font-size: 1.2rem; line-height: 1.6; color: #FFF; margin-bottom: 25px; }
-    .feedback-box { margin-top: 20px; padding: 20px; font-size: 0.95rem; }
+    .feedback-box { margin-top: 20px; padding: 20px; }
     .feedback-correct { background-color: #051B11; border-left: 4px solid #198754; color: #75B798; }
     .feedback-wrong { background-color: #2C0B0E; border-left: 4px solid #DC3545; color: #EA868F; }
     
-    input[type="text"], input[type="password"] { background-color: #111 !important; color: white !important; border: 1px solid #333 !important; }
+    input[type="text"] { background-color: #111 !important; color: white !important; border: 1px solid #333 !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -239,7 +176,7 @@ if "chat_ativo_id" not in st.session_state: st.session_state.chat_ativo_id = Non
 if "editando_id" not in st.session_state: st.session_state.editando_id = None
 if "mensagens_ia" not in st.session_state: st.session_state.mensagens_ia = [{"role": "model", "content": "Olá! Sou seu Tutor IA."}]
 
-# --- 7. FUNÇÕES DE IA ---
+# --- 7. FUNÇÕES ---
 def ler_pdf(arquivo):
     try:
         leitor = pypdf.PdfReader(arquivo)
@@ -274,9 +211,9 @@ def criar_novo_estudo(nome_arquivo, questoes):
     st.session_state.chat_ativo_id = novo_id
     st.session_state.pagina_atual = "visualizacao"
 
-# --- 8. BARRA LATERAL (COM CARD PREMIUM) ---
+# --- 8. BARRA LATERAL ---
 with st.sidebar:
-    st.markdown("<h2 style='color: white; font-family: Inter; font-weight: 900; letter-spacing: -1px;'>Pratica.ai <span style='color:#F0C14B'>.</span></h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='color: white; font-family: Inter; font-weight: 900;'>Pratica.ai</h2>", unsafe_allow_html=True)
     st.markdown("---")
     
     if st.button("＋ NOVO UPLOAD", use_container_width=True):
@@ -284,12 +221,23 @@ with st.sidebar:
         st.session_state.chat_ativo_id = None
         st.rerun()
         
-    if st.button("🤖 TUTOR IA", use_container_width=True):
+    if st.button("🤖 TUTOR IA (Grátis)", use_container_width=True):
         st.session_state.pagina_atual = "chat_ia"
         st.session_state.chat_ativo_id = None
         st.rerun()
+
+    if st.button("🛒 LOJA OFICIAL", use_container_width=True):
+        st.session_state.pagina_atual = "loja"
+        st.session_state.chat_ativo_id = None
+        st.rerun()
+
+    # Destaque para doação com emoji de gato
+    if st.button("🐱 APOIE (PIX)", use_container_width=True):
+        st.session_state.pagina_atual = "apoio"
+        st.session_state.chat_ativo_id = None
+        st.rerun()
     
-    st.markdown("<br><p style='font-size: 0.7rem; color: #666; text-transform: uppercase; font-weight: bold;'>Sua Biblioteca</p>", unsafe_allow_html=True)
+    st.markdown("<br><p style='font-size: 0.7rem; color: #666; text-transform: uppercase; font-weight: bold;'>Biblioteca</p>", unsafe_allow_html=True)
     
     for estudo in st.session_state.historico:
         if st.session_state.editando_id == estudo["id"]:
@@ -297,74 +245,32 @@ with st.sidebar:
             novo_nome = st.text_input("Nome:", value=estudo["titulo"], key=f"input_{estudo['id']}", on_change=salvar_nome)
             estudo["titulo"] = novo_nome 
             if st.button("Salvar", key=f"save_{estudo['id']}"):
-                salvar_estudo_bd(estudo)
-                st.session_state.editando_id = None
-                st.rerun()
+                salvar_estudo_bd(estudo); st.session_state.editando_id = None; st.rerun()
         else:
             col_nav, col_edit = st.columns([5, 1])
             with col_nav:
                 icone = "📂" if st.session_state.chat_ativo_id == estudo["id"] else "📁"
                 if st.button(f"{icone} {estudo['titulo']}", key=f"btn_{estudo['id']}", use_container_width=True):
-                    st.session_state.chat_ativo_id = estudo["id"]
-                    st.session_state.pagina_atual = "visualizacao"
-                    st.rerun()
+                    st.session_state.chat_ativo_id = estudo["id"]; st.session_state.pagina_atual = "visualizacao"; st.rerun()
             with col_edit:
-                if st.button("✎", key=f"edit_{estudo['id']}"):
-                    st.session_state.editando_id = estudo["id"]
-                    st.rerun()
-
-    # --- CARD DE ANÚNCIO PREMIUM (IA POWERED) ---
-    st.markdown("<br>", unsafe_allow_html=True)
-    
-    # 1. Detectar Contexto
-    contexto_usuario = ""
-    if st.session_state.pagina_atual == "visualizacao" and st.session_state.chat_ativo_id:
-        estudo_ativo = next((e for e in st.session_state.historico if e["id"] == st.session_state.chat_ativo_id), None)
-        if estudo_ativo: contexto_usuario = estudo_ativo['titulo']
-    elif st.session_state.pagina_atual == "chat_ia":
-        if len(st.session_state.mensagens_ia) > 1:
-             contexto_usuario = st.session_state.mensagens_ia[-2]['content'] # Pega ultima msg user
-
-    # 2. IA Escolhe a Categoria
-    produto_info = ia_escolher_anuncio(contexto_usuario)
-    link_final = random.choice(produto_info["links"]) # Pega um link aleatório da lista daquela categoria
-
-    # 3. Renderiza o Card Bonito
-    st.markdown(f"""
-    <a href="{link_final}" target="_blank" class="product-card">
-        <div class="card-badge" style="background: {produto_info['cor_badge']}">{produto_info['badge']}</div>
-        <div class="card-image-area">
-            {produto_info['icone']}
-        </div>
-        <div class="card-content">
-            <span class="card-title">{produto_info['titulo']}</span>
-            <span class="card-subtitle">{produto_info['subtitulo']}</span>
-            <span class="card-rating">⭐⭐⭐⭐⭐ (4.9)</span>
-            <span class="card-btn">VER PREÇO E OFERTA</span>
-        </div>
-    </a>
-    """, unsafe_allow_html=True)
-
-    # 4. Doação Pix Discreta
-    with st.expander("☕ Pagar um café pro Dev"):
-        st.caption("Chave Pix:")
-        st.code("5b84b80d-c11a-4129-b897-74fb6371dfce", language="text")
+                if st.button("✎", key=f"edit_{estudo['id']}"): st.session_state.editando_id = estudo["id"]; st.rerun()
 
 # --- 9. ÁREA PRINCIPAL ---
+
+# >>> PÁGINA 1: UPLOAD <<<
 if st.session_state.pagina_atual == "upload":
     st.markdown("""
     <div style="text-align: left; margin-top: 80px;">
-        <h1 style="font-size: 4rem; color: #FFF; line-height: 1; font-weight: 900; letter-spacing: -2px;">PRATICA<span style="color: #F0C14B;">.AI</span></h1>
-        <p style="color: #888; margin-top: 20px; font-size: 1.2rem;">ESTUDE MENOS, APRENDA MAIS.</p>
+        <h1 style="font-size: 4rem; color: #FFF; font-weight: 900; letter-spacing: -2px;">PRATICA<span style="color: #444;">.AI</span></h1>
+        <p style="color: #888; font-size: 1.2rem;">ESTUDE MENOS, APRENDA MAIS.</p>
     </div>
     """, unsafe_allow_html=True)
     col_up, _ = st.columns([1, 1])
     with col_up:
         st.markdown("<br>", unsafe_allow_html=True)
-        modo = st.radio("O QUE VAMOS FAZER HOJE?", ["Criar Questões do PDF", "Extrair Prova do PDF"])
-        st.markdown("<br>", unsafe_allow_html=True)
-        arquivo = st.file_uploader("ARRASTE SEU ARQUIVO AQUI", type="pdf")
-        if arquivo and st.button("PROCESSAR ARQUIVO ->", type="primary"):
+        modo = st.radio("O QUE VAMOS FAZER?", ["Criar Questões", "Extrair Prova"])
+        arquivo = st.file_uploader("ARRASTE SEU PDF", type="pdf")
+        if arquivo and st.button("PROCESSAR ->", type="primary"):
             with st.spinner("LENDO ARQUIVO..."):
                 texto, erro = ler_pdf(arquivo)
                 if erro: st.error(erro)
@@ -374,10 +280,70 @@ if st.session_state.pagina_atual == "upload":
                     if questoes: criar_novo_estudo(arquivo.name, questoes); st.rerun()
                     else: st.error("Erro ao processar.")
 
+# >>> PÁGINA 2: LOJA (ESTILO AMAZON) <<<
+elif st.session_state.pagina_atual == "loja":
+    st.title("🛒 Loja do Estudante")
+    st.caption("Produtos selecionados com as melhores ofertas da Amazon.")
+    
+    # Abas para organizar os links
+    abas = st.tabs(LINKS_AFILIADOS.keys())
+    
+    for aba, categoria in zip(abas, LINKS_AFILIADOS):
+        with aba:
+            links = LINKS_AFILIADOS[categoria]
+            # Cria grid de produtos
+            cols = st.columns(4) 
+            for i, link in enumerate(links):
+                with cols[i % 4]:
+                    # CARD IDÊNTICO À AMAZON
+                    st.markdown(f"""
+                    <a href="{link}" target="_blank" class="amazon-card">
+                        <div class="amz-badge">OFERTA</div>
+                        <div style="clear:both"></div>
+                        <div class="amz-logo">amazon<span>.com</span></div>
+                        <span class="amz-title">Oferta Recomendada #{i+1}</span>
+                        <span class="amz-price">Ver Preço</span>
+                        <span class="amz-button">Ver na Amazon</span>
+                    </a>
+                    """, unsafe_allow_html=True)
+
+# >>> PÁGINA 3: APOIO (PIX & GATOS) <<<
+elif st.session_state.pagina_atual == "apoio":
+    st.title("🐱 Apoie o Projeto (e o Gatinho)")
+    
+    st.markdown("""
+    O **Pratica.ai** é mantido por estudantes e usamos recursos de inteligência artificial que geram custos.
+    
+    O site continua **100% gratuito**, mas se ele te ajudou a passar na prova e você quiser 
+    **pagar um café para os devs (ou um sachê para o nosso Gerente de TI abaixo)**, qualquer valor é bem-vindo!
+    """)
+    
+    # GALERIA DE FOTOS DO GATO (CARISMA)
+    # Tenta carregar as imagens se existirem na pasta
+    cols_gato = st.columns(3)
+    fotos_gato = ["gato1.jpeg", "gato2.jpeg", "gato3.jpeg"] # Renomeie suas fotos para isso!
+    
+    for i, foto in enumerate(fotos_gato):
+        with cols_gato[i]:
+            if os.path.exists(foto):
+                st.image(foto, caption=["O Gerente julgando seu estudo", "Descanso merecido", "Esperando o Pix cair"][i], use_column_width=True)
+            else:
+                # Placeholder se não tiver foto ainda
+                st.info(f"📸 (Coloque a foto {foto} na pasta)")
+
+    st.markdown("### 💠 Chave Pix Copia e Cola")
+    st.markdown("""
+    <div class="pix-container">
+        <p style="color: #888;">Clique duas vezes abaixo para selecionar e copiar:</p>
+        <div class="pix-key">5b84b80d-c11a-4129-b897-74fb6371dfce</div>
+        <p><i>Obrigado por apoiar a educação (e os felinos)! ❤️</i></p>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+# >>> PÁGINA 4: TUTOR IA <<<
 elif st.session_state.pagina_atual == "chat_ia":
     st.title("🤖 Tutor IA")
-    st.caption("Acesso Gratuito e Ilimitado")
-    
     modo_tutor = st.radio("OPÇÕES:", ["💬 Conversar", "📝 Criar Simulado"], horizontal=True)
     st.markdown("<hr style='border-color: #333;'>", unsafe_allow_html=True)
     
@@ -391,17 +357,17 @@ elif st.session_state.pagina_atual == "chat_ia":
             with st.chat_message("assistant"):
                 with st.spinner("..."):
                     model = genai.GenerativeModel('gemini-flash-latest')
-                    response = model.generate_content(f"Seja didático e direto. Usuário: {prompt}")
+                    response = model.generate_content(f"Seja didático. Usuário: {prompt}")
                     st.markdown(response.text)
                     st.session_state.mensagens_ia.append({"role": "model", "content": response.text})
-                    st.rerun()
     else:
-        st.info("Digite um tema para gerar um simulado completo na hora.")
-        if assunto := st.chat_input("Ex: Direito Constitucional, Python, SUS..."):
-            with st.spinner(f"Criando prova sobre: {assunto}..."):
+        st.info("Digite um tema para gerar um simulado completo.")
+        if assunto := st.chat_input("Ex: Direito Constitucional..."):
+            with st.spinner(f"Criando: {assunto}..."):
                 questoes = chamar_ia_json(assunto, "criar")
                 if questoes: criar_novo_estudo(f"Simulado: {assunto}", questoes); st.rerun()
 
+# >>> PÁGINA 5: VISUALIZAÇÃO DO SIMULADO <<<
 elif st.session_state.pagina_atual == "visualizacao" and st.session_state.chat_ativo_id:
     estudo_ativo = next((e for e in st.session_state.historico if e["id"] == st.session_state.chat_ativo_id), None)
     if estudo_ativo:
