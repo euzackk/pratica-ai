@@ -69,7 +69,7 @@ def deletar_estudo_bd(id_estudo):
 
 init_db()
 
-# --- 4. CATÁLOGO DE VENDAS (MAPEADO) ---
+# --- 4. CATÁLOGO DE VENDAS ---
 CATALOGO_PREMIUM = {
     "direito": {
         "visual": {"badge": "🔥 OFERTA JURÍDICA", "titulo": "KIT OAB 2026", "subtitulo": "Vade Mecum e Doutrinas", "icone": "⚖️", "bg_style": "background: linear-gradient(135deg, #240b36 0%, #c31432 100%);", "btn_text": "VER PREÇO NA AMAZON"},
@@ -124,110 +124,116 @@ def ia_escolher_categoria(contexto_usuario):
     if any(x in ctx for x in ["policia", "taf"]): return "policial"
     return "geral"
 
-# --- 5. CSS (VISUAL REFINADO & RESPONSIVO) ---
+# --- 5. CSS (O SEGREDO PARA ESCONDER A BARRA E FORÇAR TEMA) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap');
     
-    /* RESET GERAL */
-    html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: #E0E0E0; background-color: #090909; }
-    .stApp { background-color: #090909; }
-    section[data-testid="stSidebar"] { background-color: #000000; border-right: 1px solid #222; }
+    /* 1. ESCONDER BARRA SUPERIOR E RODAPÉ DO STREAMLIT */
+    header[data-testid="stHeader"] {
+        visibility: hidden;
+        height: 0%;
+    }
+    footer {
+        visibility: hidden;
+    }
+    div[data-testid="stToolbar"] {
+        visibility: hidden;
+        height: 0%;
+    }
+    div[class^="st-emotion-cache-1"] { /* Tenta pegar classes dinâmicas do header */
+        top: -100px;
+    }
+
+    /* 2. FORÇAR TEMA ESCURO (Ignora Sistema) */
+    :root {
+        --primary-color: #F0C14B;
+        --background-color: #000000;
+        --secondary-background-color: #050505;
+        --text-color: #fafafa;
+        --font: 'Inter', sans-serif;
+    }
     
-    /* FORÇAR QUADRADO EM TUDO */
-    .stButton button, img, .super-banner, .lib-card, input, .pix-container, .questao-container, div[data-baseweb="tab"] {
+    /* Aplica fundo preto em tudo */
+    .stApp, [data-testid="stAppViewContainer"], .main {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+    }
+    
+    [data-testid="stSidebar"] {
+        background-color: #050505 !important;
+        border-right: 1px solid #222;
+        margin-top: -60px; /* Puxa a sidebar pra cima pra cobrir o buraco do header */
+        padding-top: 20px;
+    }
+    
+    /* Força inputs escuros */
+    .stTextInput input, .stSelectbox, div[data-baseweb="select"] > div {
+        background-color: #111 !important;
+        color: white !important;
+        border-color: #333 !important;
+    }
+    
+    /* Textos secundários */
+    p, label, h1, h2, h3, h4, span, li {
+        color: #e0e0e0 !important;
+    }
+
+    /* --- ESTILO QUADRADO (SQUARED) --- */
+    .stButton button, img, .super-banner, .lib-card, .pix-container, .questao-container {
         border-radius: 0px !important;
     }
 
-    /* --- ABAS À ESQUERDA (FIXED) --- */
-    .stTabs [data-baseweb="tab-list"] { gap: 0px; background-color: #111; padding: 0; }
-    .stTabs [data-baseweb="tab"] { 
-        height: 50px;
-        background-color: transparent; 
-        color: #888; 
-        border: none;
-        border-right: 1px solid #333;
-        border-bottom: 1px solid #333;
-        flex-grow: 1;
-        
-        /* O PULO DO GATO PARA ALINHAR À ESQUERDA */
-        justify-content: flex-start !important; 
-        text-align: left !important;
-        padding-left: 20px !important;
-        font-weight: 500;
-    }
-    /* Texto dentro da aba */
-    .stTabs [data-baseweb="tab"] > div {
-        align-items: center; /* Centraliza verticalmente o texto */
-    }
-    
-    .stTabs [aria-selected="true"] { 
-        background-color: #222 !important; 
-        color: #FFF !important; 
-        border-top: 2px solid #F0C14B !important; 
-        border-bottom: none !important;
-    }
-
-    /* --- SUPER BANNER PULSANTE --- */
+    /* --- SUPER BANNER --- */
     @keyframes pulse-border {
         0% { box-shadow: 0 0 0 0 rgba(240, 193, 75, 0.4); }
         70% { box-shadow: 0 0 0 10px rgba(240, 193, 75, 0); }
         100% { box-shadow: 0 0 0 0 rgba(240, 193, 75, 0); }
     }
-
     .super-banner {
         display: block; text-decoration: none; padding: 25px 20px; margin: 20px 0;
         position: relative; overflow: hidden; 
         border: 1px solid rgba(255,255,255,0.1);
-        animation: pulse-border 2s infinite; /* Chama atenção */
+        animation: pulse-border 2s infinite; 
         transition: transform 0.2s;
     }
     .super-banner:hover { transform: scale(1.02); filter: brightness(1.1); }
-    
-    .sb-badge { 
-        position: absolute; top: 0; right: 0; background: #FFD700; color: #000; 
-        font-size: 0.6rem; font-weight: 900; padding: 4px 8px; text-transform: uppercase; 
-    }
+    .sb-badge { position: absolute; top: 0; right: 0; background: #FFD700; color: #000 !important; font-size: 0.6rem; font-weight: 900; padding: 4px 8px; text-transform: uppercase; }
     .sb-icon { font-size: 3.5rem; margin-bottom: 15px; display: block; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-    .sb-title { color: #FFF; font-weight: 900; font-size: 1.3rem; line-height: 1; margin-bottom: 5px; display: block; text-transform: uppercase;}
-    .sb-prod-name { 
-        background: rgba(0,0,0,0.4); color: #FFF; font-size: 0.8rem; padding: 5px; 
-        display: inline-block; margin-bottom: 15px; font-weight: bold; border-left: 3px solid #FFD700;
-    }
-    .sb-button { 
-        background: #FFF; color: #000; text-align: center; font-weight: 900; padding: 12px; 
-        display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
-    }
+    .sb-title { color: #FFF !important; font-weight: 900; font-size: 1.3rem; line-height: 1; margin-bottom: 5px; display: block; text-transform: uppercase;}
+    .sb-prod-name { background: rgba(0,0,0,0.4); color: #FFF !important; font-size: 0.8rem; padding: 5px; display: inline-block; margin-bottom: 15px; font-weight: bold; border-left: 3px solid #FFD700;}
+    .sb-button { background: #FFF; color: #000 !important; text-align: center; font-weight: 900; padding: 12px; display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;}
 
-    /* --- CARD BIBLIOTECA (Clean) --- */
+    /* --- CARD BIBLIOTECA --- */
     .lib-card {
         background: #111; border: 1px solid #333; padding: 20px; height: 100%;
         transition: 0.2s; cursor: pointer; text-align: left;
         border-left: 2px solid #333;
     }
     .lib-card:hover { background: #1a1a1a; border-left-color: #F0C14B; }
-    .lib-title { font-weight: 700; color: #EEE; font-size: 1.1rem; margin-bottom: 8px; }
-    .lib-info { color: #666; font-size: 0.8rem; display: flex; justify-content: space-between; }
+    .lib-title { font-weight: 700; color: #EEE !important; font-size: 1.1rem; margin-bottom: 8px; }
+    .lib-info { color: #666 !important; font-size: 0.8rem; display: flex; justify-content: space-between; }
 
     /* --- RESPONSIVIDADE MOBILE --- */
     @media only screen and (max-width: 600px) {
         h1 { font-size: 2.2rem !important; }
         .stButton button { padding: 15px !important; font-size: 1rem !important; }
         .lib-card { margin-bottom: 10px; }
-        /* No mobile, as colunas viram linhas automaticamente */
         [data-testid="column"] { width: 100% !important; flex: 1 1 auto !important; min-width: 100% !important; }
-        /* Banner ocupa largura total */
         .super-banner { margin: 10px 0; }
+        
+        /* Ajuste fino para o topo no mobile já que tiramos o header */
+        .stApp { margin-top: 10px; }
     }
 
     /* PIX */
     .pix-container { background: #111; border: 1px dashed #555; padding: 20px; text-align: center; margin-top: 20px;}
-    .pix-key { font-family: monospace; background: #000; padding: 15px; color: #00FF7F; font-size: 1rem; word-break: break-all; border: 1px solid #333; }
+    .pix-key { font-family: monospace; background: #000; padding: 15px; color: #00FF7F !important; font-size: 1rem; word-break: break-all; border: 1px solid #333; }
 
     /* QUESTÕES */
     .questao-container { background-color: #111; border: 1px solid #333; border-left: 3px solid #444; padding: 25px; margin-bottom: 30px; }
-    .feedback-correct { background: rgba(5, 50, 20, 0.5); border: 1px solid #0F5132; color: #75B798; padding: 15px; margin-top: 10px; font-weight: bold;}
-    .feedback-wrong { background: rgba(50, 5, 10, 0.5); border: 1px solid #842029; color: #EA868F; padding: 15px; margin-top: 10px; font-weight: bold;}
+    .feedback-correct { background: rgba(5, 50, 20, 0.5); border: 1px solid #0F5132; color: #75B798 !important; padding: 15px; margin-top: 10px; font-weight: bold;}
+    .feedback-wrong { background: rgba(50, 5, 10, 0.5); border: 1px solid #842029; color: #EA868F !important; padding: 15px; margin-top: 10px; font-weight: bold;}
 
 </style>
 """, unsafe_allow_html=True)
@@ -274,13 +280,12 @@ def criar_novo_estudo(nome_arquivo, questoes):
     st.session_state.pagina_atual = "biblioteca" 
     st.rerun()
 
-# --- 8. BARRA LATERAL (NAVEGAÇÃO + SUPER ADS) ---
+# --- 8. BARRA LATERAL ---
 with st.sidebar:
     st.markdown("<h1 style='color: white; font-family: Inter; font-weight: 900; letter-spacing: -2px; margin:0;'>PRATICA<span style='color:#F0C14B'>.AI</span></h1>", unsafe_allow_html=True)
-    st.caption("Versão 4.0 - Mobile Ready")
+    st.caption("Modo Dark Nativo")
     st.markdown("---")
     
-    # Navegação com ícones grandes
     if st.button("📄 NOVO UPLOAD", use_container_width=True): st.session_state.pagina_atual = "upload"; st.rerun()
     if st.button("📚 BIBLIOTECA", use_container_width=True): st.session_state.pagina_atual = "biblioteca"; st.rerun()
     if st.button("🤖 TUTOR IA", use_container_width=True): st.session_state.pagina_atual = "chat_ia"; st.rerun()
@@ -288,7 +293,7 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # === SUPER BANNER DE VENDAS INTELIGENTE ===
+    # === SUPER BANNER ===
     contexto_usuario = ""
     if st.session_state.chat_ativo_id:
         estudo_ativo = next((e for e in st.session_state.historico if e["id"] == st.session_state.chat_ativo_id), None)
@@ -298,14 +303,10 @@ with st.sidebar:
 
     cat_nome = ia_escolher_categoria(contexto_usuario)
     cat_data = CATALOGO_PREMIUM[cat_nome]
-    
-    # Sorteia um produto específico para mostrar o nome real
     prod_escolhido = random.choice(cat_data["produtos"])
     visual = cat_data["visual"]
 
     st.markdown("<p style='font-size: 0.7rem; color: #666; font-weight: 800; letter-spacing: 1px; margin-bottom: 5px;'>PATROCINADO</p>", unsafe_allow_html=True)
-    
-    # Card HTML Puro com Animação
     st.markdown(f"""
     <a href="{prod_escolhido['link']}" target="_blank" class="super-banner" style="{visual['bg_style']}">
         <div class="sb-badge">{visual['badge']}</div>
@@ -318,12 +319,12 @@ with st.sidebar:
 
 # --- 9. ÁREA PRINCIPAL ---
 
-# >>> UPLOAD (Minimalista) <<<
+# >>> UPLOAD <<<
 if st.session_state.pagina_atual == "upload":
     st.markdown("""
     <div style="text-align: left; margin-top: 40px; margin-bottom: 40px;">
-        <h1 style="font-size: 3rem; color: #FFF; font-weight: 900; line-height: 1.1;">ESTUDE MENOS,<br><span style="color: #444;">APRENDA MAIS.</span></h1>
-        <p style="color: #888; font-size: 1.1rem; margin-top: 10px;">Suba seu PDF e deixe a IA criar sua prova.</p>
+        <h1 style="font-size: 3rem !important; color: #FFF !important; font-weight: 900; line-height: 1.1;">ESTUDE MENOS,<br><span style="color: #444;">APRENDA MAIS.</span></h1>
+        <p style="color: #888 !important; font-size: 1.1rem; margin-top: 10px;">Suba seu PDF e deixe a IA criar sua prova.</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -342,22 +343,51 @@ if st.session_state.pagina_atual == "upload":
                     if questoes: criar_novo_estudo(arquivo.name, questoes)
                     else: st.error("Erro ao processar.")
 
-# >>> BIBLIOTECA (COM ABAS ALINHADAS) <<<
+# >>> BIBLIOTECA (CLEAN) <<<
 elif st.session_state.pagina_atual == "biblioteca":
     
-    abas_titulos = ["📂 Meus Arquivos"]
-    estudo_ativo = None
-    
+    # MODO 1: VISUALIZAR ESTUDO
     if st.session_state.chat_ativo_id:
         estudo_ativo = next((e for e in st.session_state.historico if e["id"] == st.session_state.chat_ativo_id), None)
         if estudo_ativo:
-            abas_titulos.append(f"📝 {estudo_ativo['titulo']}")
+            c_back, c_title = st.columns([1, 6])
+            with c_back:
+                if st.button("⬅ VOLTAR"):
+                    st.session_state.chat_ativo_id = None; st.rerun()
+            with c_title:
+                st.markdown(f"<h2 style='margin:0'>{estudo_ativo['titulo']}</h2>", unsafe_allow_html=True)
             
-    abas = st.tabs(abas_titulos)
-    
-    # ABA 1: LISTA
-    with abas[0]:
-        st.markdown("<br>", unsafe_allow_html=True)
+            st.markdown("---")
+            
+            for index, q in enumerate(estudo_ativo['questoes']):
+                st.markdown(f"""
+                <div class="questao-container">
+                    <div style="color: #666; font-size: 0.8rem; margin-bottom: 10px; font-weight:bold;">QUESTÃO {index + 1:02d}</div>
+                    <div class="questao-texto">{q['pergunta']}</div>
+                </div>""", unsafe_allow_html=True)
+                
+                res_salva = estudo_ativo["respostas_usuario"].get(str(q['id']))
+                idx = q['opcoes'].index(res_salva) if res_salva in q['opcoes'] else None
+                escolha = st.radio("Sua resposta:", q['opcoes'], index=idx, key=f"q_{estudo_ativo['id']}_{q['id']}", label_visibility="collapsed")
+                
+                if escolha and escolha != res_salva:
+                    estudo_ativo["respostas_usuario"][str(q['id'])] = escolha
+                    salvar_estudo_bd(estudo_ativo); st.rerun()
+                
+                if res_salva:
+                    letra_user = res_salva.split(")")[0].strip().upper()
+                    letra_correta = q['correta'].strip().upper()
+                    if letra_user == letra_correta: st.markdown(f"""<div class="feedback-correct">✓ RESPOSTA CORRETA<br><span style="font-weight:normal">{q['comentario']}</span></div>""", unsafe_allow_html=True)
+                    else: st.markdown(f"""<div class="feedback-wrong">✕ INCORRETO (Era {letra_correta})<br><span style="font-weight:normal">{q['comentario']}</span></div>""", unsafe_allow_html=True)
+                st.markdown("<br><br>", unsafe_allow_html=True)
+
+            if st.button("REFAZER SIMULADO ↺", use_container_width=True):
+                estudo_ativo["respostas_usuario"] = {}
+                salvar_estudo_bd(estudo_ativo); st.rerun()
+                
+    # MODO 2: LISTA DE ARQUIVOS
+    else:
+        st.title("Minha Biblioteca")
         if not st.session_state.historico:
             st.info("Sua biblioteca está vazia. Faça um upload!")
         else:
@@ -381,45 +411,7 @@ elif st.session_state.pagina_atual == "biblioteca":
                     with c_act2:
                         if st.button("✕", key=f"del_{estudo['id']}", use_container_width=True):
                             deletar_estudo_bd(estudo['id'])
-                            if st.session_state.chat_ativo_id == estudo['id']: st.session_state.chat_ativo_id = None
                             st.session_state.historico = carregar_historico_bd(); st.rerun()
-
-    # ABA 2: PROVA ATIVA
-    if estudo_ativo and len(abas) > 1:
-        with abas[1]:
-            st.markdown("<br>", unsafe_allow_html=True)
-            c_h1, c_h2 = st.columns([6, 2])
-            with c_h1: st.title(estudo_ativo['titulo'])
-            with c_h2: 
-                if st.button("FECHAR X", use_container_width=True):
-                    st.session_state.chat_ativo_id = None; st.rerun()
-                
-            st.markdown("---")
-            for index, q in enumerate(estudo_ativo['questoes']):
-                st.markdown(f"""
-                <div class="questao-container">
-                    <div style="color: #666; font-size: 0.8rem; margin-bottom: 10px; font-weight:bold;">QUESTÃO {index + 1:02d}</div>
-                    <div class="questao-texto">{q['pergunta']}</div>
-                </div>""", unsafe_allow_html=True)
-                
-                res_salva = estudo_ativo["respostas_usuario"].get(str(q['id']))
-                idx = q['opcoes'].index(res_salva) if res_salva in q['opcoes'] else None
-                escolha = st.radio("Sua resposta:", q['opcoes'], index=idx, key=f"q_{estudo_ativo['id']}_{q['id']}", label_visibility="collapsed")
-                
-                if escolha and escolha != res_salva:
-                    estudo_ativo["respostas_usuario"][str(q['id'])] = escolha
-                    salvar_estudo_bd(estudo_ativo); st.rerun()
-                
-                if res_salva:
-                    letra_user = res_salva.split(")")[0].strip().upper()
-                    letra_correta = q['correta'].strip().upper()
-                    if letra_user == letra_correta: st.markdown(f"""<div class="feedback-correct">✓ RESPOSTA CORRETA<br><span style="font-weight:normal">{q['comentario']}</span></div>""", unsafe_allow_html=True)
-                    else: st.markdown(f"""<div class="feedback-wrong">✕ INCORRETO (Era {letra_correta})<br><span style="font-weight:normal">{q['comentario']}</span></div>""", unsafe_allow_html=True)
-                st.markdown("<br><br>", unsafe_allow_html=True)
-            
-            if st.button("REFAZER SIMULADO ↺", use_container_width=True):
-                estudo_ativo["respostas_usuario"] = {}
-                salvar_estudo_bd(estudo_ativo); st.rerun()
 
 # >>> TUTOR IA <<<
 elif st.session_state.pagina_atual == "chat_ia":
@@ -445,10 +437,10 @@ elif st.session_state.pagina_atual == "chat_ia":
                 questoes = chamar_ia_json(assunto, "criar")
                 if questoes: criar_novo_estudo(f"Simulado: {assunto}", questoes)
 
-# >>> APOIO (GATOS) <<<
+# >>> APOIO <<<
 elif st.session_state.pagina_atual == "apoio":
     st.title("🐱 APOIE NOSSO PROJETO!!")
-    st.markdown("<h3 style='color: #888;'>Ajude a manter o servidor ligado!</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='color: #888 !important;'>Ajude a manter o servidor ligado!</h3>", unsafe_allow_html=True)
     
     # LAYOUT PIRÂMIDE
     c1, c2, c3 = st.columns([1, 2, 1])
