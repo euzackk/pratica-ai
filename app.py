@@ -105,7 +105,7 @@ def ia_escolher_categoria(contexto_usuario):
     if any(x in ctx for x in ["policia", "taf"]): return "policial"
     return "geral"
 
-# --- 5. CSS (VISUAL SQUARED/QUADRADO) ---
+# --- 5. CSS (VISUAL SQUARED + ABAS ESQUERDA) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
@@ -114,12 +114,33 @@ st.markdown("""
     .stApp { background-color: #050505; }
     section[data-testid="stSidebar"] { background-color: #0F0F0F; border-right: 1px solid #222; }
     
-    /* GERAL QUADRADO (SQUARED) */
+    /* GERAL QUADRADO */
     .stButton button, img, .super-banner, .lib-card, .amazon-card, input, .pix-container, .questao-container {
         border-radius: 0px !important;
     }
 
-    /* SUPER BANNER LATERAL */
+    /* ABAS ALINHADAS A ESQUERDA */
+    .stTabs [data-baseweb="tab-list"] { gap: 5px; }
+    .stTabs [data-baseweb="tab"] { 
+        border-radius: 0px; 
+        background-color: #111; 
+        color: #666; 
+        border: 1px solid #333; 
+        border-bottom: none;
+        justify-content: flex-start !important; /* ALINHAMENTO ESQUERDA */
+        text-align: left !important;
+        flex-grow: 1; /* Ocupa espaço uniformemente */
+    }
+    .stTabs [data-baseweb="tab"] > div {
+        align-items: flex-start !important; /* Garante que o texto fique na esquerda */
+    }
+    .stTabs [aria-selected="true"] { 
+        background-color: #000 !important; 
+        color: #FFF !important; 
+        border-top: 3px solid #FFF !important; 
+    }
+
+    /* SUPER BANNER */
     .super-banner {
         display: block; text-decoration: none; padding: 20px; margin: 20px 0;
         position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
@@ -147,26 +168,19 @@ st.markdown("""
     .pix-container { background: #111; border: 1px dashed #444; padding: 30px; text-align: center; }
     .pix-key { font-family: monospace; background: #222; padding: 15px; color: #00FF7F; font-size: 1.1rem; margin: 20px 0; word-break: break-all; select-all; }
     
-    /* QUESTÕES */
+    /* GERAL */
     .stButton button { text-align: left; background: transparent; color: #DDD; width: 100%; border: 1px solid transparent; }
     .stButton button:hover { background: #222; border: 1px solid #333; }
     .questao-container { background-color: #111; border: 1px solid #333; border-left: 4px solid #333; padding: 30px; margin-bottom: 40px; }
     .feedback-correct { background-color: #051B11; border-left: 4px solid #198754; color: #75B798; padding: 15px; margin-top: 10px;}
     .feedback-wrong { background-color: #2C0B0E; border-left: 4px solid #DC3545; color: #EA868F; padding: 15px; margin-top: 10px;}
-    
-    /* LOJA */
     .amazon-card { background: #FFF; padding: 15px; text-align: center; display: block; text-decoration: none; border: 1px solid #DDD; }
     .amz-button { background: #FFD814; color: #000; padding: 8px; display: block; margin-top: 10px; font-weight: bold; }
-    
-    /* ABAS CUSTOMIZADAS */
-    .stTabs [data-baseweb="tab-list"] { gap: 5px; }
-    .stTabs [data-baseweb="tab"] { border-radius: 0px; background-color: #111; color: #666; border: 1px solid #333; border-bottom: none; }
-    .stTabs [aria-selected="true"] { background-color: #000 !important; color: #FFF !important; border-top: 3px solid #FFF !important; }
 
 </style>
 """, unsafe_allow_html=True)
 
-# --- 6. GERENCIAMENTO DE ESTADO ---
+# --- 6. ESTADO ---
 if "historico" not in st.session_state: st.session_state.historico = carregar_historico_bd()
 if "pagina_atual" not in st.session_state: st.session_state.pagina_atual = "upload"
 if "chat_ativo_id" not in st.session_state: st.session_state.chat_ativo_id = None
@@ -205,15 +219,14 @@ def criar_novo_estudo(nome_arquivo, questoes):
     salvar_estudo_bd(novo_estudo)
     st.session_state.historico = carregar_historico_bd()
     st.session_state.chat_ativo_id = novo_id
-    st.session_state.pagina_atual = "biblioteca" # Vai direto pra aba de estudos
+    st.session_state.pagina_atual = "biblioteca" 
     st.rerun()
 
-# --- 8. BARRA LATERAL (NAVEGAÇÃO + VENDAS) ---
+# --- 8. BARRA LATERAL ---
 with st.sidebar:
     st.markdown("<h2 style='color: white; font-family: Inter; font-weight: 900; letter-spacing: -1px;'>Pratica.ai <span style='color:#F0C14B'>.</span></h2>", unsafe_allow_html=True)
     st.markdown("---")
     
-    # Navegação
     if st.button("📄 NOVO UPLOAD", use_container_width=True): st.session_state.pagina_atual = "upload"; st.rerun()
     if st.button("📚 BIBLIOTECA", use_container_width=True): st.session_state.pagina_atual = "biblioteca"; st.rerun()
     if st.button("🤖 TUTOR IA", use_container_width=True): st.session_state.pagina_atual = "chat_ia"; st.rerun()
@@ -222,7 +235,6 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # Super Banner de Vendas (IA Contextual)
     contexto_usuario = ""
     if st.session_state.chat_ativo_id:
         estudo_ativo = next((e for e in st.session_state.historico if e["id"] == st.session_state.chat_ativo_id), None)
@@ -248,7 +260,7 @@ with st.sidebar:
 
 # --- 9. ÁREA PRINCIPAL ---
 
-# >>> PÁGINA 1: UPLOAD <<<
+# >>> UPLOAD <<<
 if st.session_state.pagina_atual == "upload":
     st.markdown("""
     <div style="text-align: left; margin-top: 50px;">
@@ -271,23 +283,21 @@ if st.session_state.pagina_atual == "upload":
                     if questoes: criar_novo_estudo(arquivo.name, questoes)
                     else: st.error("Erro ao processar.")
 
-# >>> PÁGINA 2: BIBLIOTECA (COM ABAS NO TOPO) <<<
+# >>> BIBLIOTECA (COM ABAS) <<<
 elif st.session_state.pagina_atual == "biblioteca":
     
-    # Determina quais abas mostrar
+    # Prepara lista de abas
     abas_titulos = ["📂 Todos os Arquivos"]
     estudo_ativo = None
     
-    # Se tiver um estudo ativo, cria uma aba para ele
     if st.session_state.chat_ativo_id:
         estudo_ativo = next((e for e in st.session_state.historico if e["id"] == st.session_state.chat_ativo_id), None)
         if estudo_ativo:
             abas_titulos.append(f"📝 {estudo_ativo['titulo']}")
             
-    # Cria as abas no topo
     abas = st.tabs(abas_titulos)
     
-    # ABA 1: LISTA DE ARQUIVOS
+    # ABA 1: ARQUIVOS
     with abas[0]:
         st.title("Minha Biblioteca")
         if not st.session_state.historico:
@@ -316,7 +326,7 @@ elif st.session_state.pagina_atual == "biblioteca":
                             st.session_state.historico = carregar_historico_bd()
                             st.rerun()
 
-    # ABA 2: ESTUDO ABERTO (Se houver)
+    # ABA 2: PROVA
     if estudo_ativo and len(abas) > 1:
         with abas[1]:
             st.markdown(f"## {estudo_ativo['titulo']}")
@@ -351,8 +361,7 @@ elif st.session_state.pagina_atual == "biblioteca":
                 estudo_ativo["respostas_usuario"] = {}
                 salvar_estudo_bd(estudo_ativo); st.rerun()
 
-
-# >>> PÁGINA 3: TUTOR IA <<<
+# >>> TUTOR IA <<<
 elif st.session_state.pagina_atual == "chat_ia":
     st.title("🤖 Tutor IA")
     modo_tutor = st.radio("OPÇÕES:", ["💬 Conversar", "📝 Gerar Simulado"], horizontal=True)
@@ -376,7 +385,7 @@ elif st.session_state.pagina_atual == "chat_ia":
                 questoes = chamar_ia_json(assunto, "criar")
                 if questoes: criar_novo_estudo(f"Simulado: {assunto}", questoes)
 
-# >>> PÁGINA 4: LOJA <<<
+# >>> LOJA <<<
 elif st.session_state.pagina_atual == "loja":
     st.title("🛒 Loja Oficial")
     cat_tabs = st.tabs(CATALOGO_PREMIUM.keys())
@@ -393,23 +402,22 @@ elif st.session_state.pagina_atual == "loja":
                     </a>
                     """, unsafe_allow_html=True)
 
-# >>> PÁGINA 5: APOIO (PIRÂMIDE GATOS) <<<
+# >>> APOIO ATUALIZADO (LEGENDAS CRIATIVAS + TÍTULO) <<<
 elif st.session_state.pagina_atual == "apoio":
-    st.title("🐱 Apoie o Projeto")
+    st.title("🐱 APOIE NOSSO PROJETO!!")
     st.markdown("<h3 style='color: #CCC;'>Ajude a manter o servidor ligado!</h3>", unsafe_allow_html=True)
     
-    # LAYOUT PIRÂMIDE CENTRALIZADA
     c1, c2, c3 = st.columns([1, 2, 1])
     with c2:
-        if os.path.exists("static/gato1.jpeg"): st.image("static/gato1.jpeg", caption="Gerente Julgando.", use_container_width=True)
-        elif os.path.exists("gato1.jpeg"): st.image("gato1.jpeg", caption="Gerente Julgando.", use_container_width=True)
+        if os.path.exists("static/gato1.jpeg"): st.image("static/gato1.jpeg", caption="Exausta após corrigir bugs no servidor.", use_container_width=True)
+        elif os.path.exists("gato1.jpeg"): st.image("gato1.jpeg", caption="Exausta após corrigir bugs no servidor.", use_container_width=True)
     
     c_base1, c_base2 = st.columns(2)
     with c_base1:
-        if os.path.exists("static/gato2.jpeg"): st.image("static/gato2.jpeg", caption="Cochilo.", use_container_width=True)
-        elif os.path.exists("gato2.jpeg"): st.image("gato2.jpeg", caption="Cochilo.", use_container_width=True)
+        if os.path.exists("static/gato2.jpeg"): st.image("static/gato2.jpeg", caption="A Gerente de TI analisando se você estudou hoje.", use_container_width=True)
+        elif os.path.exists("gato2.jpeg"): st.image("gato2.jpeg", caption="A Gerente de TI analisando se você estudou hoje.", use_container_width=True)
     with c_base2:
-        if os.path.exists("static/gato3.jpeg"): st.image("static/gato3.jpeg", caption="Esperando Pix.", use_container_width=True)
-        elif os.path.exists("gato3.jpeg"): st.image("gato3.jpeg", caption="Esperando Pix.", use_container_width=True)
+        if os.path.exists("static/gato3.jpeg"): st.image("static/gato3.jpeg", caption="Esperando o Pix cair pra comprar sachê premium.", use_container_width=True)
+        elif os.path.exists("gato3.jpeg"): st.image("gato3.jpeg", caption="Esperando o Pix cair pra comprar sachê premium.", use_container_width=True)
 
     st.markdown("<br><div class='pix-container'><div class='pix-key'>5b84b80d-c11a-4129-b897-74fb6371dfce</div></div>", unsafe_allow_html=True)
