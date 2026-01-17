@@ -319,7 +319,7 @@ with st.sidebar:
     if st.button("🤖 TUTOR IA", use_container_width=True):
         st.session_state.pagina_atual = "chat_ia"; st.session_state.chat_ativo_id = None; st.rerun()
 
-    if st.button("🐱 APOIE (PIX)", use_container_width=True):
+    if st.button("🐱 APOIE NOSSO PROJETO", use_container_width=True):
         st.session_state.pagina_atual = "apoio"; st.session_state.chat_ativo_id = None; st.rerun()
     
     # --- ÁREA DO SUPER BANNER DE VENDAS (CONTEXTUAL) ---
