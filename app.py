@@ -22,7 +22,7 @@ st.set_page_config(
     page_title="Pratica.ai",
     page_icon="🐱",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded" # Tenta manter aberto no PC, mas no celular fecha auto
 )
 
 # --- 3. BANCO DE DADOS ---
@@ -117,25 +117,40 @@ def ia_escolher_categoria(contexto_usuario):
     if any(x in ctx for x in ["policia", "taf"]): return "policial"
     return "geral"
 
-# --- 5. CSS (MODO APP ULTRA COMPACTO) ---
+# --- 5. CSS (CORREÇÃO MOBILE + REMOÇÃO DE RODAPÉ) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap');
     
-    /* 1. REMOÇÃO TOTAL DA INTERFACE DO STREAMLIT */
-    header, [data-testid="stHeader"], [data-testid="stToolbar"] { display: none !important; }
-    footer, .stDeployButton { display: none !important; }
-    
-    /* 2. AJUSTE DE MARGENS PARA PARECER APP (Removed Padding) */
-    .block-container {
-        padding-top: 1rem !important;
-        padding-bottom: 2rem !important;
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
+    /* 1. CONFIGURAÇÃO DE VISIBILIDADE DO TOPO */
+    /* NÃO usamos display:none no header inteiro, senão o botão some */
+    header[data-testid="stHeader"] {
+        background-color: transparent !important; /* Fundo transparente para misturar com o app */
+        z-index: 1 !important;
     }
     
-    /* Ajuste da Sidebar para não ter buraco em cima */
-    [data-testid="stSidebar"] { top: 0px !important; margin-top: 0px !important; }
+    /* Esconde a barra colorida decorativa do Streamlit */
+    div[data-testid="stDecoration"] {
+        display: none;
+    }
+
+    /* Esconde o menu de 3 pontinhos (Configurações), mas DEIXA a seta da sidebar */
+    [data-testid="stToolbar"] {
+        visibility: hidden; 
+        right: 2rem;
+    }
+    
+    /* 2. REMOÇÃO TOTAL DO RODAPÉ */
+    footer {
+        display: none !important;
+        visibility: hidden !important;
+    }
+    .stDeployButton {
+        display: none !important;
+    }
+    #MainMenu {
+        display: none !important;
+    }
 
     /* 3. DARK MODE ABSOLUTO */
     :root {
@@ -160,7 +175,7 @@ st.markdown("""
         border: 1px solid #333;
         background: #111;
         color: #EEE;
-        padding: 15px 0px !important; /* Mais alto para o dedo */
+        padding: 15px 0px !important; 
         font-size: 1rem;
         font-weight: 600;
         width: 100%;
@@ -203,8 +218,12 @@ st.markdown("""
         /* Botões Full Width */
         .stButton button { width: 100% !important; margin-bottom: 8px; }
         
-        /* Ajuste do Título da Biblioteca */
-        h2 { font-size: 1.5rem !important; }
+        /* Garante que o botão de abrir sidebar fique visível */
+        [data-testid="collapsedControl"] { 
+            display: block !important; 
+            color: white !important;
+            z-index: 9999;
+        }
     }
 
     /* PIX & QUESTÕES */
