@@ -22,7 +22,7 @@ st.set_page_config(
     page_title="Pratica.ai",
     page_icon="🐱",
     layout="wide",
-    initial_sidebar_state="expanded" # Tenta manter aberto no PC, mas no celular fecha auto
+    initial_sidebar_state="collapsed" # Começa fechado no celular para ver o conteúdo
 )
 
 # --- 3. BANCO DE DADOS ---
@@ -117,40 +117,43 @@ def ia_escolher_categoria(contexto_usuario):
     if any(x in ctx for x in ["policia", "taf"]): return "policial"
     return "geral"
 
-# --- 5. CSS (CORREÇÃO MOBILE + REMOÇÃO DE RODAPÉ) ---
+# --- 5. CSS (CORREÇÃO DE MENU MOBILE) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap');
     
-    /* 1. CONFIGURAÇÃO DE VISIBILIDADE DO TOPO */
-    /* NÃO usamos display:none no header inteiro, senão o botão some */
+    /* 1. CONFIGURAÇÃO DA BARRA SUPERIOR (IMPORTANTE) */
+    
+    /* Deixa o header transparente, mas OCUPA espaço para o botão existir */
     header[data-testid="stHeader"] {
-        background-color: transparent !important; /* Fundo transparente para misturar com o app */
-        z-index: 1 !important;
+        background-color: transparent !important;
+        z-index: 99 !important;
     }
     
-    /* Esconde a barra colorida decorativa do Streamlit */
-    div[data-testid="stDecoration"] {
-        display: none;
-    }
+    /* Esconde a barra de decoração colorida */
+    [data-testid="stDecoration"] { display: none; }
 
-    /* Esconde o menu de 3 pontinhos (Configurações), mas DEIXA a seta da sidebar */
-    [data-testid="stToolbar"] {
-        visibility: hidden; 
-        right: 2rem;
+    /* Esconde o menu da direita (3 pontinhos/Github) */
+    [data-testid="stToolbar"] { display: none !important; }
+    #MainMenu { display: none !important; }
+    
+    /* FORÇA O BOTÃO DE MENU A APARECER E SER BRANCO */
+    [data-testid="collapsedControl"] {
+        display: block !important;
+        color: #FFFFFF !important;
+        top: 1rem !important;
+        left: 1rem !important;
+    }
+    /* Ícone do menu */
+    [data-testid="collapsedControl"] svg {
+        fill: #FFFFFF !important;
+        width: 30px !important;
+        height: 30px !important;
     }
     
-    /* 2. REMOÇÃO TOTAL DO RODAPÉ */
-    footer {
-        display: none !important;
-        visibility: hidden !important;
-    }
-    .stDeployButton {
-        display: none !important;
-    }
-    #MainMenu {
-        display: none !important;
-    }
+    /* 2. REMOÇÃO DO RODAPÉ */
+    footer { display: none !important; }
+    .stDeployButton { display: none !important; }
 
     /* 3. DARK MODE ABSOLUTO */
     :root {
@@ -207,7 +210,7 @@ st.markdown("""
     .lib-title { font-weight: 700; color: #EEE !important; font-size: 1.1rem; margin-bottom: 8px; }
     .lib-info { color: #666 !important; font-size: 0.8rem; display: flex; justify-content: space-between; }
 
-    /* --- MOBILE RESPONSIVENESS CRÍTICO --- */
+    /* --- MOBILE RESPONSIVENESS --- */
     @media only screen and (max-width: 600px) {
         h1 { font-size: 2rem !important; line-height: 1.1 !important; }
         
@@ -218,12 +221,8 @@ st.markdown("""
         /* Botões Full Width */
         .stButton button { width: 100% !important; margin-bottom: 8px; }
         
-        /* Garante que o botão de abrir sidebar fique visível */
-        [data-testid="collapsedControl"] { 
-            display: block !important; 
-            color: white !important;
-            z-index: 9999;
-        }
+        /* Ajuste margem topo para não ficar embaixo do botão de menu */
+        .block-container { padding-top: 3rem !important; }
     }
 
     /* PIX & QUESTÕES */
@@ -291,7 +290,7 @@ with st.sidebar:
     if st.button("📄 NOVO UPLOAD", use_container_width=True): st.session_state.pagina_atual = "upload"; st.rerun()
     if st.button("📚 BIBLIOTECA", use_container_width=True): st.session_state.pagina_atual = "biblioteca"; st.rerun()
     if st.button("🤖 TUTOR IA", use_container_width=True): st.session_state.pagina_atual = "chat_ia"; st.rerun()
-    if st.button("🐱 APOIE!!", use_container_width=True): st.session_state.pagina_atual = "apoio"; st.rerun()
+    if st.button("🐱 APOIE (PIX)", use_container_width=True): st.session_state.pagina_atual = "apoio"; st.rerun()
     
     st.markdown("---")
     
