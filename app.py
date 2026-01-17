@@ -69,42 +69,41 @@ def deletar_estudo_bd(id_estudo):
 
 init_db()
 
-# --- 4. CATÁLOGO DE PRODUTOS NOMEADOS (Aumenta o Clique) ---
-# Mapeei seus links para nomes atrativos de produtos reais dessas categorias
+# --- 4. CATÁLOGO DE VENDAS (MAPEADO) ---
 CATALOGO_PREMIUM = {
     "direito": {
-        "visual": {"badge": "🔥 OFERTA JURÍDICA", "titulo": "KIT OAB 2026", "subtitulo": "Vade Mecum e Doutrinas", "icone": "⚖️", "bg_style": "background: linear-gradient(135deg, #4b148c 0%, #c7941d 100%);", "btn_color": "#FFD700", "btn_text": "#000"},
+        "visual": {"badge": "🔥 OFERTA JURÍDICA", "titulo": "KIT OAB 2026", "subtitulo": "Vade Mecum e Doutrinas", "icone": "⚖️", "bg_style": "background: linear-gradient(135deg, #240b36 0%, #c31432 100%);", "btn_text": "VER PREÇO NA AMAZON"},
         "produtos": [
-            {"nome": "Vade Mecum Saraiva 2026 (Pré-venda)", "link": "https://amzn.to/4qJymYt"},
+            {"nome": "Vade Mecum Saraiva 2026", "link": "https://amzn.to/4qJymYt"},
             {"nome": "Vade Mecum Rideel Compacto", "link": "https://amzn.to/4qAOVWf"},
             {"nome": "CLT Organizada - LTr", "link": "https://amzn.to/45jNwuK"},
-            {"nome": "Manual de Direito Civil - Tartuce", "link": "https://amzn.to/4sKGLft"}
+            {"nome": "Manual Direito Civil", "link": "https://amzn.to/4sKGLft"}
         ]
     },
     "tecnologia": {
-        "visual": {"badge": "⚡ SETUP PRO", "titulo": "NOTEBOOKS & PERIFÉRICOS", "subtitulo": "Potência para programar.", "icone": "💻", "bg_style": "background: linear-gradient(135deg, #006cff 0%, #00ffc8 100%);", "btn_color": "#FFF", "btn_text": "#000"},
+        "visual": {"badge": "⚡ SETUP PRO", "titulo": "NOTEBOOKS & GAMER", "subtitulo": "Potência para programar.", "icone": "💻", "bg_style": "background: linear-gradient(135deg, #000428 0%, #004e92 100%);", "btn_text": "CONFIRMAR OFERTA"},
         "produtos": [
-            {"nome": "Notebook Acer Aspire 5 (Custo Benefício)", "link": "https://amzn.to/4pJLkUC"},
-            {"nome": "Mouse Logitech MX Master 3S", "link": "https://amzn.to/3LyNpVu"},
+            {"nome": "Notebook Acer Aspire 5", "link": "https://amzn.to/4pJLkUC"},
+            {"nome": "Mouse Logitech MX Master", "link": "https://amzn.to/3LyNpVu"},
             {"nome": "Teclado Mecânico Keychron", "link": "https://amzn.to/49BErP3"},
-            {"nome": "Monitor Dell 24pol IPS", "link": "https://amzn.to/4pFde4d"}
+            {"nome": "Monitor Dell IPS 24", "link": "https://amzn.to/4pFde4d"}
         ]
     },
     "policial": {
-        "visual": {"badge": "🛡️ CARREIRA POLICIAL", "titulo": "KIT APROVAÇÃO POLÍCIA", "subtitulo": "Apostilas e Tático.", "icone": "🚓", "bg_style": "background: linear-gradient(135deg, #ff4500 0%, #ff9100 100%);", "btn_color": "#FFF", "btn_text": "#FF4500"},
+        "visual": {"badge": "🛡️ OPERACIONAL", "titulo": "KIT APROVAÇÃO POLÍCIA", "subtitulo": "Apostilas e Tático.", "icone": "🚓", "bg_style": "background: linear-gradient(135deg, #16222A 0%, #3A6073 100%);", "btn_text": "VER EQUIPAMENTOS"},
         "produtos": [
-            {"nome": "Apostila Alfacon - Carreiras Policiais", "link": "https://amzn.to/4qPWLeq"},
-            {"nome": "Vade Mecum Policial", "link": "https://amzn.to/4jK4vMs"},
+            {"nome": "Apostila Alfacon Policial", "link": "https://amzn.to/4qPWLeq"},
+            {"nome": "Vade Mecum Carreiras Policiais", "link": "https://amzn.to/4jK4vMs"},
             {"nome": "Coturno Tático Militar", "link": "https://amzn.to/4qXVCBy"}
         ]
     },
     "geral": {
-        "visual": {"badge": "🎁 ESSENCIAIS", "titulo": "KINDLE & FOCO", "subtitulo": "O que todo estudante precisa.", "icone": "🎒", "bg_style": "background: linear-gradient(135deg, #ff00a8 0%, #8a2be2 100%);", "btn_color": "#FFF", "btn_text": "#8A2BE2"},
+        "visual": {"badge": "🎁 IMPERDÍVEL", "titulo": "KINDLE & FOCO", "subtitulo": "O essencial do estudante.", "icone": "🎒", "bg_style": "background: linear-gradient(135deg, #1A2980 0%, #26D0CE 100%);", "btn_text": "APROVEITAR AGORA"},
         "produtos": [
-            {"nome": "Kindle 11ª Geração - Preto", "link": "https://amzn.to/3NpLfYP"},
-            {"nome": "Fone Cancelamento de Ruído JBL", "link": "https://amzn.to/49Z1vsr"},
-            {"nome": "Garrafa Térmica Pacco", "link": "https://amzn.to/4sL9elk"},
-            {"nome": "Mochila Executiva Antifurto", "link": "https://amzn.to/4sKkRZD"}
+            {"nome": "Kindle 11ª Geração", "link": "https://amzn.to/3NpLfYP"},
+            {"nome": "Fone JBL Cancelamento Ruído", "link": "https://amzn.to/49Z1vsr"},
+            {"nome": "Garrafa Térmica", "link": "https://amzn.to/4sL9elk"},
+            {"nome": "Mochila Antifurto", "link": "https://amzn.to/4sKkRZD"}
         ]
     }
 }
@@ -125,102 +124,119 @@ def ia_escolher_categoria(contexto_usuario):
     if any(x in ctx for x in ["policia", "taf"]): return "policial"
     return "geral"
 
-# --- 5. CSS (RESPONSIVIDADE MÓVEL + VISUAL QUADRADO) ---
+# --- 5. CSS (VISUAL REFINADO & RESPONSIVO) ---
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap');
     
-    html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: #E0E0E0; background-color: #050505; }
-    .stApp { background-color: #050505; }
-    section[data-testid="stSidebar"] { background-color: #0F0F0F; border-right: 1px solid #222; }
+    /* RESET GERAL */
+    html, body, [class*="css"] { font-family: 'Inter', sans-serif; color: #E0E0E0; background-color: #090909; }
+    .stApp { background-color: #090909; }
+    section[data-testid="stSidebar"] { background-color: #000000; border-right: 1px solid #222; }
     
-    /* RESET QUADRADO */
+    /* FORÇAR QUADRADO EM TUDO */
     .stButton button, img, .super-banner, .lib-card, input, .pix-container, .questao-container, div[data-baseweb="tab"] {
         border-radius: 0px !important;
     }
 
-    /* --- MOBILE RESPONSIVENESS (O SEGREDO) --- */
-    @media only screen and (max-width: 600px) {
-        /* Ajusta título */
-        h1 { font-size: 2.5rem !important; }
-        
-        /* Força colunas a empilharem */
-        [data-testid="column"] { width: 100% !important; flex: 1 1 auto !important; min-width: 100% !important; }
-        
-        /* Botões maiores para toque */
-        .stButton button { padding: 15px !important; font-size: 1rem !important; }
-        
-        /* Cards ocupam largura total */
-        .lib-card, .super-banner { margin: 10px 0 !important; }
-        
-        /* Ajusta padding da sidebar */
-        section[data-testid="stSidebar"] { min-width: 100% !important; }
-        
-        /* Ajusta imagens dos gatos */
-        .gato-container { margin-bottom: 20px; }
-    }
-
-    /* ABAS ALINHADAS A ESQUERDA */
-    .stTabs [data-baseweb="tab-list"] { gap: 5px; flex-wrap: wrap; }
+    /* --- ABAS À ESQUERDA (FIXED) --- */
+    .stTabs [data-baseweb="tab-list"] { gap: 0px; background-color: #111; padding: 0; }
     .stTabs [data-baseweb="tab"] { 
-        background-color: #111; color: #666; border: 1px solid #333; border-bottom: none;
-        justify-content: flex-start !important; text-align: left !important; flex-grow: 1;
+        height: 50px;
+        background-color: transparent; 
+        color: #888; 
+        border: none;
+        border-right: 1px solid #333;
+        border-bottom: 1px solid #333;
+        flex-grow: 1;
+        
+        /* O PULO DO GATO PARA ALINHAR À ESQUERDA */
+        justify-content: flex-start !important; 
+        text-align: left !important;
+        padding-left: 20px !important;
+        font-weight: 500;
     }
-    .stTabs [aria-selected="true"] { background-color: #000 !important; color: #FFF !important; border-top: 3px solid #FFF !important; }
-
-    /* TUTORIAL BOX */
-    .tutorial-box {
-        background: #1a1a1a; border: 1px solid #F0C14B; padding: 20px; margin-bottom: 30px;
-        color: #FFF; position: relative; animation: fadeIn 1s;
+    /* Texto dentro da aba */
+    .stTabs [data-baseweb="tab"] > div {
+        align-items: center; /* Centraliza verticalmente o texto */
     }
-    .tut-number { font-weight: 900; color: #F0C14B; font-size: 1.2rem; margin-right: 10px; }
-
-    /* SUPER BANNER */
-    .super-banner {
-        display: block; text-decoration: none; padding: 20px; margin: 20px 0;
-        position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        transition: transform 0.3s ease; border: 1px solid rgba(255,255,255,0.1);
-    }
-    .super-banner:hover { transform: scale(1.02); border-color: #FFF; }
-    .sb-badge { position: absolute; top: 0; right: 0; background: #000; color: #FFF; font-size: 0.6rem; font-weight: 900; padding: 5px 10px; }
-    .sb-icon { font-size: 3rem; margin-bottom: 10px; display: block; }
-    .sb-title { color: #FFF; font-weight: 900; font-size: 1.2rem; line-height: 1.1; margin-bottom: 5px; display: block; }
-    .sb-subtitle { color: rgba(255,255,255,0.8); font-size: 0.8rem; display: block; margin-bottom: 15px; }
-    .sb-button { background: #FFF; color: #000; text-align: center; font-weight: 800; padding: 10px; display: block; font-size: 0.9rem; text-transform: uppercase; border: none; }
-
-    /* CARD BIBLIOTECA */
-    .lib-card {
-        background: #111; border: 1px solid #333; padding: 20px;
-        transition: 0.2s; cursor: pointer; text-align: left; height: 100%;
-        border-left: 4px solid #333;
-    }
-    .lib-card:hover { border-color: #555; background: #161616; border-left-color: #F0C14B; }
-    .lib-title { font-weight: 700; color: #FFF; font-size: 1rem; margin-bottom: 5px; }
-    .lib-date { color: #666; font-size: 0.8rem; }
-    .lib-icon { font-size: 1.5rem; float: right; opacity: 0.5; }
-
-    /* PIX & GATOS */
-    .pix-container { background: #111; border: 1px dashed #444; padding: 30px; text-align: center; }
-    .pix-key { font-family: monospace; background: #222; padding: 15px; color: #00FF7F; font-size: 1.1rem; margin: 20px 0; word-break: break-all; select-all; }
     
-    /* GERAL */
-    .stButton button { text-align: left; background: transparent; color: #DDD; width: 100%; border: 1px solid transparent; }
-    .stButton button:hover { background: #222; border: 1px solid #333; }
-    .questao-container { background-color: #111; border: 1px solid #333; border-left: 4px solid #333; padding: 30px; margin-bottom: 40px; }
-    .feedback-correct { background-color: #051B11; border-left: 4px solid #198754; color: #75B798; padding: 15px; margin-top: 10px;}
-    .feedback-wrong { background-color: #2C0B0E; border-left: 4px solid #DC3545; color: #EA868F; padding: 15px; margin-top: 10px;}
+    .stTabs [aria-selected="true"] { 
+        background-color: #222 !important; 
+        color: #FFF !important; 
+        border-top: 2px solid #F0C14B !important; 
+        border-bottom: none !important;
+    }
 
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    /* --- SUPER BANNER PULSANTE --- */
+    @keyframes pulse-border {
+        0% { box-shadow: 0 0 0 0 rgba(240, 193, 75, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(240, 193, 75, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(240, 193, 75, 0); }
+    }
+
+    .super-banner {
+        display: block; text-decoration: none; padding: 25px 20px; margin: 20px 0;
+        position: relative; overflow: hidden; 
+        border: 1px solid rgba(255,255,255,0.1);
+        animation: pulse-border 2s infinite; /* Chama atenção */
+        transition: transform 0.2s;
+    }
+    .super-banner:hover { transform: scale(1.02); filter: brightness(1.1); }
+    
+    .sb-badge { 
+        position: absolute; top: 0; right: 0; background: #FFD700; color: #000; 
+        font-size: 0.6rem; font-weight: 900; padding: 4px 8px; text-transform: uppercase; 
+    }
+    .sb-icon { font-size: 3.5rem; margin-bottom: 15px; display: block; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+    .sb-title { color: #FFF; font-weight: 900; font-size: 1.3rem; line-height: 1; margin-bottom: 5px; display: block; text-transform: uppercase;}
+    .sb-prod-name { 
+        background: rgba(0,0,0,0.4); color: #FFF; font-size: 0.8rem; padding: 5px; 
+        display: inline-block; margin-bottom: 15px; font-weight: bold; border-left: 3px solid #FFD700;
+    }
+    .sb-button { 
+        background: #FFF; color: #000; text-align: center; font-weight: 900; padding: 12px; 
+        display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
+    }
+
+    /* --- CARD BIBLIOTECA (Clean) --- */
+    .lib-card {
+        background: #111; border: 1px solid #333; padding: 20px; height: 100%;
+        transition: 0.2s; cursor: pointer; text-align: left;
+        border-left: 2px solid #333;
+    }
+    .lib-card:hover { background: #1a1a1a; border-left-color: #F0C14B; }
+    .lib-title { font-weight: 700; color: #EEE; font-size: 1.1rem; margin-bottom: 8px; }
+    .lib-info { color: #666; font-size: 0.8rem; display: flex; justify-content: space-between; }
+
+    /* --- RESPONSIVIDADE MOBILE --- */
+    @media only screen and (max-width: 600px) {
+        h1 { font-size: 2.2rem !important; }
+        .stButton button { padding: 15px !important; font-size: 1rem !important; }
+        .lib-card { margin-bottom: 10px; }
+        /* No mobile, as colunas viram linhas automaticamente */
+        [data-testid="column"] { width: 100% !important; flex: 1 1 auto !important; min-width: 100% !important; }
+        /* Banner ocupa largura total */
+        .super-banner { margin: 10px 0; }
+    }
+
+    /* PIX */
+    .pix-container { background: #111; border: 1px dashed #555; padding: 20px; text-align: center; margin-top: 20px;}
+    .pix-key { font-family: monospace; background: #000; padding: 15px; color: #00FF7F; font-size: 1rem; word-break: break-all; border: 1px solid #333; }
+
+    /* QUESTÕES */
+    .questao-container { background-color: #111; border: 1px solid #333; border-left: 3px solid #444; padding: 25px; margin-bottom: 30px; }
+    .feedback-correct { background: rgba(5, 50, 20, 0.5); border: 1px solid #0F5132; color: #75B798; padding: 15px; margin-top: 10px; font-weight: bold;}
+    .feedback-wrong { background: rgba(50, 5, 10, 0.5); border: 1px solid #842029; color: #EA868F; padding: 15px; margin-top: 10px; font-weight: bold;}
 
 </style>
 """, unsafe_allow_html=True)
 
-# --- 6. ESTADO E ONBOARDING ---
+# --- 6. ESTADO ---
 if "historico" not in st.session_state: st.session_state.historico = carregar_historico_bd()
 if "pagina_atual" not in st.session_state: st.session_state.pagina_atual = "upload"
 if "chat_ativo_id" not in st.session_state: st.session_state.chat_ativo_id = None
 if "mensagens_ia" not in st.session_state: st.session_state.mensagens_ia = [{"role": "model", "content": "Olá! Sou seu Tutor IA."}]
-if "primeiro_acesso" not in st.session_state: st.session_state.primeiro_acesso = True # Detecta novato
 
 # --- 7. FUNÇÕES ---
 def ler_pdf(arquivo):
@@ -258,28 +274,13 @@ def criar_novo_estudo(nome_arquivo, questoes):
     st.session_state.pagina_atual = "biblioteca" 
     st.rerun()
 
-# --- 8. TUTORIAL DE BOAS-VINDAS (ONBOARDING) ---
-if st.session_state.primeiro_acesso:
-    st.markdown("""
-    <div class="tutorial-box">
-        <h2 style="color: #F0C14B; margin-top:0;">👋 Bem-vindo ao Pratica.ai!</h2>
-        <p>Preparei um guia rápido para você começar:</p>
-        <p><span class="tut-number">1</span> <b>Upload:</b> Na tela atual, suba qualquer PDF para gerar simulados.</p>
-        <p><span class="tut-number">2</span> <b>Menu Lateral:</b> Use os botões à esquerda para navegar entre Biblioteca, Tutor e Apoio.</p>
-        <p><span class="tut-number">3</span> <b>Ofertas:</b> Os melhores materiais para seu estudo aparecem no banner colorido ao lado.</p>
-        <p><span class="tut-number">4</span> <b>Mobile:</b> Se estiver no celular, clique na seta no topo esquerdo (>) para ver o menu.</p>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("ENTENDI, VAMOS ESTUDAR!", type="primary", use_container_width=True):
-        st.session_state.primeiro_acesso = False
-        st.rerun()
-
-# --- 9. BARRA LATERAL (NAVEGAÇÃO + VENDAS) ---
+# --- 8. BARRA LATERAL (NAVEGAÇÃO + SUPER ADS) ---
 with st.sidebar:
-    st.markdown("<h2 style='color: white; font-family: Inter; font-weight: 900; letter-spacing: -1px;'>Pratica.ai <span style='color:#F0C14B'>.</span></h2>", unsafe_allow_html=True)
+    st.markdown("<h1 style='color: white; font-family: Inter; font-weight: 900; letter-spacing: -2px; margin:0;'>PRATICA<span style='color:#F0C14B'>.AI</span></h1>", unsafe_allow_html=True)
+    st.caption("Versão 4.0 - Mobile Ready")
     st.markdown("---")
     
-    # Navegação
+    # Navegação com ícones grandes
     if st.button("📄 NOVO UPLOAD", use_container_width=True): st.session_state.pagina_atual = "upload"; st.rerun()
     if st.button("📚 BIBLIOTECA", use_container_width=True): st.session_state.pagina_atual = "biblioteca"; st.rerun()
     if st.button("🤖 TUTOR IA", use_container_width=True): st.session_state.pagina_atual = "chat_ia"; st.rerun()
@@ -287,7 +288,7 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # Super Banner de Vendas (Inteligente e Específico)
+    # === SUPER BANNER DE VENDAS INTELIGENTE ===
     contexto_usuario = ""
     if st.session_state.chat_ativo_id:
         estudo_ativo = next((e for e in st.session_state.historico if e["id"] == st.session_state.chat_ativo_id), None)
@@ -298,38 +299,41 @@ with st.sidebar:
     cat_nome = ia_escolher_categoria(contexto_usuario)
     cat_data = CATALOGO_PREMIUM[cat_nome]
     
-    # Escolhe um produto específico da categoria
+    # Sorteia um produto específico para mostrar o nome real
     prod_escolhido = random.choice(cat_data["produtos"])
     visual = cat_data["visual"]
 
-    st.markdown("<p style='font-size: 0.7rem; color: #666; font-weight: 800; letter-spacing: 1px;'>PATROCINADO</p>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size: 0.7rem; color: #666; font-weight: 800; letter-spacing: 1px; margin-bottom: 5px;'>PATROCINADO</p>", unsafe_allow_html=True)
+    
+    # Card HTML Puro com Animação
     st.markdown(f"""
     <a href="{prod_escolhido['link']}" target="_blank" class="super-banner" style="{visual['bg_style']}">
         <div class="sb-badge">{visual['badge']}</div>
         <span class="sb-icon">{visual['icone']}</span>
         <span class="sb-title">{visual['titulo']}</span>
-        <span class="sb-subtitle" style="color:white; font-weight:bold; background:rgba(0,0,0,0.3); padding:2px;">👉 {prod_escolhido['nome']}</span>
-        <span class="sb-button" style="background: {visual['btn_color']}; color: {visual['btn_text']};">VER OFERTA</span>
+        <div class="sb-prod-name">👉 {prod_escolhido['nome']}</div>
+        <span class="sb-button" style="color: black;">{visual['btn_text']}</span>
     </a>
     """, unsafe_allow_html=True)
 
-# --- 10. ÁREA PRINCIPAL ---
+# --- 9. ÁREA PRINCIPAL ---
 
-# >>> UPLOAD <<<
+# >>> UPLOAD (Minimalista) <<<
 if st.session_state.pagina_atual == "upload":
     st.markdown("""
-    <div style="text-align: left; margin-top: 50px;">
-        <h1 style="font-size: 4rem; color: #FFF; font-weight: 900; letter-spacing: -2px;">PRATICA<span style="color: #444;">.AI</span></h1>
-        <p style="color: #888; font-size: 1.2rem;">Inteligência Artificial para Concursos.</p>
+    <div style="text-align: left; margin-top: 40px; margin-bottom: 40px;">
+        <h1 style="font-size: 3rem; color: #FFF; font-weight: 900; line-height: 1.1;">ESTUDE MENOS,<br><span style="color: #444;">APRENDA MAIS.</span></h1>
+        <p style="color: #888; font-size: 1.1rem; margin-top: 10px;">Suba seu PDF e deixe a IA criar sua prova.</p>
     </div>
     """, unsafe_allow_html=True)
-    c1, c2 = st.columns([1, 1])
+    
+    c1, c2 = st.columns([2, 1])
     with c1:
-        st.markdown("<br>", unsafe_allow_html=True)
-        modo = st.radio("MODO:", ["Criar Questões", "Extrair Prova"])
-        arquivo = st.file_uploader("ARRASTE SEU PDF", type="pdf")
-        if arquivo and st.button("PROCESSAR ->", type="primary"):
-            with st.spinner("LENDO ARQUIVO..."):
+        arquivo = st.file_uploader("SELECIONE O ARQUIVO (PDF)", type="pdf")
+    with c2:
+        modo = st.radio("OBJETIVO:", ["Criar Questões", "Extrair Prova"])
+        if arquivo and st.button("INICIAR PROCESSAMENTO ->", type="primary", use_container_width=True):
+            with st.spinner("ANALISANDO..."):
                 texto, erro = ler_pdf(arquivo)
                 if erro: st.error(erro)
                 else:
@@ -338,10 +342,10 @@ if st.session_state.pagina_atual == "upload":
                     if questoes: criar_novo_estudo(arquivo.name, questoes)
                     else: st.error("Erro ao processar.")
 
-# >>> BIBLIOTECA (COM ABAS) <<<
+# >>> BIBLIOTECA (COM ABAS ALINHADAS) <<<
 elif st.session_state.pagina_atual == "biblioteca":
     
-    abas_titulos = ["📂 Todos os Arquivos"]
+    abas_titulos = ["📂 Meus Arquivos"]
     estudo_ativo = None
     
     if st.session_state.chat_ativo_id:
@@ -351,54 +355,56 @@ elif st.session_state.pagina_atual == "biblioteca":
             
     abas = st.tabs(abas_titulos)
     
-    # ABA 1: ARQUIVOS
+    # ABA 1: LISTA
     with abas[0]:
-        st.title("Minha Biblioteca")
+        st.markdown("<br>", unsafe_allow_html=True)
         if not st.session_state.historico:
-            st.info("Nenhum estudo encontrado.")
+            st.info("Sua biblioteca está vazia. Faça um upload!")
         else:
             cols = st.columns(3)
             for i, estudo in enumerate(st.session_state.historico):
                 with cols[i % 3]:
                     st.markdown(f"""
                     <div class="lib-card">
-                        <div class="lib-icon">📄</div>
                         <div class="lib-title">{estudo['titulo']}</div>
-                        <div class="lib-date">{estudo['data']} • {len(estudo['questoes'])} questões</div>
+                        <div class="lib-info">
+                            <span>{estudo['data']}</span>
+                            <span>{len(estudo['questoes'])} questões</span>
+                        </div>
                     </div>
                     """, unsafe_allow_html=True)
                     
-                    c_open, c_del = st.columns([4, 1])
-                    with c_open:
-                        if st.button("ABRIR", key=f"open_{estudo['id']}", use_container_width=True):
-                            st.session_state.chat_ativo_id = estudo['id']
-                            st.rerun()
-                    with c_del:
-                        if st.button("🗑️", key=f"del_{estudo['id']}", use_container_width=True):
+                    c_act1, c_act2 = st.columns([3, 1])
+                    with c_act1:
+                        if st.button("ABRIR ESTUDO", key=f"open_{estudo['id']}", use_container_width=True):
+                            st.session_state.chat_ativo_id = estudo['id']; st.rerun()
+                    with c_act2:
+                        if st.button("✕", key=f"del_{estudo['id']}", use_container_width=True):
                             deletar_estudo_bd(estudo['id'])
                             if st.session_state.chat_ativo_id == estudo['id']: st.session_state.chat_ativo_id = None
-                            st.session_state.historico = carregar_historico_bd()
-                            st.rerun()
+                            st.session_state.historico = carregar_historico_bd(); st.rerun()
 
-    # ABA 2: PROVA
+    # ABA 2: PROVA ATIVA
     if estudo_ativo and len(abas) > 1:
         with abas[1]:
-            st.markdown(f"## {estudo_ativo['titulo']}")
-            if st.button("⬅ Fechar Estudo"):
-                st.session_state.chat_ativo_id = None
-                st.rerun()
+            st.markdown("<br>", unsafe_allow_html=True)
+            c_h1, c_h2 = st.columns([6, 2])
+            with c_h1: st.title(estudo_ativo['titulo'])
+            with c_h2: 
+                if st.button("FECHAR X", use_container_width=True):
+                    st.session_state.chat_ativo_id = None; st.rerun()
                 
             st.markdown("---")
             for index, q in enumerate(estudo_ativo['questoes']):
                 st.markdown(f"""
                 <div class="questao-container">
-                    <div style="color: #666; font-size: 0.8rem; margin-bottom: 10px;">QUESTÃO {index + 1:02d}</div>
+                    <div style="color: #666; font-size: 0.8rem; margin-bottom: 10px; font-weight:bold;">QUESTÃO {index + 1:02d}</div>
                     <div class="questao-texto">{q['pergunta']}</div>
                 </div>""", unsafe_allow_html=True)
                 
                 res_salva = estudo_ativo["respostas_usuario"].get(str(q['id']))
                 idx = q['opcoes'].index(res_salva) if res_salva in q['opcoes'] else None
-                escolha = st.radio("Alternativas:", q['opcoes'], index=idx, key=f"q_{estudo_ativo['id']}_{q['id']}", label_visibility="collapsed")
+                escolha = st.radio("Sua resposta:", q['opcoes'], index=idx, key=f"q_{estudo_ativo['id']}_{q['id']}", label_visibility="collapsed")
                 
                 if escolha and escolha != res_salva:
                     estudo_ativo["respostas_usuario"][str(q['id'])] = escolha
@@ -407,11 +413,11 @@ elif st.session_state.pagina_atual == "biblioteca":
                 if res_salva:
                     letra_user = res_salva.split(")")[0].strip().upper()
                     letra_correta = q['correta'].strip().upper()
-                    if letra_user == letra_correta: st.markdown(f"""<div class="feedback-correct"><b>✓ ACERTOU</b><br>{q['comentario']}</div>""", unsafe_allow_html=True)
-                    else: st.markdown(f"""<div class="feedback-wrong"><b>✕ ERROU (Correta: {letra_correta})</b><br>{q['comentario']}</div>""", unsafe_allow_html=True)
-                st.markdown("<br>", unsafe_allow_html=True)
+                    if letra_user == letra_correta: st.markdown(f"""<div class="feedback-correct">✓ RESPOSTA CORRETA<br><span style="font-weight:normal">{q['comentario']}</span></div>""", unsafe_allow_html=True)
+                    else: st.markdown(f"""<div class="feedback-wrong">✕ INCORRETO (Era {letra_correta})<br><span style="font-weight:normal">{q['comentario']}</span></div>""", unsafe_allow_html=True)
+                st.markdown("<br><br>", unsafe_allow_html=True)
             
-            if st.button("↺ Reiniciar Simulado", use_container_width=True):
+            if st.button("REFAZER SIMULADO ↺", use_container_width=True):
                 estudo_ativo["respostas_usuario"] = {}
                 salvar_estudo_bd(estudo_ativo); st.rerun()
 
@@ -439,10 +445,10 @@ elif st.session_state.pagina_atual == "chat_ia":
                 questoes = chamar_ia_json(assunto, "criar")
                 if questoes: criar_novo_estudo(f"Simulado: {assunto}", questoes)
 
-# >>> APOIO <<<
+# >>> APOIO (GATOS) <<<
 elif st.session_state.pagina_atual == "apoio":
     st.title("🐱 APOIE NOSSO PROJETO!!")
-    st.markdown("<h3 style='color: #CCC;'>Ajude a manter o servidor ligado!</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='color: #888;'>Ajude a manter o servidor ligado!</h3>", unsafe_allow_html=True)
     
     # LAYOUT PIRÂMIDE
     c1, c2, c3 = st.columns([1, 2, 1])
@@ -458,4 +464,4 @@ elif st.session_state.pagina_atual == "apoio":
         if os.path.exists("static/gato3.jpeg"): st.image("static/gato3.jpeg", caption="Esperando o Pix cair pra comprar sachê premium.", use_container_width=True)
         elif os.path.exists("gato3.jpeg"): st.image("gato3.jpeg", caption="Esperando o Pix cair pra comprar sachê premium.", use_container_width=True)
 
-    st.markdown("<br><div class='pix-container'><div class='pix-key'>5b84b80d-c11a-4129-b897-74fb6371dfce</div></div>", unsafe_allow_html=True)
+    st.markdown("<br><div class='pix-container'><p style='color:#AAA; margin-bottom:10px;'>Copie a chave aleatória:</p><div class='pix-key'>5b84b80d-c11a-4129-b897-74fb6371dfce</div></div>", unsafe_allow_html=True)
